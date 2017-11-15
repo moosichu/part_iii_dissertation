@@ -2,5 +2,11 @@
     "cSpell.words": [
         "Mycroft",
         "Theano"
-    ]
+    ],
+    "cSpell.flagWords": [
+        "hte",
+        "haven't",
+        "isn't"
+    ],
+    "cSpell.allowCompoundWords": true
 }

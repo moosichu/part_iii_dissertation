@@ -15,19 +15,36 @@
 
 \begin{abstract}
 
-\textsl{Programming for the GPU can be complex, error-prone and hard to manage
-using existing tool chains. Despite various research into creating and designing
-unified programming languages which can be compiled to heterogeneous
-architectures, these languages have yet to experience serious uptake in
-industry due to various factors, including runtime overhead, lack of low-level
-control, and other inefficiencies. The result of this is that existing
-tool chains haven't experienced many of the improvements }
+Programming for the GPU can be complex, error-prone and hard to manage using
+existing tool chains, as programmers are required to write code in different
+languages for the GPU and CPU, with little to no runtime or compile-time safety
+across the boundaries between them. Various research has been done into
+creating and designing unified programming languages which can be compiled to
+heterogeneous architectures with systems to allocate load at runtime and handle
+parallelisation and vectorisation automatically, greatly simplifying the
+programming workflow. However, these languages are either domain specific or
+have otherwise yet to experience serious uptake in soft real-time computing due
+to various factors, including runtime overhead, lack of low-level control, and
+other inefficiencies which make them unsuitable for soft real-time
+applications. The result of this is that existing tool chains have not
+developed alongside the existing research which aims to target systems of the
+future as opposed to acknowledging the current state of affairs.
+
+This project proposes a pragmatic solution of using a hybrid system composed of
+two programming languages which each compile down to their respective
+architectures (CPU/GPU), similar to existing workflows. This project
+contributes to the field in providing a unified type-checking system across the
+two languages in order to eliminate common errors - with the ability to use
+type-safe syntactic sugar that compiles down to the boilerplate code that
+handles API calls across the CPU/GPU boundary.
 
 \end{abstract}
 
 \section{Introduction, approach and outcomes (500 words)}
 
-Some stuff here, you know? \cite{Theano2016}.
+Increasing amounts of general computation is being offloaded to GPUs in soft
+real time systems such as games \cite{GPGPUTechniques2012}. Some stuff here,
+you know? \cite{Theano2016}.
 
 \section{Workplan (500 words)}
 
@@ -40,6 +57,81 @@ Some stuff here.
 \appendix
 
 \section{Time Table}
+
+\subsection{Weeks 1-2 (20 hours)}
+
+Write 5 sample programs with a Vulkan backend in C/GLSL that can be used to
+demonstrate the common issues a new language design could solve. It is
+important that these programs use a subset of the features available in C/GLSL.
+As the goal of the language is not to re-implement existing languages, but
+demonstrate how a language could be designed to solve these common problems.
+One of the programs can be for the CPU only for testing purposes.
+
+\subsection{Weeks 3-4 (25 hours)}
+
+'Port' the sample programs to what they would ideally look like in the
+front-end of a new language. Send these off for feedback from the project
+supervisor. Start designing a grammar for the language for parsing.
+
+\subsection{Weeks 5-6 (30 hours)}
+
+Implement a parser for the language and construct an AST of each example pro-
+grams. Implement a type-checker that operates on the AST and demonstrate it can
+catch the errors the can be easily demonstrated to occur. Have an intepreter be
+able to run the AST for the CPU-only and give the same result as the
+C-equivalent.
+
+\subsection{Weeks 7-8 (20 hours)}
+
+Compile the AST to bytecode.
+
+\subsection{Weeks 9-10 (20 hours)}
+
+Compile the CPU side bytecode to an LLVM backend.
+
+\subsection{Weeks 11-12 (20 hours)}
+
+Compile the GPU side bytecode to a SPIR-V backend.
+
+\subsection{Weeks 13-14 (30 hours)}
+
+Demonstrate that the sample programs compile and run.
+
+\subsection{Weeks 15-16 (40 hours)}
+
+Flesh-out and demonstrate more ideas. Use these two weeks to investigate
+further directions this could go and implement any possible extensions. Polish
+is the main focus here.
+
+\subsection{Weeks 17-18 (40 hours)}
+
+Perform the evaluation.
+
+\subsection{Weeks 19-20 (40 hours)}
+
+Write the first draft of the dissertation. Send it to my project supervisor for
+feedback. Work on developing the software further in any spare time.
+
+\subsection{Weeks 21-22 (40 hours)}
+
+Write second draft of the dissertation.
+
+Send it to my project supervisor for feedback. Work on developing the software
+further in any spare time.
+
+
+\subsection{Weeks 23-24 (40 hours)}
+
+Write final draft of the dissertation. Send it to my project supervisor for
+feedback. Work on developing the software further in any spare time. Submit
+final project.
+
+\section{Related Work}
+
+\section{Example of boilerplate elimination and error checking}
+
+TODO:
+
 
 
 
