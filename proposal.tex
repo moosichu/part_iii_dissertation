@@ -43,10 +43,55 @@ handles API calls across the CPU/GPU boundary.
 \section{Introduction, approach and outcomes (500 words)}
 
 Increasing amounts of general computation is being offloaded to GPUs in soft
-real time systems such as games \cite{GPGPUTechniques2012}. Some stuff here,
-you know? \cite{Theano2016}.
+real time systems such as games \cite{GPGPUTechniques2012}.
+
+Graphics processing units are being used more and more for general purpose
+computations in games. However, many existing API’s have a lot of baggage in
+terms of verbosity due to their long history (OpenGL, DirectX), making them
+hard to use. Therefore, in addition to the complexity of designing and writing
+algorithms which behave nicely using GPUs, getting them to run in practise is
+complicated in terms of ensuring everything is setup just right in order to get
+results. Writing shaders themselves is relatively straight forward, it's
+managing the interface that is hard. Furthermore, even once written, minor
+changes can have unintended effects which lead to the code you have no longer
+running correctly. Vulkan, a new and low-level API, is seeking to change this,
+with an intermediate shading language known as SPIR-V, partly designed for the
+purpose of custom front-end languages on GPU beyond HLSL and GLSL.
+
+There have been many projects and tools which aim to manage these complications
+at different levels, however, the domain specificity of these project, the
+abstractions, or performance consideration of them, have made them unsuitable
+for real-time applications such as games. There have been many projects, which
+aim to automatically compile code written in a language to a wide variety of
+heterogenous systems. Unfortunately though, the abstractions they provide make
+them unsuitable for games programming. There are also some individuals in the
+games industry, making movements towards designing or using alternative
+languages to C++, leading to exciting opportunities in this space.
+
+My project will be to design and implement a simple imperative language with
+two flavours - one for the CPU and one for the GPU. This will be done
+iteratively, by targetting individual components in the existing workflow and
+designing language features which make them less cumbersome. The aims of this
+project are to provide compile-time guarantees that certain errors on the
+inteface between the GPU and CPU aren't present, so there shouldn't be any
+runtime cost.
+
+By the end I will have produced a language design and associated compiler that
+can be used to compile the language, with suitable components being compiled for
+a CPU and GPU backend.
+
+My evaluation will consist of demonstrating which problems have been sovled,
+showing equivalent C/GLSL where they can be easily be introduced, and showing
+how the new language doesn't won't compile with them whilst still having the
+similar runtime performance. As the focus of this isn't on compile-time
+optimisations, the testing will be performed with compiler optimisations
+disabled.
 
 \section{Workplan (500 words)}
+
+Counting from the 1st of December to the aimed submission date of the 27th of
+November there are 25 weeks. So I will plan for 24 weeks of work, including a
+grace week in case I fall behind.
 
 Some stuff here.
 
