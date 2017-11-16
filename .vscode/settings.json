@@ -10,7 +10,10 @@
         "JCUDA",
         "SYCL",
         "Vulkan",
-        "SPIR"
+        "SPIR",
+        "transpiler",
+        "initialisation",
+        "optimisations"
     ],
     "cSpell.flagWords": [
         "hte",
@@ -21,7 +24,8 @@
         "doesn't",
         "isn't ",
         "real time",
-        "datastructures"
+        "datastructures",
+        "sementic"
     ],
     "cSpell.allowCompoundWords": true
 }

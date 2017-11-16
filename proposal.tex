@@ -21,15 +21,15 @@ existing tool chains, as programmers are required to write code in different
 languages for the GPU and CPU, with little to no runtime or compile-time safety
 across the boundaries between them. Various research has been done into
 creating and designing unified programming languages which can be compiled to
-heterogeneous architectures with systems to allocate load at runtime and handle
-parallelisation and vectorisation automatically, greatly simplifying the
-programming workflow. However, these languages are either domain specific or
-have otherwise yet to experience serious uptake in soft real-time computing due
-to various factors, including runtime overhead, lack of low-level control, and
-other inefficiencies which make them unsuitable for soft real-time
-applications. The result of this is that existing tool chains have not
-developed alongside the existing research which aims to target systems of the
-future as opposed to acknowledging the current state of affairs.
+heterogeneous architectures with systems to allocate load at runtime, handling
+parallelisation and vectorisation automatically. These languages greatly
+simplify the programming workflow. However, these languages are either domain
+specific or have otherwise yet to experience serious uptake in soft real-time
+applications due to various factors, including runtime overhead, lack of
+low-level control, and other inefficiencies which make them unsuitable for the
+domain. The result of this is that existing tool chains have not developed
+alongside the existing research which aims to target systems of the future as
+opposed to acknowledging the current state of affairs.
 
 This project proposes a pragmatic solution of using a hybrid system composed of
 two programming languages which each compile down to their respective
@@ -73,8 +73,8 @@ seen much uptake beyond scientific computing \cite{Theano2016}.
 Another approach is take existing languages and extend them top-down with
 support for heterogeneous architectures via annotated code, taken by C++ AMP
 \cite{CAMP}, JCUDA \cite{JCUDA2009}, and more \cite{SYCL} \cite{HCC}
-\cite{Theano2016} \cite{CParallel}, however so far these have suffered from the
-same inability to offer the user fine-grained control that DSLs do, and the
+\cite{Theano2016} \cite{CParallel}. However, so far these have suffered from
+the same inability to offer the user fine-grained control that DSLs do, and the
 top-down approach of making existing general-purpose languages semi-compatible
 with GPUs makes them awkward to work with, meaning they have been unsuccessful
 in gaining traction in industry \cite{CAMPFail1} \cite{CAMPFail2}.
@@ -86,39 +86,40 @@ heterogeneous architectures \cite{Lime2012} \cite{Lime2010}. Although these
 systems may represent the future of heterogeneous computing, they still have a
 long way to go before seeing serious uptake.
 
-My project will be to take a bottom-up approach, to design and implement a two
-langauges, one for the CPU and one for the GPU - allowing for the context-aware
-programming and fine-grained control that existing bottom-up or top-down
-single-language systems do not provide. Furthermore, the bottom-up design will
-allow for a unified type-system to allow for compile-time checking of common
-errors which can frustrate current GPU programmers. Finally, syntactic sugar
-for the explicit control of boilerplate generation at the language level can
-help reduce another class of errors as well.
+My project will be to take a bottom-up approach in designing and implementing
+two langauges, one for the CPU and one for the GPU - allowing for the
+context-aware programming and fine-grained control that existing bottom-up or
+top-down single-language systems do not provide. Furthermore, the bottom-up
+design will allow for a unified type-system to allow for compile-time checking
+of common errors which can frustrate current GPU programmers. Finally,
+syntactic sugar for the explicit control of boilerplate generation at the
+language level can help reduce another class of errors as well.
 
 By the end I will have produced a language design and associated compiler that
 can be used to compile the language, with suitable components being compiled
 for a CPU and GPU backend.
 
 My evaluation will consist of demonstrating which problems have been solved,
-showing equivalent C/GLSL programs where they can be easily be introduced, and
-showing how the new language compile with them whilst still having the similar
-runtime performance. As the focus of this is not on compile-time optimisations,
-the testing will be performed with compiler optimisations disabled.
+showing equivalent C/GLSL programs where those problems can be easily be
+introduced, and showing how the new languages compile without them present
+whilst still having the similar runtime performance. As the focus of this is
+not on compile-time optimisations, the testing will be performed with compiler
+optimisations disabled.
 
 \section{Workplan (500 words)}
 
 Although the goal is to take a bottom-up approach, the aim is to do so
 iteratively, by targetting individual components in the existing workflow and
 designing language features which make them less cumbersome. A proof-of-concept
-boiler-plate generation and type checking system can be implemented as
-pre-processing step of a GLSL and C setup using OpenGL calls.
+boiler-plate generation system can be implemented as pre-processing step of a
+GLSL and C setup using OpenGL API calls.
 
 However, because the desired result is the implementation of two new
 programming languages, the scope of the project needs to be limited with the
 focus being on researching, evaluating, refining and testing the type-checking
 and boiler-plate generating features of the design. Therefore I have decided to
 write small-scale representative programs so I can evaluate the ideas
-presented.
+presented without being distracted by "feature-completeness".
 
 These programs will initially be written in a combination of GLSL and C to
 allow for the iterative approach described above. They will also provide a
@@ -130,7 +131,7 @@ testing. The goal of this system is to generate the required OpenGL API calls
 in the C program that are needed in order to invoke compute shaders written in
 GLSL. This system will not include any safety features or compile time checks.
 This boilerplate generation system will also help inform syntactical and
-sementic choices for the new languages.
+semantic choices for the new languages.
 
 I will then create a transpiler that can take simple programs written in two
 languages designed from the bottom-up to have compatible type systems - which
@@ -141,14 +142,14 @@ described in the previously.
 The next stage will be to extend the transpiler generation system to statically
 analyse the programs to ensure type safety across architecture boundaries and
 that correct initialisation of variables is occuring - a common source of
-errors. This descision to transpile will also more easily allow the new
-languages to call into existing code and libraries written in C, and similarly
-allow C to call into it.
+errors. This decision to transpile will also more easily allow for the
+extension of having the new languages to call into existing code and libraries
+written in C, and similarly allow C to call into it.
 
 Finally the system will be evaluated, as I will have multiple versions of the
-same programs on hand - in C/GLSL with boilerplate, C/GLSL without boilerplate
-and the new lanugages. These can be used as point of comparison and the
-features available in all systems can be analysed.
+same programs on hand - in C/GLSL with boilerplate, in C/GLSL without
+boilerplate and in the new languages. These can be used as point of comparison
+and the features available in all systems can be analysed.
 
 \bibliography{references}
 \bibliographystyle{ieeetr}
@@ -215,7 +216,7 @@ Perform a formal evaluation of the system.
 
 Write the first draft of the dissertation. Send it to my project supervisor for
 feedback. Work on developing the software further in any and use this week to
-catch up
+catch up.
 
 \subsection{Weeks 21-22 (40 hours)}
 
@@ -223,8 +224,9 @@ Once the first draft has been returned with feedback, write second draft of the
 dissertation.
 
 Flesh-out and demonstrate more ideas. Use these two weeks to investigate
-further directions this could go and implement any possible extensions. Polish
-is the main focus here.
+further directions this could go and implement any possible extensions
+(including the ability to call out to exiting C code). Polish is the main focus
+here.
 
 \subsection{Weeks 23-24 (40 hours)}
 
