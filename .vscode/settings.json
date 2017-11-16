@@ -1,12 +1,20 @@
 {
     "cSpell.words": [
         "Mycroft",
-        "Theano"
+        "Theano",
+        "GPUs",
+        "CPUs",
+        "DSLs"
     ],
     "cSpell.flagWords": [
         "hte",
         "haven't",
-        "isn't"
+        "isn't",
+        "don't",
+        "won't",
+        "doesn't",
+        "real time",
+        "datastructures"
     ],
     "cSpell.allowCompoundWords": true
 }

@@ -4,7 +4,7 @@
 
 \begin{document}
 
-\centerline{\Large Late-Bound computing in CPU-GPU systems}
+\centerline{\Large Heterogeneous type checking in CPU-GPU systems}
 \vspace{2em}
 \centerline{\Large \emph{A PartIII project proposal}}
 \vspace{2em}
@@ -43,56 +43,73 @@ handles API calls across the CPU/GPU boundary.
 \section{Introduction, approach and outcomes (500 words)}
 
 Increasing amounts of general computation is being offloaded to GPUs in soft
-real time systems such as games \cite{GPGPUTechniques2012}.
+real-time applications such as games \cite{GPGPUTechniques2012}. Programs which
+run on GPUs are called shaders, and running them has historically required
+using high-level APIs like OpenGL and DirectX to manually pass shader
+source-code to GPU drivers which then compile and run them at runtime. Although
+modern graphics APIs like Vulkan \cite{Vulkan} operate in a similar manner,
+SPIR-V, a new intermediate representation (IR) language is used to pass
+pre-compiled shaders instead \cite{SPIRV}.
 
-Graphics processing units are being used more and more for general purpose
-computations in games. However, many existing API’s have a lot of baggage in
-terms of verbosity due to their long history (OpenGL, DirectX), making them
-hard to use. Therefore, in addition to the complexity of designing and writing
-algorithms which behave nicely using GPUs, getting them to run in practise is
-complicated in terms of ensuring everything is setup just right in order to get
-results. Writing shaders themselves is relatively straight forward, it's
-managing the interface that is hard. Furthermore, even once written, minor
-changes can have unintended effects which lead to the code you have no longer
-running correctly. Vulkan, a new and low-level API, is seeking to change this,
-with an intermediate shading language known as SPIR-V, partly designed for the
-purpose of custom front-end languages on GPU beyond HLSL and GLSL.
+However, despite data structures being passed back-and-forth between the CPU and
+the GPU, the type and error checking between the two platforms and their
+respective languages has historically been non-existent. Furthermore, the APIs
+require extensive boilerplate in order to set-up shader invocations, another
+surface for errors.
 
-There have been many projects and tools which aim to manage these complications
-at different levels, however, the domain specificity of these project, the
-abstractions, or performance consideration of them, have made them unsuitable
-for real-time applications such as games. There have been many projects, which
-aim to automatically compile code written in a language to a wide variety of
-heterogenous systems. Unfortunately though, the abstractions they provide make
-them unsuitable for games programming. There are also some individuals in the
-games industry, making movements towards designing or using alternative
-languages to C++, leading to exciting opportunities in this space.
+Various projects and tools have developed which aim to manage these
+complications at different levels. One approach is to develop domain specific
+languages (DSLs) with high-levels of parallelism that allow them to be
+automatically compiled for a wide variety of heterogeneous architectures
+\cite{DSL1} \cite{DSL2} \cite{Theano2016}.
 
-My project will be to design and implement a simple imperative language with
-two flavours - one for the CPU and one for the GPU. This will be done
-iteratively, by targetting individual components in the existing workflow and
-designing language features which make them less cumbersome. The aims of this
-project are to provide compile-time guarantees that certain errors on the
-inteface between the GPU and CPU aren't present, so there shouldn't be any
-runtime cost.
+However, these systems are unsuitable for real-time applications which require
+general purpose computation and fine-grained control of resource usage in order
+to achieve deterministic and consistent performance - meaning that they have not
+seen much uptake beyond scientific computing \cite{Theano2016}.
+
+Another approach is take existing languages and extend them top-down with
+support for heterogeneous architectures via annotated code, taken by C++ AMP
+\cite{CAMP}, JCUDA \cite{JCUDA2009}, and more \cite{SYCL} \cite{HCC}
+\cite{Theano2016} \cite{CParallel}, however so far these have suffered from the same inability
+to offer the user fine-grained control that DSLs do, and the top-down approach
+of making existing general-purpose languages semi-compatible with GPUs makes
+them awkward to work with, meaning they have been unsuccessful in gaining
+traction in industry \cite{CAMPFail1} \cite{CAMPFail2}.
+
+The third approach that has been taken is to design a single general-purpose
+language from the bottom-up with compile-time and runtime-systems built in to
+allow for automatic resource management and workload distribution across
+heterogeneous architectures \cite{Lime2012} \cite{Lime2010}. Although these
+systems may represent the future of heterogeneous computing, they still have a
+long way to go before seeing serious uptake.
+
+My project will be to take a bottom-up approach, to design and implement a two
+langauges, one for the CPU and one for the GPU - allowing for the context-aware
+programming and fine-grained control that existing bottom-up or top-down
+single-language systems do not provide. Furthermore, the bottom-up design will
+allow for a unified type-system to allow for compile-time checking of common
+errors which can frustrate current GPU programmers.
 
 By the end I will have produced a language design and associated compiler that
-can be used to compile the language, with suitable components being compiled for
-a CPU and GPU backend.
-
-My evaluation will consist of demonstrating which problems have been sovled,
-showing equivalent C/GLSL where they can be easily be introduced, and showing
-how the new language doesn't won't compile with them whilst still having the
-similar runtime performance. As the focus of this isn't on compile-time
-optimisations, the testing will be performed with compiler optimisations
-disabled.
+can be used to compile the language, with suitable components being compiled
+for a CPU and GPU backend.
 
 \section{Workplan (500 words)}
 
-Counting from the 1st of December to the aimed submission date of the 27th of
-November there are 25 weeks. So I will plan for 24 weeks of work, including a
-grace week in case I fall behind.
 
+This will be done iteratively,
+by targetting individual components in the existing workflow and designing
+language features which make them less cumbersome. The aims of this project are
+to provide compile-time guarantees that certain errors on the inteface between
+the GPU and CPU aren't present, so there shouldn't be any runtime cost.
+
+My evaluation will consist of demonstrating which problems have been solved,
+showing equivalent C/GLSL where they can be easily be introduced, and showing
+how the new language  compile with them whilst still having the
+similar runtime performance. As the focus of this isn't on compile-time
+optimisations, the testing will be performed with compiler optimisations
+disabled.
 Some stuff here.
 
 \bibliography{references}
@@ -102,6 +119,10 @@ Some stuff here.
 \appendix
 
 \section{Time Table}
+
+Counting from the 1st of December to the aimed submission date of the 27th of
+November there are 25 weeks. So I will plan for 24 weeks of work, including a
+grace week in case I fall behind.
 
 \subsection{Weeks 1-2 (20 hours)}
 
@@ -170,8 +191,6 @@ further in any spare time.
 Write final draft of the dissertation. Send it to my project supervisor for
 feedback. Work on developing the software further in any spare time. Submit
 final project.
-
-\section{Related Work}
 
 \section{Example of boilerplate elimination and error checking}
 
