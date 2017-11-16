@@ -99,6 +99,12 @@ By the end I will have produced a language design and associated compiler that
 can be used to compile the language, with suitable components being compiled
 for a CPU and GPU backend.
 
+My evaluation will consist of demonstrating which problems have been solved,
+showing equivalent C/GLSL programs where they can be easily be introduced, and
+showing how the new language compile with them whilst still having the similar
+runtime performance. As the focus of this is not on compile-time optimisations,
+the testing will be performed with compiler optimisations disabled.
+
 \section{Workplan (500 words)}
 
 Although the goal is to take a bottom-up approach, the aim is to do so
@@ -118,15 +124,31 @@ These programs will initially be written in a combination of GLSL and C to
 allow for the iterative approach described above. They will also provide a
 reference target of what a new implementation should ideally compile-down to.
 
-//TODO, flesh out
+Firstly, a boilerplate generation system will be implemented for GLSL and C,
+using modified versions of these programs to take advantage of the system for
+testing. The goal of this system is to generate the required OpenGL API calls
+in the C program that are needed in order to invoke compute shaders written in
+GLSL. This system will not include any safety features or compile time checks.
+This boilerplate generation system will also help inform syntactical and
+sementic choices for the new languages.
 
-My evaluation will consist of demonstrating which problems have been solved,
-showing equivalent C/GLSL programs where they can be easily be introduced, and showing
-how the new language  compile with them whilst still having the
-similar runtime performance. As the focus of this isn't on compile-time
-optimisations, the testing will be performed with compiler optimisations
-disabled.
-Some stuff here.
+I will then create a transpiler that can take simple programs written in two
+languages designed from the bottom-up to have compatible type systems - which
+transpiles the CPU-specific code to C and GPU-specific code to GLSL. This
+transpiler can also take advantage of the boilerplate generation features
+described in the previously.
+
+The next stage will be to extend the transpiler generation system to statically
+analyse the programs to ensure type safety across architecture boundaries and
+that correct initialisation of variables is occuring - a common source of
+errors. This descision to transpile will also more easily allow the new
+languages to call into existing code and libraries written in C, and similarly
+allow C to call into it.
+
+Finally the system will be evaluated, as I will have multiple versions of the
+same programs on hand - in C/GLSL with boilerplate, C/GLSL without boilerplate
+and the new lanugages. These can be used as point of comparison and the
+features available in all systems can be analysed.
 
 \bibliography{references}
 \bibliographystyle{ieeetr}
@@ -142,70 +164,73 @@ grace week in case I fall behind.
 
 \subsection{Weeks 1-2 (20 hours)}
 
-Write 5 sample programs with a Vulkan backend in C/GLSL that can be used to
+Write sample programs with an OpenGL backend in C/GLSL that can be used to
 demonstrate the common issues a new language design could solve. It is
-important that these programs use a subset of the features available in C/GLSL.
-As the goal of the language is not to re-implement existing languages, but
-demonstrate how a language could be designed to solve these common problems.
-One of the programs can be for the CPU only for testing purposes.
+important that these programs use a subset of the features available in C/GLSL
+to allow them to be more easily be rewritten in new languages, and to help
+limit the features those languages will need to implement. As the goal of the
+language is not to re-implement existing languages, but demonstrate how a
+language could be designed to solve these common problems. One of the programs
+can be for the CPU only for testing purposes.
 
 \subsection{Weeks 3-4 (25 hours)}
 
-'Port' the sample programs to what they would ideally look like in the
-front-end of a new language. Send these off for feedback from the project
-supervisor. Start designing a grammar for the language for parsing.
+Implement the boilerplate generation system described in the Workplan.
 
 \subsection{Weeks 5-6 (30 hours)}
 
-Implement a parser for the language and construct an AST of each example pro-
-grams. Implement a type-checker that operates on the AST and demonstrate it can
-catch the errors the can be easily demonstrated to occur. Have an intepreter be
-able to run the AST for the CPU-only and give the same result as the
-C-equivalent.
+'Port' the sample programs to what they would ideally look like in the
+front-end of a new languages. Send these off for feedback from the project
+supervisor. Start designing a grammar for the language for parsing.
 
 \subsection{Weeks 7-8 (20 hours)}
 
-Compile the AST to bytecode.
+Implement a parser for the languages and construct an AST of the simplest
+sample programs.
 
 \subsection{Weeks 9-10 (20 hours)}
 
-Compile the CPU side bytecode to an LLVM backend.
+Compile the AST down to C/GLSL and then get that system working.
 
 \subsection{Weeks 11-12 (20 hours)}
 
-Compile the GPU side bytecode to a SPIR-V backend.
+Start the implementation of a type-checker that operates on the AST.
 
 \subsection{Weeks 13-14 (30 hours)}
 
-Demonstrate that the sample programs compile and run.
+Complete the implementation of a type-checker that operates on the AST and
+demonstrate it can catch the errors the can be easily demonstrated to occur.
 
 \subsection{Weeks 15-16 (40 hours)}
+
+Expand the system to compile more complex sample programs, including those that
+interoperate with C. Demonstrate the the sample programs can be compiled and
+run in an equivalent manner to their C counterparts.
+
+\subsection{Weeks 17-18 (40 hours)}
+
+Perform a formal evaluation of the system.
+
+\subsection{Weeks 19-20 (40 hours)}
+
+Write the first draft of the dissertation. Send it to my project supervisor for
+feedback. Work on developing the software further in any and use this week to
+catch up
+
+\subsection{Weeks 21-22 (40 hours)}
+
+Once the first draft has been returned with feedback, write second draft of the
+dissertation.
 
 Flesh-out and demonstrate more ideas. Use these two weeks to investigate
 further directions this could go and implement any possible extensions. Polish
 is the main focus here.
 
-\subsection{Weeks 17-18 (40 hours)}
-
-Perform the evaluation.
-
-\subsection{Weeks 19-20 (40 hours)}
-
-Write the first draft of the dissertation. Send it to my project supervisor for
-feedback. Work on developing the software further in any spare time.
-
-\subsection{Weeks 21-22 (40 hours)}
-
-Write second draft of the dissertation.
-
-Send it to my project supervisor for feedback. Work on developing the software
-further in any spare time.
-
 \subsection{Weeks 23-24 (40 hours)}
 
 Write final draft of the dissertation. Send it to my project supervisor for
-feedback. Work on developing the software further in any spare time. Submit
-final project.
+feedback. The main focus of this week is on polish and bugfixes. Also focus on
+making the work reproducible and presentable for others to use and test.
 
 % \section{Example of boilerplate elimination and error checking}
 
