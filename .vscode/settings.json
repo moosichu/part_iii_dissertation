@@ -4,7 +4,13 @@
         "Theano",
         "GPUs",
         "CPUs",
-        "DSLs"
+        "DSLs",
+        "GLSL",
+        "HLSL",
+        "JCUDA",
+        "SYCL",
+        "Vulkan",
+        "SPIR"
     ],
     "cSpell.flagWords": [
         "hte",

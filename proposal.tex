@@ -5,7 +5,7 @@
 
 \begin{document}
 
-\centerline{\Large Heterogeneous type checking in CPU-GPU systems}
+\centerline{\Large Heterogeneous type checking in multi-language CPU-GPU systems}
 \vspace{2em}
 \centerline{\Large \emph{A PartIII project proposal}}
 \vspace{2em}
@@ -47,10 +47,11 @@ Increasing amounts of general computation is being offloaded to GPUs in soft
 real-time applications such as games \cite{GPGPUTechniques2012}. Programs which
 run on GPUs are called shaders, and running them has historically required
 using high-level APIs like OpenGL and DirectX to manually pass shader
-source-code to GPU drivers which then compile and run them at runtime. Although
+source-code (GLSL and HLSL respectively) to GPU drivers which then compile and
+run them at runtime \cite{OpenGLWorkings} \cite{DirectXWorkings}. Although
 modern graphics APIs like Vulkan \cite{Vulkan} operate in a similar manner,
 SPIR-V, a new intermediate representation (IR) language is used to pass
-pre-compiled shaders instead \cite{SPIRV}.
+pre-compiled shaders instead \cite{SPIR-V}.
 
 However, despite data structures being passed back-and-forth between the CPU and
 the GPU, the type and error checking between the two platforms and their
@@ -72,11 +73,11 @@ seen much uptake beyond scientific computing \cite{Theano2016}.
 Another approach is take existing languages and extend them top-down with
 support for heterogeneous architectures via annotated code, taken by C++ AMP
 \cite{CAMP}, JCUDA \cite{JCUDA2009}, and more \cite{SYCL} \cite{HCC}
-\cite{Theano2016} \cite{CParallel}, however so far these have suffered from the same inability
-to offer the user fine-grained control that DSLs do, and the top-down approach
-of making existing general-purpose languages semi-compatible with GPUs makes
-them awkward to work with, meaning they have been unsuccessful in gaining
-traction in industry \cite{CAMPFail1} \cite{CAMPFail2}.
+\cite{Theano2016} \cite{CParallel}, however so far these have suffered from the
+same inability to offer the user fine-grained control that DSLs do, and the
+top-down approach of making existing general-purpose languages semi-compatible
+with GPUs makes them awkward to work with, meaning they have been unsuccessful
+in gaining traction in industry \cite{CAMPFail1} \cite{CAMPFail2}.
 
 The third approach that has been taken is to design a single general-purpose
 language from the bottom-up with compile-time and runtime-systems built in to
@@ -100,15 +101,27 @@ for a CPU and GPU backend.
 
 \section{Workplan (500 words)}
 
+Although the goal is to take a bottom-up approach, the aim is to do so
+iteratively, by targetting individual components in the existing workflow and
+designing language features which make them less cumbersome. A proof-of-concept
+boiler-plate generation and type checking system can be implemented as
+pre-processing step of a GLSL and C setup using OpenGL calls.
 
-This will be done iteratively,
-by targetting individual components in the existing workflow and designing
-language features which make them less cumbersome. The aims of this project are
-to provide compile-time guarantees that certain errors on the inteface between
-the GPU and CPU aren't present, so there shouldn't be any runtime cost.
+However, because the desired result is the implementation of two new
+programming languages, the scope of the project needs to be limited with the
+focus being on researching, evaluating, refining and testing the type-checking
+and boiler-plate generating features of the design. Therefore I have decided to
+write small-scale representative programs so I can evaluate the ideas
+presented.
+
+These programs will initially be written in a combination of GLSL and C to
+allow for the iterative approach described above. They will also provide a
+reference target of what a new implementation should ideally compile-down to.
+
+//TODO, flesh out
 
 My evaluation will consist of demonstrating which problems have been solved,
-showing equivalent C/GLSL where they can be easily be introduced, and showing
+showing equivalent C/GLSL programs where they can be easily be introduced, and showing
 how the new language  compile with them whilst still having the
 similar runtime performance. As the focus of this isn't on compile-time
 optimisations, the testing will be performed with compiler optimisations
@@ -194,9 +207,9 @@ Write final draft of the dissertation. Send it to my project supervisor for
 feedback. Work on developing the software further in any spare time. Submit
 final project.
 
-\section{Example of boilerplate elimination and error checking}
+% \section{Example of boilerplate elimination and error checking}
 
-TODO:
+% TODO:
 
 
 
