@@ -7,7 +7,7 @@
 
 \centerline{\Large Heterogeneous type checking in multi-language CPU-GPU systems}
 \vspace{2em}
-\centerline{\Large \emph{A PartIII project proposal}}
+\centerline{\Large \emph{A Part III project proposal}}
 \vspace{2em}
 \centerline{\large T. M. Read Cutting (\emph{tr395}), Downing College}
 \vspace{1em}
@@ -27,8 +27,8 @@ simplify the programming workflow. However, these languages are either domain
 specific or have otherwise yet to experience serious uptake in soft real-time
 applications due to various factors, including runtime overhead, lack of
 low-level control, and other inefficiencies which make them unsuitable for the
-domain. The result of this is that existing tool chains have not developed
-alongside the existing research which aims to target systems of the future as
+domain. The result of this is that current tool chains have not developed
+alongside the latest research which aims to target systems of the future as
 opposed to acknowledging the current state of affairs.
 
 This project proposes a pragmatic solution of using a hybrid system composed of
@@ -41,7 +41,7 @@ handles API calls across the CPU/GPU boundary.
 
 \end{abstract}
 
-\section{Introduction, approach and outcomes (500 words)}
+\section{Introduction, approach and outcomes}
 
 Increasing amounts of general computation is being offloaded to GPUs in soft
 real-time applications such as games \cite{GPGPUTechniques2012}. Programs which
@@ -88,8 +88,8 @@ long way to go before seeing serious uptake.
 
 My project will be to take a bottom-up approach in designing and implementing
 two langauges, one for the CPU and one for the GPU - allowing for the
-context-aware programming and fine-grained control that existing bottom-up or
-top-down single-language systems do not provide. Furthermore, the bottom-up
+hardware-targeted programming and fine-grained control that existing bottom-up
+or top-down single-language systems do not provide. Furthermore, the bottom-up
 design will allow for a unified type-system to allow for compile-time checking
 of common errors which can frustrate current GPU programmers. Finally,
 syntactic sugar for the explicit control of boilerplate generation at the
@@ -101,12 +101,11 @@ for a CPU and GPU backend.
 
 My evaluation will consist of demonstrating which problems have been solved,
 showing equivalent C/GLSL programs where those problems can be easily be
-introduced, and showing how the new languages compile without them present
-whilst still having the similar runtime performance. As the focus of this is
-not on compile-time optimisations, the testing will be performed with compiler
-optimisations disabled.
+introduced. Additionally showing how the new languages compile without
+suffering from these problems, whilst still having the similar runtime
+performance.
 
-\section{Workplan (500 words)}
+\section{Workplan}
 
 Although the goal is to take a bottom-up approach, the aim is to do so
 iteratively, by targetting individual components in the existing workflow and
@@ -116,10 +115,10 @@ GLSL and C setup using OpenGL API calls.
 
 However, because the desired result is the implementation of two new
 programming languages, the scope of the project needs to be limited with the
-focus being on researching, evaluating, refining and testing the type-checking
-and boiler-plate generating features of the design. Therefore I have decided to
-write small-scale representative programs so I can evaluate the ideas
-presented without being distracted by "feature-completeness".
+focus being on researching, evaluating, refining and testing the cross-language
+type-checking and boiler-plate generating features of the design. Therefore I
+have decided to write small-scale representative programs so I can evaluate the
+ideas presented without being distracted by "feature-completeness".
 
 These programs will initially be written in a combination of GLSL and C to
 allow for the iterative approach described above. They will also provide a
@@ -157,7 +156,7 @@ and the features available in all systems can be analysed.
 \newpage
 \appendix
 
-\section{Time Table}
+\section{Timetable}
 
 Counting from the 1st of December to the aimed submission date of the 27th of
 November there are 25 weeks. So I will plan for 24 weeks of work, including a
