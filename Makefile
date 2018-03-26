@@ -15,11 +15,11 @@ acs-dissertation.ps: acs-dissertation.dvi
 #acs-dissertation.dvi: acs-dissertation.tex dissertation.bib
 acs-dissertation.dvi: acs-dissertation.tex titlepage.tex declaration.tex abstract.tex
 	$(LATEX) acs-dissertation
-#       $(BIBTEX) acs-dissertation
+	$(BIBTEX) acs-dissertation
 	$(LATEX) acs-dissertation
 	$(LATEX) acs-dissertation
 
 clean:
-	$(RM) -f acs-dissertation.pdf acs-dissertation.ps acs-dissertation.dvi 
+	$(RM) -f acs-dissertation.pdf acs-dissertation.ps acs-dissertation.dvi
 	$(RM) -f *.log *.aux *.toc *.bbl *.lot *.lof
 
