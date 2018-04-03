@@ -104,6 +104,8 @@ TODO
 % much. The correct choice will depend on what you're writing up, and
 % your own personal preference.
 
+\section{A (brief) History of GPUs}
+
 Graphics Processing Units (GPUs) were originally designed to be fixed-function
 3D graphics hardware accelerators aimed at hobbyist gamers who wanted to play
 the latest and greatest games with the prettiest graphics possible \cite{TODO}.
@@ -125,7 +127,62 @@ mining \cite{TODO}, video-processing \cite{TODO} and artificial intelligence
 \cite{TODO}. To the point where the hobbyists they cards were originally
 designed for are being priced out of the market \cite{TODO}.
 
-However, despite the exploding number of use cases.
+\section{The Challenges with the APIs}
+
+Programmers interact with GPUs using APIs, however, as the development of and
+growth of GPUs in computing has been relatively organic and ad-hoc, these APIs
+themselves have many legacy components and can be difficult to work with.
+
+To understand the challenges of working GPUs, one must first understand the
+current workflow of GPUs and how that workflow has developed over time.
+
+The best point of comparison is the CPU, and programming for the CPU. When
+programming for the CPU, programmers often have access to a plethora of
+programming languages which are suited to different needs and are capable of
+targeting a wide range of backends. Furthermore, the instruction sets of CPUs
+are published and well-documented, allowing programmers to write applications
+for them directly - even allowing them to write their own compiler for them if
+they so desire. Finally, in the world of desktop computing, x86 is the de-facto
+standard architecture, massively increasing the portability of programs which
+target desktop PCs without the need for hardware abstractions which could come
+with performance penalties.
+
+The workflow of the GPU is very different.
+
+Although GPUs do not have a standard ISA, open standards for GPU computing have
+been developed and maintained by the Khronos Group \cite{TODO}, which was
+founded in 2000 by a group companies for this purpose. OpenGL is the most
+widely used standard graphics API that they maintain, however, the API has a
+history dating back to the early 1990's \cite{TODO}, with control of the
+standard being passed from Silicon Graphics in 2006 \cite{TODO}. For a long
+time the OpenGL family of graphics APIs were the only cross-platform family of
+graphics APIs, with OpenGL ES, a related API, being used for mobile and
+embedded systems \cite{TODO}.
+
+Despite OpenGL being an open standard with a differently-flavoured API for
+non-desktop systems, portability and development using the API is difficult for
+several reasons - both beyond and as a result of its legacy. The focus of
+this is on the language-aspects of graphics programming.
+
+The largest competitor to OpenGL has been
+
+List to cover:
+
+ - no standard ISA
+ - standard has a lot of legacy and issues:
+    - different workflows and APIs for different applications
+    - non-standard implementations of the standard, with vendor-specific extenions
+    and other propietary technologies.
+    - standard changes depending on whether targeting desktop, mobile or
+    embedded systems
+    - must interact with Operating systems directly, such as using their windowing
+    system to create a \textit{context}. This reduces portabililty.
+    - Langauges are compiled at run-time, with different shader-models
+    - Companie wil partner with different vendors
+
+
+
+
 
 
 \chapter{Design}
