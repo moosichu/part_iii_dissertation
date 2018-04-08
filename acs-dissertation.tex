@@ -129,6 +129,13 @@ designed for are being priced out of the market \cite{TODO}.
 
 \section{The Challenges with the APIs}
 
+This section gives an overview of the general challenges programmers face when
+using graphics APIs. Firstly, the context and history of graphics APIs are
+described, with a focus on OpenGL and Vulkan. Subsequently, the general
+workflow of writing programs for GPUs is described, before finally the
+individual problems that type heterogeneous type safety seeks to address are
+identified.
+
 Programmers interact with GPUs using APIs, however, as the development of and
 growth of GPUs in computing has been relatively organic and ad-hoc, these APIs
 themselves have many legacy components and can be difficult to work with.
@@ -149,6 +156,8 @@ with performance penalties.
 
 The workflow of the GPU is very different.
 
+\subsection{OpenGL}
+
 Although GPUs do not have a standard ISA, open standards for GPU computing have
 been developed and maintained by the Khronos Group \cite{TODO}, which was
 founded in 2000 by a group companies for this purpose. OpenGL is the most
@@ -161,14 +170,45 @@ embedded systems \cite{TODO}.
 
 Despite OpenGL being an open standard with a differently-flavoured API for
 non-desktop systems, portability and development using the API is difficult for
-several reasons - both beyond and as a result of its legacy. The focus of
-this is on the language-aspects of graphics programming.
+several reasons. The focus of this is on the language-aspects of graphics
+programming.
 
-The largest competitor to OpenGL has been
+The largest competitor to OpenGL has been Direct3D by Microsoft, and is an
+alternative graphics API for Windows computers \cite{TODO}. Other platforms may
+have their own proprietary graphics APIs, such a Metal for Apple devices
+\cite{TODO}, and the various APIs that gaming consoles provide \cite{TODO}.
+Although each of these platforms have their differences, the problems being
+tackled can be generalised to all of them. Therefore, this paper will purely
+focus on the OpenGL family of graphics APIs.
+
+\subsection{Vulkan}
+
+TODO:
+
+\subsection{Graphics workflow and pipeline}
+
+GPUs are highly parallel compute machines capable of running programs called
+\textit{shaders}. However, unlike CPU programs, where a programmer will simply
+start writing code in a \texttt{main} function which can be straightforwardly
+compiled and executed, shaders require more setup and boilerplate. Typically,
+shaders complement programs designed for the CPU, with the traditional example
+being a video game. In this case, the core components of a game (such as logic,
+animation, scene-setup, input handling) will be handled by the CPU which can
+then offload certain computations to the GPU (such as graphics and physics).
+The programmer does this by using graphics APIs to initialise the graphics
+pipeline to the desired state for a particular computation (setting up buffers,
+loading data onto the GPU, initialising the pipeline, reserving resources,
+etc.). Following this, those APIs are used to direct the drivers to load
+\textit{shader code} onto the GPU. Finally, the shaders are executed for the
+desired results.
+
+Although laborious, this workflow allows programmers to use the resources of
+GPUs fairly efficiently. However, it is not without issues. The one which this
+paper seeks to tackle is down to the fact that \textit{shaders} and CPU code
+are written in completely different programming languages.
 
 List to cover:
 
- - no standard ISA
  - standard has a lot of legacy and issues:
     - different workflows and APIs for different applications
     - non-standard implementations of the standard, with vendor-specific extenions
@@ -180,17 +220,25 @@ List to cover:
     - Langauges are compiled at run-time, with different shader-models
     - Companie wil partner with different vendors
 
-
-
-
-
-
 \chapter{Design}
 
 The heterogeneous type checking aspects of the projects is composed of two
 alternative systems. The first is a pre-processing system for C and GLSL that
 ensures the enforcement of interfaces between the two languages. The second is a
 set of two novel toy languages which natively support such enforcement.
+
+
+\section{Lexer}
+
+TODO:
+
+\section{Parser}
+
+TODO:
+
+\section{Semantic Analysis}
+
+TODO:
 
 \chapter{Implementation}
 
