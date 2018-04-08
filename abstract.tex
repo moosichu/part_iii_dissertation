@@ -6,8 +6,25 @@
 
 % 2. Paper explores cross module checking between languages.
 
+Programming for Graphical Processing Units (GPUs) can be frustrating and
+error-prone due to the noncompatible nature of programming languages designed
+for different architectures. GPU programmers have to to contend with manually
+ensuring data structures and types are preserved on the boundaries between code
+for the CPU and GPU - even when using high-level programming languages on each.
+Although the future holds promise with unified languages which automatically
+optimise for heterogeneous architectures, they are currently either domain
+specific or lack the control necessary to achieve the desired performance
+levels that can be achieved using traditional workflows.
 
-TODO
+This paper explores cross module type checking between languages for
+heterogeneous computing systems. Although the ideas are generalisable, the
+focus is on GPUs and CPUs. Two approaches are discussed, implemented and
+evaluated. The first being a front-end preprocessor for C and GLSL using
+traditional backends, the second being a completely operational pair of toy
+languages with compatible type systems. Both of these approaches have their own
+tradeoffs, with the goal of improving the user experience when interacting with
+GPUs whilst still offering the high level of control traditional workflows
+provide.
 
 \newpage
 \vspace*{\fill}
