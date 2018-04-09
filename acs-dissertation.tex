@@ -54,6 +54,29 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
+Despite the slow down in the increase of transistor density in recent years
+\cite{TODO}, Graphical Processing Units (GPUs) have provided significant gains
+in computing power compared with CPUs \cite{TODO}. Furthermore, the growth of
+General Purpose GPU (GPGPU) computations have made GPUs applicable outside of
+their traditional domain of real-time graphics rendering for video games.
+
+However despite this shift, the toolchains used to interact with GPUs still
+suffer from many of the problems they did when their use cases were fairly
+niche. Although there has been research into developing modern systems which
+can target heterogeneous platforms in more user-friendly ways, they sacrifice
+the control that traditional pipelines offer.
+
+I created two systems for type-checking programs accross language boundaries in
+CPU-GPU systems. The first is a pre-processing system for C and GLSL that
+operates on annotated sections of code. The second is a proof-of-concept pair
+of languages with the features provided by the pre-processing system baked-into
+the type system at the language level.
+
+
+TODO: Flesh out.
+
+\section{Overview}
+
 % This is the introduction where you should introduce your work.  In
 % general the thing to aim for here is to describe a little bit of the
 % context for your work --- why did you do it (motivation), what was the
@@ -68,7 +91,7 @@
 % document, although without care this can appear formulaic
 % and tedious. Your call.
 
-I implemented a set of languages.
+TODO: Give overview of paper.
 
 \chapter{Technical Background}
 
@@ -224,9 +247,12 @@ List to cover:
 
 The heterogeneous type checking aspects of the projects is composed of two
 alternative systems. The first is a pre-processing system for C and GLSL that
-ensures the enforcement of interfaces between the two languages. The second is a
-set of two novel toy languages which natively support such enforcement.
+ensures the enforcement of interfaces between the two languages. The second is
+a set of two novel toy languages which natively support such enforcement.
 
+\section{Workflow}
+
+One of the important parts of the system is the implementation of the workflow.
 
 \section{Lexer}
 
@@ -248,7 +274,7 @@ TODO:
 
 TODO:
 
-TODO: reference usage of FNV hash \cite{FNVHash}.
+TODO: reference usage of FNV hash for symbol table. \cite{FNVHash}.
 
 
 
@@ -270,6 +296,10 @@ TODO:
 % to potential future work. \cite{DirectXWorkings}
 
 TODO:
+
+\chapter{Related Work}
+
+TODO: Discuss all related work in the field.
 
 \appendix
 \singlespacing
