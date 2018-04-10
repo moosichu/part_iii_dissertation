@@ -4,26 +4,37 @@
 
 % 1 sentence setting out the the scene, future holds promise.
 
+% this thesis sets scene then give contributions.
+
+% TODO: so step back and look at heterogenous computing
+
+% TODO: because compiled in seperate languages, use better words
+
 % 2. Paper explores cross module checking between languages.
 
-Programming for Graphical Processing Units (GPUs) can be frustrating and
-error-prone due to the noncompatible nature of programming languages designed
-for different architectures. GPU programmers have to contend with manually
-ensuring data structures and types are preserved on the boundaries between code
-for the CPU and GPU - even when using high-level programming languages on each.
-Although the future holds promise with unified languages which automatically
-optimise for heterogeneous architectures, they are currently either domain
-specific or lack the control necessary to achieve the desired performance
-levels that can be achieved using traditional workflows.
+Programming for heterogeneous systems such as GPUs can be frustrating and
+error-prone due to the incompatible nature of programming languages designed
+for different architectures. Programmers have to contend with manually ensuring
+data structures and types are consistent on the boundaries between code for
+different systems - even when targeting them with high-level and
+internally-sound programming languages.
 
-This paper explores cross module type checking between languages for
-heterogeneous computing systems. Although the ideas are generalisable, the
+There are multiple approaches that can be used to ease this burden. For
+example, the future holds promise with unified languages (TODO such as) which
+automatically target heterogeneous architectures, they are currently either
+domain specific or lack the control necessary to achieve the desired
+performance levels that can be achieved using traditional workflows.
+
+TODO: tighten up below. talk about the the two solutions very briefly
+
+This paper explores mechanisms for cross-module type checking between languages
+for heterogeneous computing systems. Although the ideas are generalisable, the
 focus is on GPUs and CPUs. Two approaches are discussed, implemented and
 evaluated. The first being a front-end preprocessor for C and GLSL using
 traditional backends, the second being a completely operational pair of toy
 languages with compatible type systems. Both of these approaches have their own
 tradeoffs, with the goal of improving the user experience when interacting with
-GPUs whilst still offering the high level of control traditional workflows
+GPUs whilst still offering the high level of control that traditional workflows
 provide.
 
 \newpage
