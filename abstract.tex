@@ -12,30 +12,32 @@
 
 % 2. Paper explores cross module checking between languages.
 
-Programming for heterogeneous systems such as GPUs can be frustrating and
-error-prone due to the incompatible nature of programming languages designed
-for different architectures. Programmers have to contend with manually ensuring
-data structures and types are consistent on the boundaries between code for
-different systems - even when targeting them with high-level and
-internally-sound programming languages.
+Programming for heterogeneous architectures such as CPU-GPU systems can be
+frustrating and error-prone due to the requirement of using incompatible
+programming languages designed for distinct target backends. Programmers have
+to contend with manually ensuring ahared data structures and types are
+consistent on the boundaries between code for different systems - even when
+targeting them with high-level and internally-sound programming languages.
 
 There are multiple approaches that can be used to ease this burden. For
-example, the future holds promise with unified languages (TODO such as) which
-automatically target heterogeneous architectures, they are currently either
-domain specific or lack the control necessary to achieve the desired
-performance levels that can be achieved using traditional workflows.
+example, the future holds promise with unified languages which target
+heterogeneous architectures. However, these languages are currently either
+domain specific \cite{DSL1} \cite{DSL2} or lack the control necessary to
+achieve the performance levels that traditional workflows provide
+\cite{Lime2010} \cite{JCUDA2009}.
 
-TODO: tighten up below. talk about the the two solutions very briefly
+This paper explores and discusses the implementation of two mechanisms for
+cross-module type checking between languages for heterogeneous computing
+systems without sacrificing the control modern systems provide. Although the
+ideas are applicable to general heterogeneous systems, the focus for this paper
+is on GPUs and CPUs.
 
-This paper explores mechanisms for cross-module type checking between languages
-for heterogeneous computing systems. Although the ideas are generalisable, the
-focus is on GPUs and CPUs. Two approaches are discussed, implemented and
-evaluated. The first being a front-end preprocessor for C and GLSL using
-traditional backends, the second being a completely operational pair of toy
-languages with compatible type systems. Both of these approaches have their own
-tradeoffs, with the goal of improving the user experience when interacting with
-GPUs whilst still offering the high level of control that traditional workflows
-provide.
+Th first mechanism is a front-end pre-processor for the C and GLSL programming
+languages to ensure the compile-time type-safety of the data transferred
+between them. The second mechanism is a pair of programming languages with
+compatible type systems. Both of these approaches have their own trade-offs,
+with the goal of improving the user experience when interacting with GPUs
+whilst still offering the level of control that traditional workflows provide.
 
 \newpage
 \vspace*{\fill}
