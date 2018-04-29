@@ -54,17 +54,58 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-Despite the slow-down in the increase of transistor density in recent years
-\cite{TODO}, Graphical Processing Units (GPUs) have provided significant gains
-in computing power compared with CPUs \cite{TODO}. Furthermore, the growth of
-General Purpose GPU (GPGPU) computations have made GPUs applicable outside of
-their traditional domain of real-time graphics rendering for video games.
+This section provides the motivation for the work this paper - that is the what
+the problem is, why it is important and why it has not yet been solved. This is
+followed with a brief description of the solutions this paper presents an
+overview of the entire document is finally provided.
 
-However despite this shift, the toolchains used to interact with GPUs still
-suffer from many of the problems they did when their use cases were fairly
-niche. Although there has been research into developing modern systems which
-can target heterogeneous platforms in more user-friendly ways, they sacrifice
-the control that traditional pipelines offer.
+\section{Motivation}
+
+I introduce how a slow-down in ``Moore's Law'' has led to GPUs becoming
+increasingly relevant as more industries have turned to using them due to the
+the floating point computing power they provide relative to CPUs. However, I
+then explain how despite sizeable number of developers using GPUs, standards
+and standard practices are few and far between - with a brief exploration of
+how legacy APIs, politics and proprietary technologies have led to an
+unfortunate amount of fragmentation and steep learning curves for using GPUs.
+This is an important problem to work on due to the benefits solutions could
+provide to the wide number of developers programming for GPUs.
+
+As a result of the recent slow-down in ``Moore's Law'' \cite{MooreLawSlowdown},
+Graphical Processing Units (GPUs) have provided significant gains in
+floating-point computing power relative to CPUs \cite{CPUGPUOverTime}. This has
+lead to a growth in the use GPUs for general purpose computations (known as
+GPGPU). Whilst GPUs were originally designed for rendering the graphics of
+games using a fixed-function pipeline, changes in their design over time have
+made them increasingly programmable. These design changes were driven by the
+desire of game developers to have increasingly realistic, complex and diverse
+graphics in their games. Furthermore, this has allowed GPUs to be used in a
+broadening domain of applications, including machine learning \cite{TODO},
+scientific computing \cite{TODO}, and bitcoin mining \cite{TODO}.
+
+However despite this growth, the toolchains used to interact with GPUs still
+suffer from many of the problems they did when originally used by graphics
+programmers in the early-to-mid 2000s. Section \ref{sec:history_gpu} fleshes
+out the history of GPUs in-depth.
+
+Although there has been research into
+developing modern systems which can target heterogeneous platforms in more
+user-friendly ways, they sacrifice the control that traditional pipelines
+offer.
+
+\section{These Solutions}
+
+TODO
+
+
+\subsection{Desired Outcome}
+
+TODO
+
+
+\subsection{What was done}
+
+TODO
 
 I created two systems for type-checking programs accross language boundaries in
 CPU-GPU systems. The first is a pre-processing system for C and GLSL that
@@ -129,6 +170,8 @@ TODO: Give overview of paper.
 
 \section{A (brief) History of GPUs}
 
+\label{sec:history_gpu}
+
 Graphics Processing Units (GPUs) were originally designed to be fixed-function
 3D graphics hardware accelerators aimed at hobbyist gamers who wanted to play
 the latest and greatest games with the prettiest graphics possible \cite{TODO}.
@@ -151,6 +194,8 @@ mining \cite{TODO}, video-processing \cite{TODO} and artificial intelligence
 designed for are being priced out of the market \cite{TODO}.
 
 \section{The Challenges with the APIs}
+
+\label{sec:api_challanges}
 
 This section gives an overview of the general challenges programmers face when
 using graphics APIs. Firstly, the context and history of graphics APIs are
