@@ -11,6 +11,7 @@
         "SYCL",
         "Theano",
         "Vulkan",
+        "datastructures",
         "initialisation",
         "optimisations",
         "shaders",

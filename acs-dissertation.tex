@@ -110,11 +110,11 @@ overview of the entire document is finally provided.
 
 \section{Motivation}
 
-I introduce how a slow-down in ``Moore's Law'' has led to GPUs becoming
-increasingly relevant as more industries have turned to using them due to the
-the increased floating point computing power they provide relative to CPUs.
-However, I then explain how despite sizeable number of developers using GPUs,
-standards and standard practices are few and far between - with a brief
+This section introduces how a slow-down in ``Moore's Law'' has led to GPUs
+becoming increasingly relevant as more industries have turned to using them due
+to the the increased floating point computing power they provide relative to
+CPUs. However, I then explain how despite sizeable number of developers using
+GPUs, standards and standard practices are few and far between - with a brief
 exploration of how legacy APIs, politics and proprietary technologies have led
 to an unfortunate amount of fragmentation and steep learning curves for using
 GPUs. This is an important problem to work on due to the benefits solutions
@@ -178,13 +178,14 @@ simulate the particles themselves and additionally calculates the shape of the
 resulting surface they represent before rendering the results as shown in
 Figure \ref{fig:waveparticles_example}. In this case, C$^\sharp$ was the
 language used to write code for the CPU, and HLSL was the language used to
-write shaders. Therefore, even though the same datastructure is shared, it has
-to be defined in both languages. If these definitions do not agree with each
-other, there are no in-built mechanisms to catch the errors this causes, at
-run-time or otherwise. The outcome of such a mismatch would simply be the
-undefined runtime behaviour. Section \ref{sec:api_challanges} fleshes out how
-in detail how the APIs used to write programs for GPUs work, and demonstrates
-other examples of how errors such as these can occur.
+write shaders for the GPU. Therefore, even though both languages require the
+same datastructure, it has to be defined in both languages. If these
+definitions do not agree with each other, there are no in-built mechanisms to
+catch the errors this causes, at run-time or otherwise. The outcome of such a
+mismatch would simply be the undefined runtime behaviour. Section
+\ref{sec:api_challanges} fleshes out how in detail how the APIs used to write
+programs for GPUs work, and demonstrates other examples of how errors such as
+these can occur.
 
 \begin{figure}[h]
 \centering
@@ -203,9 +204,17 @@ Developing modern systems which can target heterogeneous platforms in more
 user-friendly ways, they sacrifice the control that traditional pipelines
 offer.
 
-\section{These Solutions}
+The section provided the motivation for the solutions described in this paper,
+first by demonstrating the prevalence of GPUs and how important improvements to
+toolchains which target them could be. Secondly, it demonstrated the problems
+current toolchains face with a brief example showing how datastructures must be
+defined separately in programming languages for the GPU and the CPU. Finally, a
+brief explanation of why research has yet to tackle these problems was
+provided.
 
-TODO
+\section{The Solutions}
+
+This paper presents two solutions to the problem described above.
 
 
 \subsection{Desired Outcome}
