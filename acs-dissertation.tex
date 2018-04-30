@@ -83,10 +83,10 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-This chapter provides the motivation for the work this paper - that is the what
-the problem is, why it is important and why it has not yet been solved. This is
-followed with a brief description of the solutions this paper presents an
-overview of the entire document is finally provided.
+This chapter provides the motivation for the work this paper -- that is the
+what the problem is, why it is important and why it has not yet been solved.
+This is followed with a brief description of the solutions this paper presents
+an overview of the entire document is finally provided.
 
 \section{Terminology}
 
@@ -114,7 +114,7 @@ This section introduces how a slow-down in ``Moore's Law'' has led to GPUs
 becoming increasingly relevant as more industries have turned to using them due
 to the the increased floating point computing power they provide relative to
 CPUs. However, I then explain how despite sizeable number of developers using
-GPUs, standards and standard practices are few and far between - with a brief
+GPUs, standards and standard practices are few and far between -- with a brief
 exploration of how legacy APIs, politics and proprietary technologies have led
 to an unfortunate amount of fragmentation and steep learning curves for using
 GPUs. This is an important problem to work on due to the benefits solutions
@@ -187,6 +187,28 @@ mismatch would simply be the undefined runtime behaviour. Section
 programs for GPUs work, and demonstrates other examples of how errors such as
 these can occur.
 
+It is worth noting that the problems described here are further complicated by
+the fact that there are competing graphics API ``standards'', which can be
+either ``open'' \cite{OpenGL} \cite{Vulkan} or locked to a single platform
+\cite{Direct3D} \cite{Metal}. There can be different versions of the same
+standard on the same platform \cite{OpenGLHistory}. There can be different
+implementations of the same standards for different hardware on the same
+platform \cite{NVIDIADrivers} \cite{NVIDIADrivers}. There can be different
+implementations of the same standards for the \textit{same} hardware on
+different platforms \cite{OpenGLGettingStarted}. Platform and hardware
+variations can support different features and extensions, both within the
+``open'' ecosystems \cite{VulkanExtensions} or using proprietary mechanisms
+\cite{PhysXSDK} \cite{HairworksAMD}. Furthermore, developers can be expected to
+use different toolchains depending on their use-cases
+\cite{KhronosDeveloperOverview}. Finally, GPU vendors will put game-specific
+optimisations and workarounds in their drivers so that those specific games
+will perform well on their graphics cards \cite{WhyGamesAreWorseOnLinux}.
+Therefore, games using standard APIs incorrectly, may work fine on GPUs from
+one vendor but not on GPUs from the other \cite{TODO}.
+
+Section \ref{sec:api_options} gives an extensive breakdown of what is
+summarised here.
+
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.8\linewidth]{waveparticles_example}
@@ -198,7 +220,7 @@ There has been research into pushing forward the state-of-the-art in targeting
 more programmer-friendly ways. However, as covered in Section
 \ref{sec:related_work}, much of the research has either been domain-specific
 or provided abstractions which have an unacceptable performance overhead for
-most use-cases involving GPUs. (TODO: flesh out).
+most use-cases involving GPUs. The main reason for this
 
 Developing modern systems which can target heterogeneous platforms in more
 user-friendly ways, they sacrifice the control that traditional pipelines
@@ -215,7 +237,6 @@ provided.
 \section{The Solutions}
 
 This paper presents two solutions to the problem described above.
-
 
 \subsection{Desired Outcome}
 
@@ -235,12 +256,13 @@ the type system at the language level.
 
 TODO: Flesh out.
 
+
 \section{Overview}
 
 % This is the introduction where you should introduce your work.  In
 % general the thing to aim for here is to describe a little bit of the
-% context for your work --- why did you do it (motivation), what was the
-% hoped-for outcome (aims) --- as well as trying to give a brief
+% context for your work -- why did you do it (motivation), what was the
+% hoped-for outcome (aims) -- as well as trying to give a brief
 % overview of what you actually did.
 
 % It's often useful to bring forward some ``highlights'' into
@@ -256,6 +278,10 @@ TODO: Give overview of paper.
 \section{Compelling Results}
 
 TODO: Give compelling results.
+
+\section{Summary}
+
+TODO: summarise introduction.
 
 \chapter{Technical Background}
 
@@ -371,11 +397,11 @@ programming for the CPU, programmers often have access to a plethora of
 programming languages which are suited to different needs and are capable of
 targeting a wide range of backends. Furthermore, the instruction sets of CPUs
 are published and well-documented, allowing programmers to write applications
-for them directly - even allowing them to write their own compiler for them if
-they so desire. Finally, in the world of desktop computing, x86 is the de-facto
-standard architecture, massively increasing the portability of programs which
-target desktop PCs without the need for hardware abstractions which could come
-with performance penalties.
+for them directly -- even allowing them to write their own compiler for them
+if they so desire. Finally, in the world of desktop computing, x86 is the
+de-facto standard architecture, massively increasing the portability of
+programs which target desktop PCs without the need for hardware abstractions
+which could come with performance penalties.
 
 The workflow of the GPU is very different.
 
@@ -443,6 +469,12 @@ List to cover:
     - Langauges are compiled at run-time, with different shader-models
     - Companie wil partner with different vendors
     - Examples
+
+\subsection{API options}
+
+\label{sec:api_options}
+
+TODO:
 
 
 \textit{Issues Summary}
