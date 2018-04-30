@@ -197,18 +197,6 @@ TODO: Give compelling results.
 
 \chapter{Technical Background}
 
-This chapter provides extensive coverage of the relevant history of graphics
-hardware and how it developed over time to become useful in many fields beyond
-real-time rendering in video games. Following that, a breakdown of graphics
-APIs is provided, to give both the context for the problem this paper aims to
-tackle and the underlying technology the solutions depend upon. Then, the
-difficulties and issues with programming for GPUs is summarised from the
-contents of this chapter with a brief explanation of which ones the solutions
-presented in this paper aim to tackle and which ones they do not. The chapter
-finishes of with an overview of related research in this area, demonstrating
-both were they succeed and how they fail to tackle the specific problems that
-are solved here.
-
 % A more extensive coverage of what's required to understand your
 % work. In general you should assume the reader has a good undergraduate
 % degree in computer science, but is not necessarily an expert in
@@ -240,6 +228,18 @@ are solved here.
 % latter is that don't have to forward reference to your solution too
 % much. The correct choice will depend on what you're writing up, and
 % your own personal preference.
+
+This chapter provides extensive coverage of the relevant history of graphics
+hardware and how it developed over time to become useful in many fields beyond
+real-time rendering in video games. Following that, a breakdown of graphics
+APIs is provided, to give both the context for the problem this paper aims to
+tackle and the underlying technology the solutions depend upon. Then, the
+difficulties and issues with programming for GPUs is summarised from the
+contents of this chapter with a brief explanation of which ones the solutions
+presented in this paper aim to tackle and which ones they do not. The chapter
+finishes of with an overview of related research in this area, demonstrating
+both were they succeed and how they fail to tackle the specific problems that
+are solved here.
 
 \section{A (brief) History of GPUs}
 
@@ -481,7 +481,12 @@ TODO:
 % the idea is that you have one (or a few) ``meat'' chapters which
 % describe the work you did in technical detail.
 
-TODO:
+The source code for the project is publicly available and open-source
+\cite{ProjectSource}. The implementation is formed of two distinct components,
+the C-annotation pre-processor and the custom-languages compiler. Although both
+are written in C++, Python is also used as a build-system to enable easy
+cross-platform builds. The project was developed and tested on both Ubuntu
+16.04 and Windows 10 operating systems.
 
 TODO: reference usage of FNV hash for symbol table. \cite{FNVHash}.
 
