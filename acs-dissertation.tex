@@ -204,10 +204,8 @@ use different toolchains depending on their use-cases
 optimisations and workarounds in their drivers so that those specific games
 will perform well on their graphics cards \cite{WhyGamesAreWorseOnLinux}.
 Therefore, games using standard APIs incorrectly, may work fine on GPUs from
-one vendor but not on GPUs from the other \cite{TODO}.
-
-Section \ref{sec:api_options} gives an extensive breakdown of what is
-summarised here.
+one vendor but not on GPUs from the other \cite{TODO}. Section
+\ref{sec:api_options} gives an extensive breakdown of what is summarised here.
 
 \begin{figure}[h]
 \centering
@@ -216,15 +214,19 @@ summarised here.
 \label{fig:waveparticles_example}
 \end{figure}
 
-There has been research into pushing forward the state-of-the-art in targeting
-more programmer-friendly ways. However, as covered in Section
-\ref{sec:related_work}, much of the research has either been domain-specific
-or provided abstractions which have an unacceptable performance overhead for
-most use-cases involving GPUs. The main reason for this
-
-Developing modern systems which can target heterogeneous platforms in more
-user-friendly ways, they sacrifice the control that traditional pipelines
-offer.
+There has been research into pushing forward the state-of-the-art in developing
+code for heterogeneous platforms in more programmer-friendly ways. However, as
+covered in Section \ref{sec:related_work}, much of the research has either been
+domain-specific or provided abstractions which have an unacceptable performance
+overhead for most use-cases involving GPUs. For example, a common approach is
+to design a unified language which can be compiled to a run-time that supports
+GPUs, as is the case with Lime \cite{Lime2010}. However, by hiding the details
+of the heterogeneous backends the language targets, there is an unavoidable
+run-time overhead. Working with current toolchains is an odd mix of using an
+API and writing code in a GPU-specific language -- research has primarily
+focused on hiding the API and simplifying GPU-specific elements by designing
+unified languages abstract those details. However, alternative approaches which
+improve aspects of current toolchains do exist.
 
 The section provided the motivation for the solutions described in this paper,
 first by demonstrating the prevalence of GPUs and how important improvements to
