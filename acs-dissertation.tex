@@ -39,12 +39,12 @@
 \singlespacing
 \input{abstract}
 
-\pagenumbering{roman}
-\setcounter{page}{0}
-\pagestyle{plain}
-\tableofcontents
-\listoffigures
-\listoftables
+% \pagenumbering{roman}
+% \setcounter{page}{0}
+% \pagestyle{plain}
+% \tableofcontents
+% \listoffigures
+% \listoftables
 
 \onehalfspacing
 
@@ -54,22 +54,35 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-This section provides the motivation for the work this paper - that is the what
+This chapter provides the motivation for the work this paper - that is the what
 the problem is, why it is important and why it has not yet been solved. This is
 followed with a brief description of the solutions this paper presents an
 overview of the entire document is finally provided.
+
+\section{Terminology}
+
+\begin{itemize}
+
+    \item \textbf{Shader:} A computer program written for the GPU.
+
+    \item \textbf{VRAM:} The RAM a GPU directly accesses. Although computing
+    architectures do exist where the CPU and GPU share access to a single pool
+    of memory, in most architectures data must be explicitly transferred from
+    the CPU's RAM to the GPU's VRAM through a bus.
+
+\end{itemize}
 
 \section{Motivation}
 
 I introduce how a slow-down in ``Moore's Law'' has led to GPUs becoming
 increasingly relevant as more industries have turned to using them due to the
-the floating point computing power they provide relative to CPUs. However, I
-then explain how despite sizeable number of developers using GPUs, standards
-and standard practices are few and far between - with a brief exploration of
-how legacy APIs, politics and proprietary technologies have led to an
-unfortunate amount of fragmentation and steep learning curves for using GPUs.
-This is an important problem to work on due to the benefits solutions could
-provide to the wide number of developers programming for GPUs.
+the increased floating point computing power they provide relative to CPUs.
+However, I then explain how despite sizeable number of developers using GPUs,
+standards and standard practices are few and far between - with a brief
+exploration of how legacy APIs, politics and proprietary technologies have led
+to an unfortunate amount of fragmentation and steep learning curves for using
+GPUs. This is an important problem to work on due to the benefits solutions
+could provide to the wide number of developers programming for GPUs.
 
 As a result of the recent slow-down in ``Moore's Law'' \cite{MooreLawSlowdown},
 Graphical Processing Units (GPUs) have provided significant gains in
@@ -81,15 +94,23 @@ made them increasingly programmable. These design changes were driven by the
 desire of game developers to have increasingly realistic, complex and diverse
 graphics in their games. Furthermore, this has allowed GPUs to be used in a
 broadening domain of applications, including machine learning \cite{TODO},
-scientific computing \cite{TODO}, and bitcoin mining \cite{TODO}.
+scientific computing \cite{TODO}, and bitcoin mining \cite{TODO}. Section
+\ref{sec:history_gpu} provides more details on this.
 
 However despite this growth, the toolchains used to interact with GPUs still
 suffer from many of the problems they did when originally used by graphics
-programmers in the early-to-mid 2000s. Section \ref{sec:history_gpu} fleshes
-out the history of GPUs in-depth.
+programmers in the early-to-mid 2000s. A large root-cause of these problems is
+the fact that the programs written for GPUs (known as \textit{shaders}) have to
+be developed in a separate environment. Therefore although data is shared
+between the CPU and GPU via a bus, the programmer has to manually ensure that
+the data structures used to encode that data is consistent between the programs
+written for the GPU and CPU. Section \ref{sec:api_challanges} fleshes out how
+typical APIs used to control and program for GPUs work.
 
-Although there has been research into
-developing modern systems which can target heterogeneous platforms in more
+There has been research into pushing forward the state-of-the-art in targeting
+more programmer-friendly ways. However, TODO:.
+
+Developing modern systems which can target heterogeneous platforms in more
 user-friendly ways, they sacrifice the control that traditional pipelines
 offer.
 
