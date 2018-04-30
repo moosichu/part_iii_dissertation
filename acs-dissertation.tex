@@ -83,10 +83,10 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-This chapter provides the motivation for the work this paper presents -- that
-is the what the problem is, why it is important and why it has not yet been
-solved. This is followed with a brief description of the solutions this paper
-presents an overview of the entire document is finally provided.
+This chapter provides the motivation for the work this paper presents: What the
+problem is, why it is important and why it has not yet been solved. This is
+followed by a brief description of the solutions this paper presents before an
+overview of the entire document is provided.
 
 \section{Terminology}
 
@@ -96,20 +96,24 @@ presents an overview of the entire document is finally provided.
 
     \item \textbf{OpenGL/Direct3D:} These are 3D graphics APIs. The first is an
     open standard maintained by the Khronos Group \cite{OpenGL}, and the latter
-    is Microsoft's standard 3D graphics API supported by Windows platforms
+    is Microsoft's proprietary 3D graphics API supported by Windows platforms
     \cite{Direct3D}.
 
     \item \textbf{GLSL/HLSL:} These are \textit{shading langauges}, that is,
     programming languages that are used to write shaders. GLSL is the language
     OpenGL uses whilst HLSL is the equivalent found in Direct3D. Traditionally,
-    shaders are packaged as source code with software and GPU vendors write
-    drivers which compile these down to GPU machine-code at run-time.
+    shaders are packaged as source-code with software that has been written to
+    use them (such as a game). GPU vendors are responsible for writing drivers
+    which compile source-code down to GPU machine-code at run-time.
 
-    \item \textbf{OpenCL/CUDA:} These are \textit{compute platforms}. OpenCL is
-    an open standard for the parallel programming of heterogeneous systems
-    \cite{OpenCL}, whilst CUDA is a similar, proprietary system that is only
-    compatible with NVIDIA GPUs \cite{CUDA}. These are typically used for non-graphics
-    GPU-based applications.
+    \item \textbf{OpenCL/CUDA:} These are \textit{compute platforms}, that is,
+    APIs and ecosystems similar to OpenGL/Direct3D which are used by
+    programmers who have no intention of using the graphics capabilities of
+    GPUs. OpenCL is an open standard for the ``parallel programming of
+    heterogeneous systems'' \cite{OpenCL}, whilst CUDA is a similar,
+    proprietary system that is only compatible with NVIDIA GPUs \cite{CUDA}.
+    \textit{OpenCL C} and \textit{CUDA} are also the names of the shader
+    languages these platforms use.
 
     \item \textbf{Vulkan:} A 3D graphics \textit{and} compute API \cite{Vulkan}
     that is a successor to OpenGL and OpenCL. This differs from OpenGL and
@@ -146,10 +150,10 @@ becoming increasingly relevant as more industries have turned to using them due
 to the the increased floating point computing power they provide relative to
 CPUs. However, I then explain how despite sizeable number of developers using
 GPUs, standards and standard practices are few and far between -- with a brief
-exploration of how legacy APIs, politics and proprietary technologies have led
-to an unfortunate amount of fragmentation and steep learning curves for using
-GPUs. This is an important problem to work on due to the benefits solutions
-could provide to the wide number of developers programming for GPUs.
+exploration of how legacy APIs, proprietary technologies have led to an
+unfortunate amount of fragmentation and steep learning curves for using GPUs.
+This is an important problem to work on due to the benefits solutions could
+provide to the wide number of developers programming for GPUs.
 
 As a result of the recent slow-down in ``Moore's Law'' \cite{MooreLawSlowdown},
 Graphical Processing Units (GPUs) have provided significant gains in

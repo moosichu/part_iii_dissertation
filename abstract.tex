@@ -15,22 +15,23 @@
 Programming for heterogeneous architectures such as CPU-GPU systems can be
 frustrating and error-prone due to the requirement of using incompatible
 programming languages designed for distinct target backends. Programmers have
-to contend with manually ensuring ahared data structures and types are
-consistent on the boundaries between code for different systems - even when
-targeting them with high-level and internally-sound programming languages.
+to contend with manually ensuring shared datastructures and types are
+consistent on the boundaries between code for different architectures -- even
+when targeting them with high-level and internally-sound programming languages.
 
 There are multiple approaches that can be used to ease this burden. For
 example, the future holds promise with unified languages which target
 heterogeneous architectures. However, these languages are currently either
-domain specific \cite{DSL1} \cite{DSL2} or lack the control necessary to
-achieve the performance levels that traditional workflows provide
-\cite{Lime2010} \cite{JCUDA2009}.
+domain-specific \cite{DSL1} \cite{DSL2} or do not provide programmers the
+control necessary to achieve the performance levels that traditional workflows
+can provide \cite{Lime2010} \cite{JCUDA2009}.
 
 This paper explores and discusses the implementation of two mechanisms for
-cross-module type checking between languages for heterogeneous computing
-systems without sacrificing the control modern systems provide. Although the
-ideas are applicable to general heterogeneous systems, the focus for this paper
-is on GPUs and CPUs.
+cross-module type checking between languages which each target components of
+heterogeneous computing systems without sacrificing the control modern systems
+provide. Although the ideas are applicable to general heterogeneous systems,
+the focus for this paper is on type checking between languages which target
+GPUs and CPUs.
 
 The first mechanism is a front-end pre-processor for the C and GLSL programming
 languages to ensure the compile-time type-safety of the data transferred
