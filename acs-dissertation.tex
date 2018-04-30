@@ -140,11 +140,64 @@ the fact that the programs written for GPUs (known as \textit{shaders}) have to
 be developed in a separate environment. Therefore although data is shared
 between the CPU and GPU via a bus, the programmer has to manually ensure that
 the data structures used to encode that data is consistent between the programs
-written for the GPU and CPU. Section \ref{sec:api_challanges} fleshes out how
-typical APIs used to control and program for GPUs work.
+written for the GPU and CPU.
+
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+// C# struct definition
+public struct WaveParticle
+{
+    public Vector2 origin;
+    public Vector2 velocity;
+    public float amplitude;
+    public float dispersionAngle;
+    public int startingFrame;
+}
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+//HLSL struct definition
+struct WaveParticle {
+    float2 origin;
+    float2 velocity;
+    float amplitude;
+    float dispersionAngle;
+    int startingFrame;
+};
+\end{lstlisting}
+\label{lst:c_sharp_hlsl_struct_comparison}
+\caption{The same datastructure defined separately in C$^\sharp$ and HLSL.}
+\end{lstfloat}
+
+Listing \ref{lst:c_sharp_hlsl_struct_comparison} demonstrates a simple example
+of this kind of issue, extraced from a simple GPU-accelerated wave simulator
+\cite{WaveParticlesGPU}. In this example, units of distortion on the surface of
+a liquid are represented using a datastructure known as a \textit{Wave
+Particle} \cite{WaveParticlesOriginalPaper}. The CPU handles in-world physics
+which result in these particles being generated. However, the GPU is used to
+simulate the particles themselves and additionally calculates the shape of the
+resulting surface they represent before rendering the results as shown in
+Figure \ref{fig:waveparticles_example}. In this case, C$^\sharp$ was the
+language used to write code for the CPU, and HLSL was the language used to
+write shaders. Therefore, even though the same datastructure is shared, it has
+to be defined in both languages. If these definitions do not agree with each
+other, there are no in-built mechanisms to catch the errors this causes, at
+run-time or otherwise. The outcome of such a mismatch would simply be the
+undefined runtime behaviour. Section \ref{sec:api_challanges} fleshes out how
+in detail how the APIs used to write programs for GPUs work, and demonstrates
+other examples of how errors such as these can occur.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{waveparticles_example}
+\caption{The modern 3D graphics card pipeline.}
+\label{fig:waveparticles_example}
+\end{figure}
 
 There has been research into pushing forward the state-of-the-art in targeting
-more programmer-friendly ways. However, TODO:.
+more programmer-friendly ways. However, as covered in Section
+\ref{sec:related_work}, much of the research has either been domain-specific
+or provided abstractions which have an unacceptable performance overhead for
+most use-cases involving GPUs. (TODO: flesh out).
 
 Developing modern systems which can target heterogeneous platforms in more
 user-friendly ways, they sacrifice the control that traditional pipelines
@@ -389,32 +442,6 @@ TODO;
 
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
-// C# struct definition
-public struct WaveParticle
-{
-    public Vector2 origin;
-    public Vector2 velocity;
-    public float amplitude;
-    public float dispersionAngle;
-    public int startingFrame;
-}
-\end{lstlisting}
-\begin{lstlisting}[language=C]
-//HLSL struct definition
-struct WaveParticle {
-    float2 origin;
-    float2 velocity;
-    float amplitude;
-    float dispersionAngle;
-    int startingFrame;
-};
-\end{lstlisting}
-\label{lst:hlsl_struct}
-\caption{The same datastructure defined separately in C$^\sharp$ and HLSL.}
-\end{lstfloat}
-
-\begin{lstfloat}
-\begin{lstlisting}[language=C]
 const float fixedDeltaTime;
 const int currentFrame;
 const float particleSpeed;
@@ -452,6 +479,12 @@ void DrawParticles(uint3 id : SV_DispatchThreadID)
 in a buffer and copies its amplitude to a specific location on a texture.}
 \end{lstfloat}
 
+\section{Related Work}
+
+\label{sec:related_work}
+
+TODO:
+
 \chapter{Design}
 
 The heterogeneous type checking aspects of the projects is composed of two
@@ -484,11 +517,22 @@ TODO:
 The source code for the project is publicly available and open-source
 \cite{ProjectSource}. The implementation is formed of two distinct components,
 the C-annotation pre-processor and the custom-languages compiler. Although both
-are written in C++, Python is also used as a build-system to enable easy
+are written in C++, Python is also used as a build-system to enable simple
 cross-platform builds. The project was developed and tested on both Ubuntu
 16.04 and Windows 10 operating systems.
 
+
+\section{Pre-processor}
+
+TODO:
+
+\section{Compiler}
+
+
 TODO: reference usage of FNV hash for symbol table. \cite{FNVHash}.
+
+
+
 
 
 

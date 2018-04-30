@@ -1,19 +1,20 @@
 {
     "cSpell.words": [
-        "Mycroft",
-        "Theano",
-        "GPUs",
         "CPUs",
         "DSLs",
         "GLSL",
+        "GPUs",
         "HLSL",
         "JCUDA",
-        "SYCL",
-        "Vulkan",
+        "Mycroft",
         "SPIR",
-        "transpiler",
+        "SYCL",
+        "Theano",
+        "Vulkan",
         "initialisation",
-        "optimisations"
+        "optimisations",
+        "shaders",
+        "transpiler"
     ],
     "cSpell.flagWords": [
         "hte",
