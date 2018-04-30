@@ -23,8 +23,37 @@
 \def\wordcount{TODO}
 
 
-\usepackage{epsfig,graphicx,hyperref,parskip,setspace,tabularx,xspace}
+\usepackage{color,epsfig,float,inconsolata,graphicx,hyperref,listings,parskip,setspace,tabularx,xspace}
 \graphicspath{ {images/} }
+
+\newfloat{lstfloat}{htbp}{lop}
+\floatname{lstfloat}{Listing}
+\def\lstfloatautorefname{Listing} % needed for hyperref/auroref
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=2
+}
+
+\lstset{style=mystyle}
 
 %% START OF DOCUMENT
 \begin{document}
@@ -39,10 +68,10 @@
 \singlespacing
 \input{abstract}
 
-% \pagenumbering{roman}
-% \setcounter{page}{0}
-% \pagestyle{plain}
-% \tableofcontents
+\pagenumbering{roman}
+\setcounter{page}{0}
+\pagestyle{plain}
+\tableofcontents
 % \listoffigures
 % \listoftables
 
@@ -69,6 +98,13 @@ overview of the entire document is finally provided.
     architectures do exist where the CPU and GPU share access to a single pool
     of memory, in most architectures data must be explicitly transferred from
     the CPU's RAM to the GPU's VRAM through a bus.
+
+    \item \textbf{Framerate:} The rate at which a piece of software can render
+    a new frame in real-time. Higher is better.
+
+    \item \textbf{FPS:} Frames-per-second, a unit of measurement used to
+    quantify the framerate of some software. Due to the refresh-rates of most
+    consumer displays, 30FPS and 60FPS are common framerate targets.
 
 \end{itemize}
 
@@ -155,7 +191,23 @@ TODO: Flesh out.
 
 TODO: Give overview of paper.
 
+\section{Compelling Results}
+
+TODO: Give compelling results.
+
 \chapter{Technical Background}
+
+This chapter provides extensive coverage of the relevant history of graphics
+hardware and how it developed over time to become useful in many fields beyond
+real-time rendering in video games. Following that, a breakdown of graphics
+APIs is provided, to give both the context for the problem this paper aims to
+tackle and the underlying technology the solutions depend upon. Then, the
+difficulties and issues with programming for GPUs is summarised from the
+contents of this chapter with a brief explanation of which ones the solutions
+presented in this paper aim to tackle and which ones they do not. The chapter
+finishes of with an overview of related research in this area, demonstrating
+both were they succeed and how they fail to tackle the specific problems that
+are solved here.
 
 % A more extensive coverage of what's required to understand your
 % work. In general you should assume the reader has a good undergraduate
@@ -193,20 +245,40 @@ TODO: Give overview of paper.
 
 \label{sec:history_gpu}
 
-Graphics Processing Units (GPUs) were originally designed to be fixed-function
-3D graphics hardware accelerators aimed at hobbyist gamers who wanted to play
-the latest and greatest games with the prettiest graphics possible \cite{TODO}.
-However, as video game developers wanted more artistic control over what was
-rendered, the \textit{shader model} was introduced which gave graphics
-programmers some control ove how computer graphics were rendered. Although
-initially simple, as the desire for flexibility over these systems increased,
-the capabilities of graphics cards themselves did so as well, reaching a point
-where they are now essentially highly-parallel general-purpose computation
-machines. A lot of the early (and current) development of GPUs has been driven
-by a desire to increase the capabilities they offer to video games, allowing
-them to drive not just traditional rendering, but also physics \cite{TODO},
-procedural world generation \cite{TODO}, post-processing effects \cite{TODO}
-and alternative types of rendering including ray-tracing \cite{TODO}.
+Graphics Processing Units (GPUs) were originally fixed-function hardware
+accelerators for 3D rendering aimed at hobbyist gamers who desired hardware to
+play games with the most complex graphics possible \cite{TODO}. GPUs achieved
+levels of fidelity that were otherwise unachievable by being focused on
+optimising the \textit{rasterisation} step of 3D graphics rendering in
+hardware. This allowed games using GPUs to display much higher levels of detail
+(with higher framerates) compared to those using CPUs for rendering (known as
+\textit{software rendering}). An early example of this was the video game Quake
+and its update GLQuake. Whilst the former used the CPU for software rendering,
+the latter supported GPUs through the use of the OpenGL API, allowing for
+higher framerates, higher resolutions, improved texture filtering and
+additional effects \cite{GLQuake}.
+
+With time, developers wanted increasing artistic control over how video games
+were rendered. Therefore, graphics cards stopped being fixed-function hardware
+accelerators and the \textit{shader model} was created.
+
+This gave graphics programmers some control over how computer graphics were
+rendered. Although initially simple, as the desire for flexibility over these
+systems increased, the capabilities of graphics cards themselves did so as
+well, reaching a point where they are now essentially highly-parallel
+general-purpose computation machines. A lot of the early (and current)
+development of GPUs has been driven by a desire to increase the capabilities
+they offer to video games, allowing them to drive not just traditional
+rendering, but also physics \cite{TODO}, procedural world generation
+\cite{TODO}, post-processing effects \cite{TODO} and alternative types of
+rendering including ray-tracing \cite{TODO}.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{TODO}
+\caption{The modern 3D graphics card pipeline.}
+\label{fig:graphics_pipeline}
+\end{figure}
 
 However, this increase in flexibility has allowed GPUs be used in increasingly
 general domains, including scientific computing \cite{TODO}, crypto-currency
@@ -308,6 +380,77 @@ List to cover:
     system to create a \textit{context}. This reduces portabililty.
     - Langauges are compiled at run-time, with different shader-models
     - Companie wil partner with different vendors
+    - Examples
+
+
+\textit{Issues Summary}
+
+TODO;
+
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+// C# struct definition
+public struct WaveParticle
+{
+    public Vector2 origin;
+    public Vector2 velocity;
+    public float amplitude;
+    public float dispersionAngle;
+    public int startingFrame;
+}
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+//HLSL struct definition
+struct WaveParticle {
+    float2 origin;
+    float2 velocity;
+    float amplitude;
+    float dispersionAngle;
+    int startingFrame;
+};
+\end{lstlisting}
+\label{lst:hlsl_struct}
+\caption{The same datastructure defined separately in C$^\sharp$ and HLSL.}
+\end{lstfloat}
+
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+const float fixedDeltaTime;
+const int currentFrame;
+const float particleSpeed;
+float2 getPosition(int startingFrame, float2 velocity, float2 origin) {
+    float t = (fixedDeltaTime * (float)(currentFrame - startingFrame));
+    return origin + (t * particleSpeed * velocity);
+}
+
+const int horiRes;
+const int vertRes;
+const float planeWidth;
+const float planeHeight;
+StructuredBuffer<WaveParticle> waveParticleBuffer;
+RWTexture2D<float4> amplitudeTexture;
+
+///
+/// Splat the wave particles to the splatTexture
+///
+#pragma kernel SplatParticles
+[numthreads(THREAD_GROUPS_X, 1, 1)]
+void DrawParticles(uint3 id : SV_DispatchThreadID)
+{
+    WaveParticle particle = waveParticleBuffer[id.x];
+    float2 waveParticlePosition = getPosition(
+        particle.startingFrame, particle.velocity, particle.origin
+    );
+    int xPos = (int)round((waveParticlePosition.x / planeWidth) * horiRes);
+    int yPos = (int)round((waveParticlePosition.y / planeHeight) * vertRes);
+    amplitudeTexture[int2(xPos, yPos)] +=
+        float4(0.0, particle.amplitude, 0.0, 0.0);
+}
+\end{lstlisting}
+\label{lst:draw_particles}
+\caption{An example of an HLSL computer shader that takes a particle stored in
+in a buffer and copies its amplitude to a specific location on a texture.}
+\end{lstfloat}
 
 \chapter{Design}
 
