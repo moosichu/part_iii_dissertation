@@ -83,16 +83,47 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-This chapter provides the motivation for the work this paper -- that is the
-what the problem is, why it is important and why it has not yet been solved.
-This is followed with a brief description of the solutions this paper presents
-an overview of the entire document is finally provided.
+This chapter provides the motivation for the work this paper presents -- that
+is the what the problem is, why it is important and why it has not yet been
+solved. This is followed with a brief description of the solutions this paper
+presents an overview of the entire document is finally provided.
 
 \section{Terminology}
 
 \begin{itemize}
 
     \item \textbf{Shader:} A computer program written for the GPU.
+
+    \item \textbf{OpenGL/Direct3D:} These are 3D graphics APIs. The first is an
+    open standard maintained by the Khronos Group \cite{OpenGL}, and the latter
+    is Microsoft's standard 3D graphics API supported by Windows platforms
+    \cite{Direct3D}.
+
+    \item \textbf{GLSL/HLSL:} These are \textit{shading langauges}, that is,
+    programming languages that are used to write shaders. GLSL is the language
+    OpenGL uses whilst HLSL is the equivalent found in Direct3D. Traditionally,
+    shaders are packaged as source code with software and GPU vendors write
+    drivers which compile these down to GPU machine-code at run-time.
+
+    \item \textbf{OpenCL/CUDA:} These are \textit{compute platforms}. OpenCL is
+    an open standard for the parallel programming of heterogeneous systems
+    \cite{OpenCL}, whilst CUDA is a similar, proprietary system that is only
+    compatible with NVIDIA GPUs \cite{CUDA}. These are typically used for non-graphics
+    GPU-based applications.
+
+    \item \textbf{Vulkan:} A 3D graphics \textit{and} compute API \cite{Vulkan}
+    that is a successor to OpenGL and OpenCL. This differs from OpenGL and
+    OpenCL in creating a unified approach for interacting with GPUs at a much
+    lower level than those APIs allow. Although it has seen uptake in the gaming
+    industry, it has so far seen little success in fields where OpenCL or CUDA
+    have traditionally been used \cite{TODO}.
+
+    \item \textbf{SPIR-V}: A byte-code successor to GLSL that is supported by
+    both OpenGL and Vulkan. The idea is that graphics drivers should only have
+    to support interpreting this byte-code instead of a high-level language.
+    The Khronos Group hopes that this will spur the development of many
+    varieties of GPU-targeted languages, similar to how there are many
+    languages which compile to CPU machine-code \cite{TODO}.
 
     \item \textbf{VRAM:} The RAM a GPU directly accesses. Although computing
     architectures do exist where the CPU and GPU share access to a single pool
@@ -238,16 +269,43 @@ provided.
 
 \section{The Solutions}
 
-This paper presents two solutions to the problem described above.
+This paper presents two solutions to the problem described above. First by
+describing what the desired outcomes of those solutions should be and how they
+should improve over the status quo. This is followed by what the solutions are;
+first describing the annotation processor and then the pair of languages with a
+unified type system. The trade-offs between the two is then used to round off
+the section.
 
 \subsection{Desired Outcome}
 
-TODO
+As described in Section \ref{sec:related_work}, one of the largest stumbling
+blocks that systems which aim to improve over current toolchains face is that
+they sacrifice the control that traditional workflows provide in order to
+improve the user-experience that programmers have. The issue with this approach
+is the fact that performance is still important in many domains where GPUs are
+used -- to the point where programmers still make the trade-off of working
+directly with APIs like OpenGL instead of choosing the usability that
+abstractions could otherwise provide. Therefore, solutions which aim to build
+and improve upon the status quo should provide all the options that traditional
+toolchains do, including exposing any underlying graphics APIs.
 
+However, there are some ``easy wins'' to be made, as demonstrated by the
+example shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}, which can be
+found in compile-time type-checking. That is, instead of trying to unify code
+that is written for the CPU and GPU under a single language or system, we can
+acknowledge that they are different so have CPU code and shaders written in
+different programming languages. This means that code written for the CPU
+should still manually make API calls as it does in current toolchains. However,
+this does not mean that shaders and CPU code should be entirely separate, and
+we can still improve the programming model by having cross-language
+type-checking to ensure we have achieve the level of consistency that is
+desired.
+
+Therefore, any solution that aims to improve upon current programming models
+should give the benefits described above without sacrificing anything those
+current systems provide.
 
 \subsection{What was done}
-
-TODO
 
 I created two systems for type-checking programs accross language boundaries in
 CPU-GPU systems. The first is a pre-processing system for C and GLSL that
@@ -255,8 +313,15 @@ operates on annotated sections of code. The second is a proof-of-concept pair
 of languages with the features provided by the pre-processing system baked-into
 the type system at the language level.
 
+\subsubsection{Annotation System}
 
-TODO: Flesh out.
+The annotation system reads annotated code written in C and annotated code
+written in GLSL.
+
+
+\subsubsection{New Language}
+
+\subsection{Comparison}
 
 
 \section{Overview}
@@ -535,21 +600,31 @@ alternative systems. The first is a pre-processing system for C and GLSL that
 ensures the enforcement of interfaces between the two languages. The second is
 a set of two novel toy languages which natively support such enforcement.
 
+\section{Design Concerns}
+
+TODO:
+
+Design concerns include:
+
+ - Having a non-intrusive system
+
+ - supporting simple workflows, but without sacrificing controls
+
+ - Allow multiple shader backends
+
+ - Allow custom wrappers to exist
+
 \section{Workflow}
 
 One of the important parts of the system is the implementation of the workflow.
 
-\section{Lexer}
+\section{Annotation Processor}
 
-TODO:
+TODO
 
-\section{Parser}
+\section{Language}
 
-TODO:
-
-\section{Semantic Analysis}
-
-TODO:
+TODO
 
 \chapter{Implementation}
 
@@ -571,12 +646,7 @@ TODO:
 
 \section{Compiler}
 
-
 TODO: reference usage of FNV hash for symbol table. \cite{FNVHash}.
-
-
-
-
 
 
 \chapter{Evaluation}
@@ -585,7 +655,19 @@ TODO: reference usage of FNV hash for symbol table. \cite{FNVHash}.
 % some kind of evaluation, and it's often useful to separate
 % this out into its own chapter.
 
+
+\section{Performance}
+
+Ideally, there shouldn't be any performance overhead in either of the
+solutions. For the annotation processor, that's fairly straight-forward to
+establish, as it is essentially syntactic sugar that sits on-top-of C and GLSL.
+
+However, although the custom language has semantics very similar to C and GLSL,
+and in theory identical programs in both environments should be \textit{just
+as} performant as C - the compiler may not optimise as well as it should.
+
 TODO:
+
 
 \chapter{Conclusion and Further Work}
 
@@ -597,10 +679,6 @@ TODO:
 % to potential future work. \cite{DirectXWorkings}
 
 TODO:
-
-\chapter{Related Work}
-
-TODO: Discuss all related work in the field.
 
 \appendix
 \singlespacing
