@@ -1,10 +1,18 @@
 LATEX=latex
+PDFLATEX=pdflatex
 BIBTEX=bibtex
 DVIPS=dvips
 PS2PDF=ps2pdf
 
 all: acs-dissertation.pdf
-acs-dissertation.pdf: acs-dissertation.ps
+
+acs-dissertation.pdf: acs-dissertation.tex titlepage.tex declaration.tex abstract.tex
+	$(PDFLATEX) acs-dissertation
+	$(BIBTEX) acs-dissertation
+	$(PDFLATEX) acs-dissertation
+	$(PDFLATEX) acs-dissertation
+
+acs-dissertation.pdf2: acs-dissertation.ps
 	$(PS2PDF) -dEmbedAllFonts=true acs-dissertation.ps test.pdf
 	ps2pdf13 -dPDFSETTINGS=/prepress test.pdf acs-dissertation.pdf
 	rm -f test.pdf
