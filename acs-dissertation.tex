@@ -656,6 +656,12 @@ in a buffer and copies its amplitude to a specific location on a texture.}
 
 TODO:
 
+\chapter{Usage}
+
+This chapter describes how the systems can be used by programmers.
+
+TODO:
+
 \chapter{Design}
 
 The heterogeneous type checking aspects of the projects is composed of two
@@ -663,11 +669,19 @@ alternative systems. The first is a pre-processing system for C and GLSL that
 ensures the enforcement of interfaces between the two languages. The second is
 a set of two novel toy languages which natively support such enforcement.
 
-\section{Design Concerns}
+\section{Design Goals}
 
-TODO:
+The ultimate design goal of the cross-module type checking systems is to make
+programming for GPUs less frustrating and error prone by catching errors which
+can commonly occur. However, unlike other systems which do this, we cannot have
+\textit{any} compromises to runtime performance relative to existing industry
+standards such as GLSL and OpenGL. This includes not limiting the possible
+programs programmers can make. Naturally there pros and cons to this approach.
 
-Design concerns include:
+There are other concerns beyond performacne that need to be taken into account
+which inform the design the system. For example, a commonly used feature is two
+\textit{swap} shaders with identical interfaces in-and-out at runtime.
+Therefore this needs to be supported by the system as well.
 
 \begin{itemize}
 
