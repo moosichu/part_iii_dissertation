@@ -200,13 +200,13 @@ struct WaveParticle {
 };
 \end{lstlisting}
 \label{lst:c_sharp_hlsl_struct_comparison}
-\caption{The same datastructure defined separately in C$^\sharp$ and HLSL.}
+\caption{The same data structure defined separately in C$^\sharp$ and HLSL.}
 \end{lstfloat}
 
 Listing \ref{lst:c_sharp_hlsl_struct_comparison} demonstrates a simple example
 of this kind of issue, extraced from a simple GPU-accelerated wave simulator
 \cite{WaveParticlesGPU}. In this example, units of distortion on the surface of
-a liquid are represented using a datastructure known as a \textit{Wave
+a liquid are represented using a data structure known as a \textit{Wave
 Particle} \cite{WaveParticlesOriginalPaper}. The CPU handles in-world physics
 which result in these particles being generated. However, the GPU is used to
 simulate the particles themselves and additionally calculates the shape of the
@@ -214,7 +214,7 @@ resulting surface they represent before rendering the results as shown in
 Figure \ref{fig:waveparticles_example}. In this case, C$^\sharp$ was the
 language used to write code for the CPU, and HLSL was the language used to
 write shaders for the GPU. Therefore, even though both languages require the
-same datastructure, it has to be defined in both languages. If these
+same data structure, it has to be defined in both languages. If these
 definitions do not agree with each other, there are no in-built mechanisms to
 catch the errors this causes, at run-time or otherwise. The outcome of such a
 mismatch would simply be the undefined runtime behaviour. Section
@@ -266,7 +266,7 @@ improve aspects of current toolchains do exist.
 The section provided the motivation for the solutions described in this paper,
 first by demonstrating the prevalence of GPUs and how important improvements to
 toolchains which target them could be. Secondly, it demonstrated the problems
-current toolchains face with a brief example showing how datastructures must be
+current toolchains face with a brief example showing how data structures must be
 defined separately in programming languages for the GPU and the CPU. Finally, a
 brief explanation of why research has yet to tackle these problems was
 provided.
