@@ -196,12 +196,20 @@ scientific computing \cite{TODO}, and bitcoin mining \cite{TODO}. Section
 
 However despite this growth, the toolchains used to interact with GPUs still
 suffer from many of the problems they did when originally used by graphics
-programmers in the early-to-mid 2000s. A large root-cause of these problems is
-the fact that the programs written for GPUs (known as \textit{shaders}) have to
-be developed in a separate environment. Therefore although data is shared
-between the CPU and GPU via a bus, the programmer has to manually ensure that
-the data structures used to encode that data is consistent between the programs
-written for the GPU and CPU.
+programmers in the early-to-mid 2000s.
+
+\begin{itemize}
+
+    \item The redefinition of data structures between langauges.
+
+\end{itemize}
+
+A large root-cause of these problems is the fact that the programs written for
+GPUs (known as \textit{shaders}) have to be developed in a separate
+environment. Therefore although data is shared between the CPU and GPU via a
+bus, the programmer has to manually ensure that the data structures used to
+encode that data is consistent between the programs written for the GPU and
+CPU.
 
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
@@ -299,11 +307,11 @@ provided.
 
 \section{The Solutions}
 
-This paper presents two solutions to the problem described above. First by
+This paper sections two solutions to the problems described above. First by
 describing what the desired outcomes of those solutions should be and how they
 should improve over the status quo. This is followed by what the solutions are;
 first describing the annotation processor and then the pair of languages with a
-unified type system. The trade-offs between the two is then used to round off
+unified type system. The pros and cons of each are then discussed to round off
 the section.
 
 \subsection{Desired Outcome}
@@ -353,7 +361,7 @@ written in GLSL.
 
 TODO:
 
-\subsection{Comparison}
+\subsection{Pros and Cons}
 
 TODO:
 
@@ -431,6 +439,25 @@ presented in this paper aim to tackle and which ones they do not. The chapter
 finishes of with an overview of related research in this area, demonstrating
 both were they succeed and how they fail to tackle the specific problems that
 are solved here.
+
+\section{GPU-CPU differences}
+
+
+
+\begin{center}
+\begin{tabular}{||c||c|c|c||}
+\hline
+        & Number of Cores  & FLOPS                                         & Type of parallelism \\
+\hline
+\hline
+CPU     & 1 - O(10)        & Up to 1 Teraflop \cite{IntelTeraFlop}         & TODO                \\
+\hline
+GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TODO                \\
+\hline
+\end{tabular}
+\end{center}
+
+
 
 \section{A (brief) History of GPUs}
 
