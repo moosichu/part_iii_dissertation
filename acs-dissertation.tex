@@ -90,49 +90,75 @@ overview of the entire document is provided.
 
 \section{Terminology}
 
+Useful terms and domain-specific jargon are briefly explained below. Although
+the concepts here are explored in depth in Chapter
+\ref{chp:technical_background}, this serves as a quick reference.
+
 \begin{itemize}
 
-    \item \textbf{Shader:} A computer program written for the GPU.
+    \item \textbf{GPU:} This is a \textit{Graphical Processing Unit}, and is a
+    piece of hardware that TODO The RAM a GPU directly accesses. Although
+    computing architectures do exist where the CPU and GPU share access to a
+    single pool of memory, in most architectures data must be explicitly
+    transferred from the CPU's RAM to the GPU's VRAM through a bus.
 
-    \item \textbf{OpenGL/Direct3D:} These are 3D graphics APIs. The first is an
-    open standard maintained by the Khronos Group \cite{OpenGL}, and the latter
-    is Microsoft's proprietary 3D graphics API supported by Windows platforms
-    \cite{Direct3D}.
+    \item \textbf{Shader:} The word for \textit{any} computer program written
+    for the GPU. These are named \textit{shaders} because they were originally
+    used for shading computer graphics images, but the term now applies to all
+    GPU programs including those which are not related to graphics at all.
+
+    \item \textbf{Shading langauge:} These are programming languages that are
+    used to write shaders. These are usually distinct languages from those used
+    to write programs for the CPU.
+
+    \item \textbf{3D graphics library:} These are libraries for the CPU,
+    commonly written in C. They provide helpful functions for graphics
+    programmers and additionally provide appropriate APIs for interfacing with
+    the GPU in order to render 3D graphics. This includes function and API
+    calls to load and run shaders on the GPU.
+
+    \item \textbf{Compute platform:} These are libraries and ecosystems similar
+    to 3D graphics libraries. Despite essentially serving the same purpose of
+    allowing programmers to interface with and load programs onto the GPU. They
+    are designed with a focus on general purpose GPU computations as opposed to
+    using them to render graphics. Additionally, some compute platforms are
+    designed for hardware beyond GPUs.
+
+    \item \textbf{OpenGL/Direct3D:} These are 3D graphics libraries. The first
+    is an open standard maintained by the Khronos Group \cite{OpenGL}, and the
+    latter is Microsoft's proprietary 3D graphics API supported by Windows
+    platforms \cite{Direct3D}.
 
     \item \textbf{GLSL/HLSL:} These are \textit{shading langauges}, that is,
     programming languages that are used to write shaders. GLSL is the language
     OpenGL uses whilst HLSL is the equivalent found in Direct3D. Traditionally,
-    shaders are packaged as source-code with software that has been written to
-    use them (such as a game). GPU vendors are responsible for writing drivers
-    which compile source-code down to GPU machine-code at run-time.
+    these languages are packaged as source-code with software that has been
+    written to use them (such as a game). GPU vendors are responsible for
+    writing drivers which compile source-code down to GPU machine-code at
+    run-time.
 
-    \item \textbf{OpenCL/CUDA:} These are \textit{compute platforms}, that is,
-    APIs and ecosystems similar to OpenGL/Direct3D which are used by
-    programmers who have no intention of using the graphics capabilities of
-    GPUs. OpenCL is an open standard for the ``parallel programming of
-    heterogeneous systems'' \cite{OpenCL}, whilst CUDA is a similar,
-    proprietary system that is only compatible with NVIDIA GPUs \cite{CUDA}.
-    \textit{OpenCL C} and \textit{CUDA} are also the names of the shader
-    languages these platforms use.
+    \item \textbf{OpenCL/CUDA:} These are \textit{compute platforms}. OpenCL is
+    an open standard for the ``parallel programming of heterogeneous systems''
+    \cite{OpenCL}, whilst CUDA is a similar, proprietary system that is only
+    compatible with NVIDIA GPUs \cite{CUDA}. \textit{OpenCL C} and
+    \textit{CUDA} are also the names of the shader languages these platforms
+    use.
 
-    \item \textbf{Vulkan:} A 3D graphics \textit{and} compute API \cite{Vulkan}
-    that is a successor to OpenGL and OpenCL. This differs from OpenGL and
-    OpenCL in creating a unified approach for interacting with GPUs at a much
-    lower level than those APIs allow. Although it has seen uptake in the gaming
-    industry, it has so far seen little success in fields where OpenCL or CUDA
-    have traditionally been used \cite{TODO}.
+    \item \textbf{Vulkan:} This is 3D graphics library \textit{and} compute
+    platform \cite{Vulkan} that is a successor to both OpenGL and OpenCL. It
+    differs from OpenGL and OpenCL in creating a unified approach for
+    interacting with GPUs at a much lower level than those libraries. Although
+    it has seen uptake in the gaming industry \cite{TODO}, it has so far seen
+    little success in fields where OpenCL or CUDA have traditionally been used
+    \cite{TODO}.
 
-    \item \textbf{SPIR-V}: A byte-code successor to GLSL that is supported by
-    both OpenGL and Vulkan. The idea is that graphics drivers should only have
-    to support interpreting this byte-code instead of a high-level language.
-    The Khronos Group hopes that this will spur the development of many
-    varieties of GPU-targeted languages, similar to how there are many
-    languages which compile to CPU machine-code \cite{TODO}.
-
-    \item \textbf{VRAM:} The RAM a GPU directly accesses. Although computing
-    architectures do exist where the CPU and GPU share access to a single pool
-    of memory, in most architectures data must be explicitly transferred from
-    the CPU's RAM to the GPU's VRAM through a bus.
+    \item \textbf{SPIR-V}: This is an intermediate language successor to GLSL
+    that is supported by both OpenGL and Vulkan. The idea is that graphics
+    drivers should only have to support interpreting this byte-code instead of
+    a high-level language such as GLSL. The Khronos Group hopes that this will
+    spur the development of many varieties of GPU-targeted languages, similar
+    to how there are many languages which compile to CPU machine-code
+    \cite{TODO}.
 
     \item \textbf{Framerate:} The rate at which a piece of software can render
     a new frame in real-time. Higher is better.
@@ -359,6 +385,8 @@ TODO: Give compelling results.
 TODO: summarise introduction.
 
 \chapter{Technical Background}
+
+\label{chp:technical_background}
 
 % A more extensive coverage of what's required to understand your
 % work. In general you should assume the reader has a good undergraduate
