@@ -457,6 +457,9 @@ GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TOD
 \end{tabular}
 \end{center}
 
+Can be worth being wary of GPU vs CPU performance based on perfomance alone.
+http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
+
 
 
 \section{A (brief) History of GPUs}
@@ -654,7 +657,98 @@ in a buffer and copies its amplitude to a specific location on a texture.}
 
 \label{sec:related_work}
 
-TODO:
+This section describes related work in the field of modifying or improving GPU
+toolchains beyond traditional libraries. These attempts have generally fallen
+into two categories: providing frameworks to make use of GPUs in specific
+domains easier, or designing general purpose systems with the same goal but
+other restrictions.
+
+Mention
+
+- SYCL, SYCL "single-source programming enables the host and kernel code for an
+application to be contained in the same source file, in a type-safe way and
+with the simplicity of a cross-platform asynchronous task graph". \cite{SYCL}.
+Has seen use in ML with TensorFlow. Built on OpenCL. Abstraction Layer.
+https://blog.tartanllama.xyz/sycl/ Implementation of SYCL:
+https://github.com/codeplaysoftware/computecpp-sdk
+https://codeplay.com/products/computesuite/computecpp
+
+- OpenCL has OpenCL C++ as a language. \cite{OpenCL},
+https://www.khronos.org/opencl/ Advertises 'top to bottom C++'. "OpenCL library
+functions can now take advantage of the C++ language to provide increased
+safety and reduced undefined behavior while accessing features such as atomics,
+iterators, images, samplers, pipes, and device queue built-in types and address
+spaces" Disadvantage is that it can only do compute and is designed for that.
+Note that there is confusion about role between OpenCL and Vulkan, and compute
+shaders in OpenGL.
+https://www.khronos.org/assets/uploads/developers/library/2014-siggraph-bof/KITE-BOF_Aug14.pdf
+
+- Vulkan is low level graphics and compute API. OpenCL and Vulkan may merge in
+the future:
+http://hexus.net/tech/news/software/105895-vulkan-opencl-will-merge-single-api/
+
+- SPIR-V has been taken advantage of in this manner for Compute.
+
+- Attempts at making GPU computing available in other languages,
+Theano, TensorFlow for machine learning.
+
+- Harlan is domain specific languag for GPUs, to support higher order programming.
+It is based on Scheme.
+
+- HIP converts CUDA to portable C++ that can run on NVIDIA or AMD GPUs.
+
+- Lime is an attempt to make a Java-compatible langauge that can be compiled to
+run on GPUS. However, it abstracts away many low level details such as teh
+ability to "explicitly manage many low-level details to map data to appropriate
+address spaces, enable vectorization, schedule data transfers between the hos t
+and device, and manage synchro- nization among queues connecting the host and
+devices"
+
+- JCUDA similarly tries to make CUDA accessible to Java programmers through
+programmer friendly interfaces. However, goal is to bring power of GPU to Java
+programmers, not to make life of game developers easier who already program
+using existing pipelines.
+
+- Unity Game Engine Scriptable render pipeline.
+
+- Fumero et al. Have worked on techniques for writing shaders directly in
+high level languages. https://dl.acm.org/citation.cfm?doid=3050748.3050761
+
+- Futhark https://dl.acm.org/citation.cfm?doid=3062341.3062354 Functional
+programming on CPU
+
+- OpenMP and
+
+- HSAIL, http://www.hsafoundation.com/html/Content/PRM/Topics/01_Overview/what_is_HSAIL.htm
+(has horrible design apparently)
+
+- http://halide-lang.org/ DSL for image processing and comuptational
+photography.
+
+- GPUGPU roadmap confusing, (article about using HSA in games, but has fallen
+by wayside). https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
+https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
+
+- Bolt Library: https://github.com/HSA-Libraries/Bolt
+https://www.slideshare.net/DevCentralAMD/pt-4059-bensander
+
+
+
+- C++ AMP (work out how it's different from SYCL). Seems to be very managed.
+
+- http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3960.pdf C++
+Extensions for parallelism.
+
+- Seems to be you are either stuck with a library or delving into low level
+OpenCL.
+
+
+
+
+
+
+
+
 
 \chapter{Usage}
 
@@ -751,7 +845,7 @@ as} performant as C - the compiler may not optimise as well as it should.
 TODO:
 
 
-\chapter{Conclusion and Further Work}
+\chapter{Conclusion, Further Work and the Future of Heterogeneous Programming}
 
 % As you might imagine: summarizes the dissertation, and draws
 % any conclusions. Depending on the length of your work, and
