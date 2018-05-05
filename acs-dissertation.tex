@@ -102,10 +102,13 @@ the concepts here are explored in depth in Chapter
     single pool of memory, in most architectures data must be explicitly
     transferred from the CPU's RAM to the GPU's VRAM through a bus.
 
-    \item \textbf{Shader:} The word for \textit{any} computer program written
-    for the GPU. These are named \textit{shaders} because they were originally
-    used for shading computer graphics images, but the term now applies to all
-    GPU programs including those which are not related to graphics at all.
+    \item \textbf{Shader/Kernel:} A \textit{shader} is \textit{any} computer
+    program written for the GPU. These are named \textit{shaders} because they
+    were originally used for shading computer graphics images, but the term now
+    applies to all GPU programs including those which are not related to
+    graphics at all. A \textit{kernel} is a name used for a computer program
+    that runs on any non-CPU \textit{accelerator}, and is a term that is widely
+    used for general heterogeneous computing.
 
     \item \textbf{Shading langauge:} These are programming languages that are
     used to write shaders. These are usually distinct languages from those used
@@ -440,6 +443,11 @@ finishes of with an overview of related research in this area, demonstrating
 both were they succeed and how they fail to tackle the specific problems that
 are solved here.
 
+% TODO: Why low level details are important (eg unified memory versus seperate
+% memory)
+% https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
+% https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
+
 \section{GPU-CPU differences}
 
 
@@ -658,94 +666,132 @@ in a buffer and copies its amplitude to a specific location on a texture.}
 \label{sec:related_work}
 
 This section describes related work in the field of modifying or improving GPU
-toolchains beyond traditional libraries. These attempts have generally fallen
-into two categories: providing frameworks to make use of GPUs in specific
-domains easier, or designing general purpose systems with the same goal but
-other restrictions.
+toolchains beyond traditional libraries. It aims to show diverse set of
+approaches that have been taken to doing this and the progress that has been
+made, in addition to demonstrating the specific use-cases this paper targets
+have yet to be addressed. The work that has been done has generally fallen into
+two categories: providing frameworks to make use of GPUs in specific domains
+easier, or designing general purpose systems with the same goal but other
+restrictions.
 
-Mention
-
-- SYCL, SYCL "single-source programming enables the host and kernel code for an
-application to be contained in the same source file, in a type-safe way and
-with the simplicity of a cross-platform asynchronous task graph". \cite{SYCL}.
-Has seen use in ML with TensorFlow. Built on OpenCL. Abstraction Layer.
-https://blog.tartanllama.xyz/sycl/ Implementation of SYCL:
-https://github.com/codeplaysoftware/computecpp-sdk
-https://codeplay.com/products/computesuite/computecpp
-
-- OpenCL has OpenCL C++ as a language. \cite{OpenCL},
-https://www.khronos.org/opencl/ Advertises 'top to bottom C++'. "OpenCL library
-functions can now take advantage of the C++ language to provide increased
-safety and reduced undefined behavior while accessing features such as atomics,
-iterators, images, samplers, pipes, and device queue built-in types and address
-spaces" Disadvantage is that it can only do compute and is designed for that.
-Note that there is confusion about role between OpenCL and Vulkan, and compute
-shaders in OpenGL.
-https://www.khronos.org/assets/uploads/developers/library/2014-siggraph-bof/KITE-BOF_Aug14.pdf
-
-- Vulkan is low level graphics and compute API. OpenCL and Vulkan may merge in
-the future:
-http://hexus.net/tech/news/software/105895-vulkan-opencl-will-merge-single-api/
-
-- SPIR-V has been taken advantage of in this manner for Compute.
-
-- Attempts at making GPU computing available in other languages,
-Theano, TensorFlow for machine learning.
-
-- Harlan is domain specific languag for GPUs, to support higher order programming.
-It is based on Scheme.
-
-- HIP converts CUDA to portable C++ that can run on NVIDIA or AMD GPUs.
-
-- Lime is an attempt to make a Java-compatible langauge that can be compiled to
-run on GPUS. However, it abstracts away many low level details such as teh
-ability to "explicitly manage many low-level details to map data to appropriate
-address spaces, enable vectorization, schedule data transfers between the hos t
-and device, and manage synchro- nization among queues connecting the host and
-devices"
-
-- JCUDA similarly tries to make CUDA accessible to Java programmers through
-programmer friendly interfaces. However, goal is to bring power of GPU to Java
-programmers, not to make life of game developers easier who already program
-using existing pipelines.
-
-- Unity Game Engine Scriptable render pipeline.
-
-- Fumero et al. Have worked on techniques for writing shaders directly in
-high level languages. https://dl.acm.org/citation.cfm?doid=3050748.3050761
-
-- Futhark https://dl.acm.org/citation.cfm?doid=3062341.3062354 Functional
-programming on CPU
-
-- OpenMP and
-
-- HSAIL, http://www.hsafoundation.com/html/Content/PRM/Topics/01_Overview/what_is_HSAIL.htm
-(has horrible design apparently)
-
-- http://halide-lang.org/ DSL for image processing and comuptational
-photography.
-
-- GPUGPU roadmap confusing, (article about using HSA in games, but has fallen
-by wayside). https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
-https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
-
-- Bolt Library: https://github.com/HSA-Libraries/Bolt
-https://www.slideshare.net/DevCentralAMD/pt-4059-bensander
+Because heterogeneous programming is such a young field there are points of
+confusion. For examples, many papers creating custom interfaces or languages
+claim to create ``OpenCL Code'' in their backend. However, \textit{there is no
+such thing}. OpenCL is an API, and has traditionally defined a C-like language
+called \textit{OpenCL C} as the standard for writing compute kernels that host
+code can then load onto heterogeneous devices using the OpenCL API. Most papers
+will output code in this langauge for GPUs as a backend, as traditionally this
+has been the only option available (aside from proprietary backends such as
+CUDA for NVIDIA GPUs). However, recently an alternative intermediate langauge
+called SPIR-V has been developed for OpenCL, meaning compilers can now target
+that as a back-end instead of \textit{OpenCL C}. Furhermore, whilst the
+graphics API OpenGL, and the heterogeneous compute API, Open CL, have
+traditionally had different kernel/shader languages in GLSL and OpenCL C
+respectively, they now both share SPIR-V, which another API, Vulkan, also uses.
+However, these APIs are still distinct with their own niches, and SPIR-V has
+yet to be targeted by many front-ends yet apart from \textit{OpenCL C++}.
 
 
+Since the creation of the SPIR-V intermediate language for heterogeneous, some
+progress has been made in simplifying and unifying how GPUs are interacted with
+for compute purposes. In addition to a modified version of C, \textit{OpenCL
+C}, OpenCL has standardised recently a modified version of C++, \textit{OpenCL
+C++} for developing compute kernels \cite{OpenCL22Release}
+\cite{OpenCLCPPWhitePaper} \cite{OpenCL}. However, despite unifying some
+aspects of host and accelerator languages, this uses the traditional workflow
+of programming compute kernels and host code separately, with no checking at
+the API boundaries \cite{OpenCL22Release}. SYCL is a framework built on top of
+OpenCL that abstracts away the API calls to enable ``single-source'' C++
+development which automatically generates host and kernel from a single C++
+source file \cite{OpenCL22Release} \cite{SYCL}. SYCL has seen uptake in terms
+of multiple implementations \cite{ComputeCPP} \cite{triSYCL}, and has been
+adopted as a backend for various machine learning frameworks such as TensorFlow
+and Eigen \cite{SYCLTensorFlow} \cite{SYCLEigen}. However, this approach does
+have its limitations in removing the ability for developers to control how
+those API calls are made. Both OpenCL and SYCL are also limited in only being
+suitable for \textit{compute} applications, and for examples, do not allow for
+the graphics operations that GPUs are capable of. However, Vulkan and OpenCL
+could merge in the future \cite{VulkanOpenCLMerge}.
 
-- C++ AMP (work out how it's different from SYCL). Seems to be very managed.
+Research has been done to make GPU and heterogeneous computing available in
+high level languages. There are several approaches to this. The most
+straight-forward is to abstract a compute platform such as OpenCL or CUDA using
+a framework or library, which has primarily seen success in fields such as
+scientific computing and machine learning. Theano and TensorFlow do this
+\cite{Theano2016} \cite{TensorFlowWhitePaper}.
 
-- http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3960.pdf C++
-Extensions for parallelism.
+Harlan, developed by Holk et al, is a dommain-specific langauge based on Scheme
+for GPUS, with support for higher order programming with Scheme-influenced
+syntax and semantics \cite{Harlan} \cite{HarlanAnnouncement}. GPipe extends the
+functional language Haskell such that shaders can be written functionally and
+OpenGL calls can be made in type-safe ways, however, the garbage-collected
+nature of Haskell makes it unsuitable for many of the domains GPUs are used
+such as games \cite{HaskellState} \cite{GPipe}. Halide is another DSL for image
+processing and comuptational photography \cite{Halide}.
 
-- Seems to be you are either stuck with a library or delving into low level
-OpenCL.
+Another approach has that has been taken is to abstract away underlying APIs
+such as CUDA and OpenCL with platforms that can target both as backends. HIP is
+a project that does this by allowing CUDA code to be compiled to C++ that uses
+an abstracted API so that developers can convert their CUDA projects which is
+NVIDIA's proprietary language that can only target NVIDIA GPU to something that
+can target arbtrary backends \cite{HIP}. Lime and JCUDA take the approach of
+compiling Java or Java-like for heterogeneous architectures \cite{Lime2010}
+\cite{Lime2012} \cite{JCUDA2009}. However, they different in their approaches.
+Lime aims to abstract low-level details of heterogeneous such that arbtrary
+backends can be targetted, including GPUs (using OpenCL as a back-end) and FPGA
+syncthesisation. JCUDA is much more specialised, specifically allowing CUDA
+programs to be created using Java, with an interface that aims to closely match
+CUDA's native C one so that code can target it specifically.
+
+Fumero et al. have developed techniques to automatically offload computation
+from high-level interpreted dynamic languages using just-in-time compilation to
+achieving speedups by compiling R to an OpenCL C backend \cite{JITGPU}.
+
+Futhark is an attempt to design a functional data-parallel array language from
+the ground-up that can target GPUs, targetting an OpenCL backend
+\cite{Futhark}.
+
+
+The biggest problem with all of these though is that they focus on abstracting
+underlying API calls that are made to enable heterogeneous programming,
+exposing alternate high-level interfaces to ensure simplified and less
+error-prone program. This differs from the approach taken here, which is to
+programmers to mark-up uses of those API calls directly so that they are
+checked and compile-time for consistency without sacrificing the control that
+would otherwise be lost.
 
 
 
 
 
+% This could be useful to reference to talk about confusion with GLSL and Vulkan:
+% https://www.khronos.org/assets/uploads/developers/library/2014-siggraph-bof/KITE-BOF_Aug14.pdf
+
+% Using Compute for self driving cars:
+% https://www.codeplay.com/
+
+% - HIP converts CUDA to portable C++ that can run on NVIDIA or AMD GPUs.
+
+% - OpenMP and
+
+% - HSAIL, http://www.hsafoundation.com/html/Content/PRM/Topics/01_Overview/what_is_HSAIL.htm
+% (has horrible design apparently)
+
+% - GPUGPU roadmap confusing, (article about using HSA in games, but has fallen
+% by wayside). https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
+% https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
+
+% - Bolt Library: https://github.com/HSA-Libraries/Bolt
+% https://www.slideshare.net/DevCentralAMD/pt-4059-bensander
+
+
+% - C++ AMP (work out how it's different from SYCL). Seems to be very managed.
+
+% - http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3960.pdf C++
+% Extensions for parallelism.
+
+% - Seems to be you are either stuck with a library or delving into low level
+% OpenCL.
 
 
 

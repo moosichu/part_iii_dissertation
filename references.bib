@@ -175,6 +175,46 @@
     keywords = {fpga, functional programming, high level synthesis, object oriented, reconfigurable architecture, streaming, value type},
 }
 
+@inproceedings{JITGPU,
+    author = {Fumero, Juan and Steuwer, Michel and Stadler, Lukas and Dubach, Christophe},
+    title = {Just-In-Time GPU Compilation for Interpreted Languages with Partial Evaluation},
+    booktitle = {Proceedings of the 13th ACM SIGPLAN/SIGOPS International Conference on Virtual Execution Environments},
+    series = {VEE '17},
+    year = {2017},
+    isbn = {978-1-4503-4948-2},
+    location = {Xi'an, China},
+    pages = {60--73},
+    numpages = {14},
+    url = {http://doi.acm.org/10.1145/3050748.3050761},
+    doi = {10.1145/3050748.3050761},
+    acmid = {3050761},
+    publisher = {ACM},
+    address = {New York, NY, USA},
+}
+
+@inproceedings{Futhark,
+    author = {Henriksen, Troels and Serup, Niels G. W. and Elsman, Martin and Henglein, Fritz and Oancea, Cosmin E.},
+    title = {Futhark: Purely Functional GPU-programming with Nested Parallelism and In-place Array Updates},
+    booktitle = {Proceedings of the 38th ACM SIGPLAN Conference on Programming Language Design and Implementation},
+    series = {PLDI 2017},
+    year = {2017},
+    isbn = {978-1-4503-4988-8},
+    location = {Barcelona, Spain},
+    pages = {556--571},
+    numpages = {16},
+    url = {http://doi.acm.org/10.1145/3062341.3062354},
+    doi = {10.1145/3062341.3062354},
+    acmid = {3062354},
+    publisher = {ACM},
+    address = {New York, NY, USA},
+    keywords = {GPGPU, compilers, functional language, parallel},
+}
+
+@misc{Halide,
+    howpublished = {\url{http://halide-lang.org/}},
+    title = {Halide},
+}
+
 @misc{SYCL,
     title = {SYCL},
     howpublished = {\url{https://www.khronos.org/sycl}},
@@ -355,6 +395,149 @@
     year = {2017},
     month = {Oct},
     howpublished = {\url{https://www.gamingonlinux.com/articles/why-linux-games-often-perform-worse-than-on-windows.8406}},
+}
+
+@misc{OpenCL22Release,
+    title = {Khronos Releases OpenCL 2.2 With SPIR-V 1.2},
+    publisher = {The Khronos Group Inc.},
+    howpublished = {\url{https://www.khronos.org/news/press/khronos-releases-opencl-2.2-with-spir-v-1.2}},
+    month = {May},
+    day = {16},
+    year = {2017},
+}
+
+@misc{OpenCLCPPWhitePaper,
+    title = {An Introduction to OpenCL C++},
+    publisher = {The Khronos Group Inc.},
+    howpublished = {\url{https://www.khronos.org/assets/uploads/developers/resources/Intro-to-OpenCL-C++-Whitepaper-May15.pdf}},
+    author = {AJ Guillon, YetiWare Inc.},
+    month = {May},
+    year = {2015},
+}
+
+@misc{SYCLTensorFlow,
+    title = {TensorFlow\textsuperscript{TM} for OpenCL\textsuperscript{TM} using SYCL\textsuperscript{TM}},
+    howpublished = {\url{https://www.codeplay.com/portal/tensorflow%E2%84%A2-for-opencl%E2%84%A2-using-sycl%E2%84%A2}},
+    author = {Luke Iwanski},
+    month = {Jun},
+    day = {12},
+    year = {2016},
+    publisher = {Codeplay Software Ltd.},
+}
+
+@misc{SYCLEcoSystem,
+    title = {sycle.tech},
+    howpublished = {\url{http://sycl.tech/}},
+}
+
+@misc{triSYCL,
+    title = {triSYCL},
+    howpublished = {\url{https://github.com/Xilinx/triSYCL}},
+}
+
+@misc{ComputeCPP,
+    title = {ComputeCPP},
+    howpublished = {\url{https://www.codeplay.com/products/computesuite/computecpp}},
+}
+
+@misc{SYCLEigen,
+    title = {Implementing OpenCL Support for Eigen using SYCL and ComputeCpp},
+    howpublished = {\url{https://www.codeplay.com/portal/05-22-17-implementing-opencl-support-for-eigen-using-sycl-and-computecpp}},
+    author = {Mehdi Goli},
+    month = {May},
+    day = {22},
+    year = {2017},
+    publisher = {Codeplay Software Ltd.},
+}
+
+@misc{VulkanOpenCLMerge,
+    title = {Vulkan and OpenCL will merge into a single API},
+    howpublished = {\url{http://hexus.net/tech/news/software/105895-vulkan-opencl-will-merge-single-api/}},
+    author = {Mark Tyson},
+    month = {May},
+    day = {19},
+    year = {2017},
+    publisher = {HEXUS.net},
+}
+
+@misc{TensorFlowWhitePaper,
+title={ {TensorFlow}: Large-Scale Machine Learning on Heterogeneous Systems},
+url={https://www.tensorflow.org/},
+note={Software available from tensorflow.org},
+author={
+    Mart\'{\i}n~Abadi and
+    Ashish~Agarwal and
+    Paul~Barham and
+    Eugene~Brevdo and
+    Zhifeng~Chen and
+    Craig~Citro and
+    Greg~S.~Corrado and
+    Andy~Davis and
+    Jeffrey~Dean and
+    Matthieu~Devin and
+    Sanjay~Ghemawat and
+    Ian~Goodfellow and
+    Andrew~Harp and
+    Geoffrey~Irving and
+    Michael~Isard and
+    Yangqing Jia and
+    Rafal~Jozefowicz and
+    Lukasz~Kaiser and
+    Manjunath~Kudlur and
+    Josh~Levenberg and
+    Dandelion~Man\'{e} and
+    Rajat~Monga and
+    Sherry~Moore and
+    Derek~Murray and
+    Chris~Olah and
+    Mike~Schuster and
+    Jonathon~Shlens and
+    Benoit~Steiner and
+    Ilya~Sutskever and
+    Kunal~Talwar and
+    Paul~Tucker and
+    Vincent~Vanhoucke and
+    Vijay~Vasudevan and
+    Fernanda~Vi\'{e}gas and
+    Oriol~Vinyals and
+    Pete~Warden and
+    Martin~Wattenberg and
+    Martin~Wicke and
+    Yuan~Yu and
+    Xiaoqiang~Zheng},
+  year={2015},
+}
+
+@misc{Harlan,
+    howpublished = {\url{https://github.com/eholk/harlan}},
+    title = {Harlan},
+    author = {Erik Holk},
+}
+
+@misc{HarlanAnnouncement,
+    howpublished = {\url{https://blog.theincredibleholk.org/blog/2013/06/28/announcing-the-release-of-harlan/}},
+    year = {2013},
+    month = {Jun},
+    day = {28},
+    title = {Announcing the release of Harlan},
+    author = {Erik Holk},
+    publisher = {Erik Holk},
+}
+
+@misc{GPipe,
+    author = {Tobias Bexelius},
+    howpublished = {\url{https://github.com/tobbebex/GPipe-Core}},
+    title = {GPipe 2},
+}
+
+@misc{HaskellState,
+    howpublished = {\url{https://github.com/Gabriel439/post-rfc/blob/master/sotu.md}},
+    title = {State of the Haskell ecosystem},
+}
+
+@misc{HIP,
+    howpublished = {\url{https://github.com/ROCm-Developer-Tools/HIP}},
+    title = {HIP : Convert CUDA to Portable C++ Code},
 }
 
 @misc{TODO,
