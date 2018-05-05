@@ -751,6 +751,16 @@ Futhark is an attempt to design a functional data-parallel array language from
 the ground-up that can target GPUs, targetting an OpenCL backend
 \cite{Futhark}.
 
+In addition to SYCL and OpenCL C++, there have been other attempts at bringing
+heterogeneous programming models natively to C++ specifically through parallel
+programming standards. C++ AMP is a C++ library, programming model, and
+compiler developed by Microsoft that targets DirectX 11 \cite{CAMP}. However,
+it seems to have died \cite{CAMPFail1} \cite{CAMPFail2}. \textit{C++ extensions
+for parallelism} has brought such standards to the C++ standard template
+library \cite{CPPParallelism}. Finally, OpenMP is an API standard dedicated to
+shared-memory multiprocessing \cite{OpenMP}. HCC is a project aims to take C++
+code that conforms to any of these standards and compile it to AMD's GCN
+instruction set \cite{HCC}.
 
 The biggest problem with all of these though is that they focus on abstracting
 underlying API calls that are made to enable heterogeneous programming,
@@ -759,8 +769,6 @@ error-prone program. This differs from the approach taken here, which is to
 programmers to mark-up uses of those API calls directly so that they are
 checked and compile-time for consistency without sacrificing the control that
 would otherwise be lost.
-
-
 
 
 
