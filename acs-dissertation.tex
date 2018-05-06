@@ -23,7 +23,7 @@
 \def\wordcount{TODO}
 
 
-\usepackage{color,epsfig,float,inconsolata,graphicx,hyperref,listings,parskip,setspace,tabularx,xspace}
+\usepackage{array,color,epsfig,float,inconsolata,graphicx,hyperref,listings,parskip,setspace,tabularx,tabu,xspace}
 \graphicspath{ {images/} }
 
 \newfloat{lstfloat}{htbp}{lop}
@@ -93,6 +93,23 @@ overview of the entire document is provided.
 Useful terms and domain-specific jargon are briefly explained below. Although
 the concepts here are explored in depth in Chapter
 \ref{chp:technical_background}, this serves as a quick reference.
+
+Because heterogeneous programming is such a young field there are points of
+confusion. For examples, many papers creating custom interfaces or languages
+claim to create ``OpenCL Code'' in their backend. However, \textit{there is no
+such thing}. OpenCL is an API, and has traditionally defined a C-like language
+called \textit{OpenCL C} as the standard for writing compute kernels that host
+code can then load onto heterogeneous devices using the OpenCL API. Most papers
+will output code in this langauge for GPUs as a backend, as traditionally this
+has been the only option available (aside from proprietary backends such as
+CUDA for NVIDIA GPUs). However, recently an alternative intermediate langauge
+called SPIR-V has been developed for OpenCL, meaning compilers can now target
+that as a back-end instead of \textit{OpenCL C}. Furhermore, whilst the
+graphics API OpenGL, and the heterogeneous compute API, Open CL, have
+traditionally had different kernel/shader languages in GLSL and OpenCL C
+respectively, they now both share SPIR-V, which another API, Vulkan, also uses.
+However, these APIs are still distinct with their own niches, and SPIR-V has
+yet to be targeted by many front-ends yet apart from \textit{OpenCL C++}.
 
 \begin{itemize}
 
@@ -519,6 +536,93 @@ designed for are being priced out of the market \cite{TODO}.
 
 \label{sec:api_challanges}
 
+\begin{table}
+\footnotesize
+\begin{tabu} to 1
+\textwidth {||X[c]||X[c]|X[c]|X[c]||}
+\hline
+Name &
+Created &
+Developer &
+Purpose \\
+\hline
+OpenGL &
+1992 &
+Khronos Group &
+Graphics \\
+\hline
+Direct3D &
+1996 &
+Microsoft &
+Graphics \\
+\hline
+CUDA &
+2007 &
+NVIDIA &
+Compute \\
+\hline
+OpenCL &
+2009 &
+Khronos Group &
+Compute \\
+\hline
+Metal &
+2014 &
+Apple &
+Compute and Graphics \\
+\hline
+Vulkan &
+2016 &
+Khronos Group &
+Compute and Graphics \\
+\hline
+
+\hline
+\hline
+
+\hline
+Name &
+Targets &
+Langauge &
+License \\
+\hline
+OpenGL &
+GPUs &
+GLSL and SPIR-V &
+Open Specification \\
+\hline
+Direct3D &
+GPUs with Windows OS &
+HLSL &
+Proprietary \\
+\hline
+CUDA &
+NVIDIA GPUs &
+CUDA C/C++ &
+Proprietary \\
+\hline
+OpenCL &
+GPUs, DSPs and FPGAs &
+OpenCL C and SPIR-V &
+Open Specification \\
+\hline
+Metal &
+GPUs &
+Metal Shading Language (C++ based) &
+Proprietary \\
+\hline
+Vulkan &
+GPUs (so far) &
+SPIR-V &
+Open Specification \\
+\hline
+\end{tabu}
+
+\caption{ A comparison of different graphics and compute APIs, listed in
+chronological order. }
+
+\end{table}
+
 This section gives an overview of the general challenges programmers face when
 using graphics APIs. Firstly, the context and history of graphics APIs are
 described, with a focus on OpenGL and Vulkan. Subsequently, the general
@@ -666,52 +770,32 @@ in a buffer and copies its amplitude to a specific location on a texture.}
 \label{sec:related_work}
 
 This section describes related work in the field of modifying or improving GPU
-toolchains beyond traditional libraries. It aims to show diverse set of
-approaches that have been taken to doing this and the progress that has been
-made, in addition to demonstrating the specific use-cases this paper targets
-have yet to be addressed. The work that has been done has generally fallen into
-two categories: providing frameworks to make use of GPUs in specific domains
-easier, or designing general purpose systems with the same goal but other
-restrictions.
+toolchains beyond traditional low-level libraries. It aims to show diverse set
+of approaches that have been taken to doing this and the progress that has been
+made, in addition to demonstrating the specific problems targeted by this paper
+have yet to be addressed.
 
-Because heterogeneous programming is such a young field there are points of
-confusion. For examples, many papers creating custom interfaces or languages
-claim to create ``OpenCL Code'' in their backend. However, \textit{there is no
-such thing}. OpenCL is an API, and has traditionally defined a C-like language
-called \textit{OpenCL C} as the standard for writing compute kernels that host
-code can then load onto heterogeneous devices using the OpenCL API. Most papers
-will output code in this langauge for GPUs as a backend, as traditionally this
-has been the only option available (aside from proprietary backends such as
-CUDA for NVIDIA GPUs). However, recently an alternative intermediate langauge
-called SPIR-V has been developed for OpenCL, meaning compilers can now target
-that as a back-end instead of \textit{OpenCL C}. Furhermore, whilst the
-graphics API OpenGL, and the heterogeneous compute API, Open CL, have
-traditionally had different kernel/shader languages in GLSL and OpenCL C
-respectively, they now both share SPIR-V, which another API, Vulkan, also uses.
-However, these APIs are still distinct with their own niches, and SPIR-V has
-yet to be targeted by many front-ends yet apart from \textit{OpenCL C++}.
-
-
-Since the creation of the SPIR-V intermediate language for heterogeneous, some
+Since the creation of the SPIR-V intermediate language for heterogeneous
+programming (as discussed in Chapter \ref{chp:technical_background}), some
 progress has been made in simplifying and unifying how GPUs are interacted with
 for compute purposes. In addition to a modified version of C, \textit{OpenCL
-C}, OpenCL has standardised recently a modified version of C++, \textit{OpenCL
+C}, OpenCL has recently standardised a modified version of C++, \textit{OpenCL
 C++} for developing compute kernels \cite{OpenCL22Release}
 \cite{OpenCLCPPWhitePaper} \cite{OpenCL}. However, despite unifying some
 aspects of host and accelerator languages, this uses the traditional workflow
-of programming compute kernels and host code separately, with no checking at
-the API boundaries \cite{OpenCL22Release}. SYCL is a framework built on top of
-OpenCL that abstracts away the API calls to enable ``single-source'' C++
-development which automatically generates host and kernel from a single C++
-source file \cite{OpenCL22Release} \cite{SYCL}. SYCL has seen uptake in terms
-of multiple implementations \cite{ComputeCPP} \cite{triSYCL}, and has been
-adopted as a backend for various machine learning frameworks such as TensorFlow
-and Eigen \cite{SYCLTensorFlow} \cite{SYCLEigen}. However, this approach does
-have its limitations in removing the ability for developers to control how
-those API calls are made. Both OpenCL and SYCL are also limited in only being
-suitable for \textit{compute} applications, and for examples, do not allow for
-the graphics operations that GPUs are capable of. However, Vulkan and OpenCL
-could merge in the future \cite{VulkanOpenCLMerge}.
+of programming compute kernels and host code separately, with no cross-module
+checking at the API boundaries \cite{OpenCL22Release}. SYCL is a framework
+built on top of OpenCL that abstracts away the API calls to enable
+``single-source'' C++ development which automatically generates host and kernel
+from a single C++ source file \cite{OpenCL22Release} \cite{SYCL}. SYCL has seen
+uptake in terms of multiple implementations \cite{ComputeCPP} \cite{triSYCL},
+and has been adopted as a backend for various machine learning frameworks such
+as TensorFlow and Eigen \cite{SYCLTensorFlow} \cite{SYCLEigen}. However, this
+approach does have its limitations in removing the ability for developers to
+control how those API calls are made. Both OpenCL and SYCL are also limited in
+only being suitable for \textit{compute} applications, and do not allow for the
+graphics operations that GPUs are capable of. However, Vulkan and OpenCL could
+merge in the future \cite{VulkanOpenCLMerge}.
 
 Research has been done to make GPU and heterogeneous computing available in
 high level languages. There are several approaches to this. The most
