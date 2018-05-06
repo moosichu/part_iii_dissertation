@@ -743,6 +743,13 @@ syncthesisation. JCUDA is much more specialised, specifically allowing CUDA
 programs to be created using Java, with an interface that aims to closely match
 CUDA's native C one so that code can target it specifically.
 
+OpenACC is a system specifically targeted at scientists that lets programmers
+mark appropriate sections of normal C++, C or Fortran code as possible
+candidates for accelerated parallel computation \cite{OpenACC}. The goal is
+specifically to allow users to write code as they normally would for the CPU,
+and then perform a pass where that code is left entirely unmodified except for
+the addition of directives.
+
 Fumero et al. have developed techniques to automatically offload computation
 from high-level interpreted dynamic languages using just-in-time compilation to
 achieving speedups by compiling R to an OpenCL C backend \cite{JITGPU}.
@@ -769,40 +776,6 @@ error-prone program. This differs from the approach taken here, which is to
 programmers to mark-up uses of those API calls directly so that they are
 checked and compile-time for consistency without sacrificing the control that
 would otherwise be lost.
-
-
-
-% This could be useful to reference to talk about confusion with GLSL and Vulkan:
-% https://www.khronos.org/assets/uploads/developers/library/2014-siggraph-bof/KITE-BOF_Aug14.pdf
-
-% Using Compute for self driving cars:
-% https://www.codeplay.com/
-
-% - HIP converts CUDA to portable C++ that can run on NVIDIA or AMD GPUs.
-
-% - OpenMP and
-
-% - HSAIL, http://www.hsafoundation.com/html/Content/PRM/Topics/01_Overview/what_is_HSAIL.htm
-% (has horrible design apparently)
-
-% - GPUGPU roadmap confusing, (article about using HSA in games, but has fallen
-% by wayside). https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
-% https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
-
-% - Bolt Library: https://github.com/HSA-Libraries/Bolt
-% https://www.slideshare.net/DevCentralAMD/pt-4059-bensander
-
-
-% - C++ AMP (work out how it's different from SYCL). Seems to be very managed.
-
-% - http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n3960.pdf C++
-% Extensions for parallelism.
-
-% - Seems to be you are either stuck with a library or delving into low level
-% OpenCL.
-
-
-
 
 \chapter{Usage}
 
