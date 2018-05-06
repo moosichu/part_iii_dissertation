@@ -18,6 +18,7 @@
         "initialisation",
         "optimisations",
         "shaders",
+        "synthesisation",
         "transpiler"
     ],
     "cSpell.flagWords": [

@@ -104,7 +104,7 @@ will output code in this langauge for GPUs as a backend, as traditionally this
 has been the only option available (aside from proprietary backends such as
 CUDA for NVIDIA GPUs). However, recently an alternative intermediate langauge
 called SPIR-V has been developed for OpenCL, meaning compilers can now target
-that as a back-end instead of \textit{OpenCL C}. Furhermore, whilst the
+that as a back-end instead of \textit{OpenCL C}. Furthermore, whilst the
 graphics API OpenGL, and the heterogeneous compute API, Open CL, have
 traditionally had different kernel/shader languages in GLSL and OpenCL C
 respectively, they now both share SPIR-V, which another API, Vulkan, also uses.
@@ -149,7 +149,7 @@ yet to be targeted by many front-ends yet apart from \textit{OpenCL C++}.
     latter is Microsoft's proprietary 3D graphics API supported by Windows
     platforms \cite{Direct3D}.
 
-    \item \textbf{GLSL/HLSL:} These are \textit{shading langauges}, that is,
+    \item \textbf{GLSL/HLSL:} These are \textit{shading languages}, that is,
     programming languages that are used to write shaders. GLSL is the language
     OpenGL uses whilst HLSL is the equivalent found in Direct3D. Traditionally,
     these languages are packaged as source-code with software that has been
@@ -220,7 +220,7 @@ programmers in the early-to-mid 2000s.
 
 \begin{itemize}
 
-    \item The redefinition of data structures between langauges.
+    \item The redefinition of data structures between languages.
 
 \end{itemize}
 
@@ -258,7 +258,7 @@ struct WaveParticle {
 \end{lstfloat}
 
 Listing \ref{lst:c_sharp_hlsl_struct_comparison} demonstrates a simple example
-of this kind of issue, extraced from a simple GPU-accelerated wave simulator
+of this kind of issue, extracted from a simple GPU-accelerated wave simulator
 \cite{WaveParticlesGPU}. In this example, units of distortion on the surface of
 a liquid are represented using a data structure known as a \textit{Wave
 Particle} \cite{WaveParticlesOriginalPaper}. The CPU handles in-world physics
@@ -365,7 +365,7 @@ current systems provide.
 
 \subsection{What was done}
 
-I created two systems for type-checking programs accross language boundaries in
+I created two systems for type-checking programs across language boundaries in
 CPU-GPU systems. The first is a pre-processing system for C and GLSL that
 operates on annotated sections of code. The second is a proof-of-concept pair
 of languages with the features provided by the pre-processing system baked-into
@@ -482,7 +482,7 @@ GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TOD
 \end{tabular}
 \end{center}
 
-Can be worth being wary of GPU vs CPU performance based on perfomance alone.
+Can be worth being wary of GPU vs CPU performance based on performance alone.
 http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
 
 
@@ -705,14 +705,14 @@ List to cover:
 
  - standard has a lot of legacy and issues:
     - different workflows and APIs for different applications
-    - non-standard implementations of the standard, with vendor-specific extenions
-    and other propietary technologies.
+    - non-standard implementations of the standard, with vendor-specific extensions
+    and other proprietary technologies.
     - standard changes depending on whether targeting desktop, mobile or
     embedded systems
     - must interact with Operating systems directly, such as using their windowing
-    system to create a \textit{context}. This reduces portabililty.
-    - Langauges are compiled at run-time, with different shader-models
-    - Companie wil partner with different vendors
+    system to create a \textit{context}. This reduces portability.
+    - Languages are compiled at run-time, with different shader-models
+    - Companies Will partner with different vendors
     - Examples
 
 \subsection{API options}
@@ -778,52 +778,56 @@ have yet to be addressed.
 Since the creation of the SPIR-V intermediate language for heterogeneous
 programming (as discussed in Chapter \ref{chp:technical_background}), some
 progress has been made in simplifying and unifying how GPUs are interacted with
-for compute purposes. In addition to a modified version of C, \textit{OpenCL
-C}, OpenCL has recently standardised a modified version of C++, \textit{OpenCL
-C++} for developing compute kernels \cite{OpenCL22Release}
-\cite{OpenCLCPPWhitePaper} \cite{OpenCL}. However, despite unifying some
-aspects of host and accelerator languages, this uses the traditional workflow
-of programming compute kernels and host code separately, with no cross-module
-checking at the API boundaries \cite{OpenCL22Release}. SYCL is a framework
-built on top of OpenCL that abstracts away the API calls to enable
-``single-source'' C++ development which automatically generates host and kernel
-from a single C++ source file \cite{OpenCL22Release} \cite{SYCL}. SYCL has seen
-uptake in terms of multiple implementations \cite{ComputeCPP} \cite{triSYCL},
-and has been adopted as a backend for various machine learning frameworks such
-as TensorFlow and Eigen \cite{SYCLTensorFlow} \cite{SYCLEigen}. However, this
-approach does have its limitations in removing the ability for developers to
-control how those API calls are made. Both OpenCL and SYCL are also limited in
-only being suitable for \textit{compute} applications, and do not allow for the
-graphics operations that GPUs are capable of. However, Vulkan and OpenCL could
-merge in the future \cite{VulkanOpenCLMerge}.
+for compute purposes. For example the Khronos Group have recently standardised
+a modified version of C++, \textit{OpenCL C++} for developing compute kernels
+\cite{OpenCL22Release} \cite{OpenCLCPPWhitePaper} \cite{OpenCL}. This has only
+been possible because it can be compiled to SPIR-V, whereas previously graphics
+drivers had to implement OpenCL C directly, limiting how complex OpenCL's
+shader language could become. However, despite unifying some aspects of host
+and accelerator languages, this uses the traditional workflow of programming
+compute kernels and host code separately, with no cross-module checking at the
+API boundaries \cite{OpenCL22Release}.
+
+SYCL is a framework by the Khronos Group built on top of OpenCL that abstracts
+away the API calls to enable ``single-source'' C++ development which
+automatically generates host and kernel from a single C++ source file
+\cite{OpenCL22Release} \cite{SYCL}. SYCL has seen uptake in terms of multiple
+implementations \cite{ComputeCPP} \cite{triSYCL}, and has been adopted as a
+backend for various machine learning frameworks such as TensorFlow and Eigen
+\cite{SYCLTensorFlow} \cite{SYCLEigen}. However, this approach does have its
+limitations in removing the ability for developers to control how those API
+calls are made. Both OpenCL and SYCL are also limited in only being suitable
+for \textit{compute} applications, and do not allow for the graphics operations
+that GPUs are capable of. However, Vulkan and OpenCL could merge in the future,
+which may open the door to this happening \cite{VulkanOpenCLMerge}.
 
 Research has been done to make GPU and heterogeneous computing available in
-high level languages. There are several approaches to this. The most
+high-level languages. There are several approaches to this. The most
 straight-forward is to abstract a compute platform such as OpenCL or CUDA using
 a framework or library, which has primarily seen success in fields such as
 scientific computing and machine learning. Theano and TensorFlow do this
 \cite{Theano2016} \cite{TensorFlowWhitePaper}.
 
-Harlan, developed by Holk et al, is a dommain-specific langauge based on Scheme
+Harlan, developed by Holk et al., is a domain-specific langauge based on Scheme
 for GPUS, with support for higher order programming with Scheme-influenced
 syntax and semantics \cite{Harlan} \cite{HarlanAnnouncement}. GPipe extends the
 functional language Haskell such that shaders can be written functionally and
 OpenGL calls can be made in type-safe ways, however, the garbage-collected
 nature of Haskell makes it unsuitable for many of the domains GPUs are used
 such as games \cite{HaskellState} \cite{GPipe}. Halide is another DSL for image
-processing and comuptational photography \cite{Halide}.
+processing and computational photography \cite{Halide}.
 
 Another approach has that has been taken is to abstract away underlying APIs
 such as CUDA and OpenCL with platforms that can target both as backends. HIP is
 a project that does this by allowing CUDA code to be compiled to C++ that uses
 an abstracted API so that developers can convert their CUDA projects which is
 NVIDIA's proprietary language that can only target NVIDIA GPU to something that
-can target arbtrary backends \cite{HIP}. Lime and JCUDA take the approach of
+can target arbitrary backends \cite{HIP}. Lime and JCUDA take the approach of
 compiling Java or Java-like for heterogeneous architectures \cite{Lime2010}
 \cite{Lime2012} \cite{JCUDA2009}. However, they different in their approaches.
-Lime aims to abstract low-level details of heterogeneous such that arbtrary
-backends can be targetted, including GPUs (using OpenCL as a back-end) and FPGA
-syncthesisation. JCUDA is much more specialised, specifically allowing CUDA
+Lime aims to abstract low-level details of heterogeneous such that arbitrary
+backends can be targeted, including GPUs (using OpenCL as a back-end) and FPGA
+synthesisation. JCUDA is much more specialised, specifically allowing CUDA
 programs to be created using Java, with an interface that aims to closely match
 CUDA's native C one so that code can target it specifically.
 
@@ -839,7 +843,7 @@ from high-level interpreted dynamic languages using just-in-time compilation to
 achieving speedups by compiling R to an OpenCL C backend \cite{JITGPU}.
 
 Futhark is an attempt to design a functional data-parallel array language from
-the ground-up that can target GPUs, targetting an OpenCL backend
+the ground-up that can target GPUs, targeting an OpenCL backend
 \cite{Futhark}.
 
 In addition to SYCL and OpenCL C++, there have been other attempts at bringing
@@ -883,7 +887,7 @@ can commonly occur. However, unlike other systems which do this, we cannot have
 standards such as GLSL and OpenGL. This includes not limiting the possible
 programs programmers can make. Naturally there pros and cons to this approach.
 
-There are other concerns beyond performacne that need to be taken into account
+There are other concerns beyond performance that need to be taken into account
 which inform the design the system. For example, a commonly used feature is two
 \textit{swap} shaders with identical interfaces in-and-out at runtime.
 Therefore this needs to be supported by the system as well.
