@@ -23,7 +23,7 @@
 \def\wordcount{TODO}
 
 
-\usepackage{array,color,epsfig,float,inconsolata,graphicx,hyperref,listings,parskip,setspace,tabularx,tabu,xspace}
+\usepackage{array,color,epsfig,float,inconsolata,graphicx,hyperref,listings,parskip,setspace,tabularx,tabu,textcomp,xspace}
 \graphicspath{ {images/} }
 
 \newfloat{lstfloat}{htbp}{lop}
@@ -191,15 +191,15 @@ yet to be targeted by many front-ends yet apart from \textit{OpenCL C++}.
 
 \section{Motivation}
 
-This section introduces how a slow-down in ``Moore's Law'' has led to GPUs
-becoming increasingly relevant as more industries have turned to using them due
-to the the increased floating point computing power they provide relative to
-CPUs. However, I then explain how despite sizeable number of developers using
-GPUs, standards and standard practices are few and far between -- with a brief
-exploration of how legacy APIs, proprietary technologies have led to an
-unfortunate amount of fragmentation and steep learning curves for using GPUs.
-This is an important problem to work on due to the benefits solutions could
-provide to the wide number of developers programming for GPUs.
+% This section introduces how a slow-down in ``Moore's Law'' has led to GPUs
+% becoming increasingly relevant as more industries have turned to using them due
+% to the the increased floating point computing power they provide relative to
+% CPUs. However, I then explain how despite sizeable number of developers using
+% GPUs, standards and standard practices are few and far between -- with a brief
+% exploration of how legacy APIs, proprietary technologies have led to an
+% unfortunate amount of fragmentation and steep learning curves for using GPUs.
+% This is an important problem to work on due to the benefits solutions could
+% provide to the wide number of developers programming for GPUs.
 
 As a result of the recent slow-down in ``Moore's Law'' \cite{MooreLawSlowdown},
 Graphical Processing Units (GPUs) have provided significant gains in
@@ -482,8 +482,98 @@ GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TOD
 \end{tabular}
 \end{center}
 
-Can be worth being wary of GPU vs CPU performance based on performance alone.
-http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
+% Can be worth being wary of GPU vs CPU performance based on performance alone.
+% http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
+
+\begin{table}
+\begin{tabular}{||c|| m{12cm} ||}
+\hline
+Year &
+Development \\
+\hline
+\hline
+1992 &
+
+\textbf{OpenGL 1.0} released by Silicon Graphics (SGI) as an API for
+interacting with graphics hardware on 3D graphics workstations. OpenGL was
+created from their proprietary ``IrisGL'' API in order to prevent competitors
+from creating and using their own proprietary graphics APIs. The API allowed
+users to issue basic commands in order to set-up 3D scenes, apply basic
+fixed-function lighting, and then render them \cite{OpenGL_1_0}. \\
+\hline
+1996 &
+\textbf{Direct3D 2.0} release by Microsoft, so named, because it was the
+\textit{first} version of Direct3D. Although at this point API was designed as
+an abstraction for a software renderer \cite{JohnCarmackPlanDirect3DvsOpenGl},
+it eventually developed into an API for interfacing with graphics cards. \\
+\hline
+1996 &
+\textbf{3Dfx Voodoo} graphics card released. Although not the first graphics
+card, it dominated the consumer market and brought 3D graphics rendering to
+the mainstream. \cite{TODO} \\
+\hline
+1999 &
+\textbf{NVIDIA GeForce 256} released, the first video card to be called a
+\textbf{GPU}. First consumer PC-graphics hardware to accelerate ``transform and
+lighting'' operations, allowing them to offloaded form the CPU. The ``transform
+and lighting'' component of GPUs would be what would eventually run shaders.
+\cite{GeForce256} \\
+\hline
+2001 &
+Larson and McAllister demonstrate that GPUs can perform fast matrix
+multiplications by encoding the matrices as the inputs and outputs of the
+graphics pipeline such that the graphics pipeline can then be configured to
+perform the desired calculations \cite{MatrixGPU}. Subsequent papers then
+show how GPUs can outperform CPUs for many operations that are desirable
+in scientific computing \cite{CUDAtoOpenCL} \cite{Kruger03linearalgebra}
+\cite{LUGPU} \cite{SparsematrixGPU}. \\
+\hline
+2004 &
+\textbf{GLSL} (also known as OpenGL Shading Language or glslang) introduced
+into the \textbf{OpenGL 2.0} specification. Introduced to tame the complexity
+and proliferation of custom OpenGL extensions and assembly languages being
+introduced to customise parts of the fixed-function pipeline. Formally replaces
+parts of the pipeline with user-programmable stages defined using a
+hardware-independent high-level language (replacing proprietary assembler
+languages that individual GPU manufacturers were introducing). GLSL at this
+point is defined as \textit{two} closely-related shading languages for
+different parts of the pipeline: the vertex processor and fragment processor.
+Finally, the language is forward-looking in supporting many features that
+hardware at the time didn't \cite{GLSL_1_10}. \\
+\hline
+2005 &
+\textbf{Unified Shader Architecture} introduced in ATI's \textbf{Xenos GPU},
+released as part of the Xbox 360. The ``vertex'' and ``pixel'' segments of the
+GPU pipeline are unified into a single component that can run either. This
+brings GPUs closer to highly-parallel general computation machines and away
+from being direct fixed-function hardware implementations of the graphics
+pipeline represented by APIs such as OpenGL. \cite{XenosDemystified} All GPUs
+would soon adopt this architecture \cite{HistoryOfTheGPU}. \\
+\hline
+2006 &
+\textbf{CUDA} (Compute Unified Device Architecture) introduced by NVIDIA as a
+parallel platform and API, allowing programmers to exploit the \textbf{GPGPU}
+capabilities of graphics hardware directly, without having to encode data as
+the input and output of the OpenGL pipeline. This makes GPU computing more
+efficient and accessible \cite{AboutCUDA}. \\
+\hline
+\end{tabular}
+\caption{
+Tabulated history of graphics APIs and graphics card development. Naturally
+this tabled misses many details, especially related to the earlier years when
+there were many hardware vendors, the graphics market was volatile, and there
+were many, many competing graphics APIs each with their own extensions and
+features. Futhermore, the introduction of certain features are really hard to
+pin-down. For example, there is no set-date where GPUs went from being
+fixed-function hardware to becoming programmable hardware. Changes such as
+these happened gradually, with extra configurability being slowly introduced to
+graphics hardware with extensions and additional API calls until shading
+languages needed to be defined in order to program these configurations more
+systematically. However, even these languages were limited in their
+capabilities and support for advanced features like loops and flow-control took
+time to be introduced into hardware.
+}
+\end{table}
 
 
 

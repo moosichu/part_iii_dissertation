@@ -6,7 +6,7 @@ PS2PDF=ps2pdf
 
 all: acs-dissertation.pdf
 
-acs-dissertation.pdf: acs-dissertation.tex titlepage.tex declaration.tex abstract.tex
+acs-dissertation.pdf: references.bib acs-dissertation.tex titlepage.tex declaration.tex abstract.tex
 	$(PDFLATEX) acs-dissertation
 	$(BIBTEX) acs-dissertation
 	$(PDFLATEX) acs-dissertation
