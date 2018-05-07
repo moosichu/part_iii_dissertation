@@ -486,6 +486,7 @@ GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TOD
 % http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
 
 \begin{table}
+\footnotesize
 \begin{tabular}{||c|| m{12cm} ||}
 \hline
 Year &
@@ -493,13 +494,14 @@ Development \\
 \hline
 \hline
 1992 &
-
 \textbf{OpenGL 1.0} released by Silicon Graphics (SGI) as an API for
 interacting with graphics hardware on 3D graphics workstations. OpenGL was
 created from their proprietary ``IrisGL'' API in order to prevent competitors
 from creating and using their own proprietary graphics APIs. The API allowed
 users to issue basic commands in order to set-up 3D scenes, apply basic
-fixed-function lighting, and then render them \cite{OpenGL_1_0}. \\
+fixed-function lighting, and then render them \cite{OpenGL_1_0}. Control of the
+OpenGL specification eventually transfers from SGI to various owners before
+landing in the hands of the \textbf{Khronos Group} \cite{OpenCL}. \\
 \hline
 1996 &
 \textbf{Direct3D 2.0} release by Microsoft, so named, because it was the
@@ -557,6 +559,15 @@ capabilities of graphics hardware directly, without having to encode data as
 the input and output of the OpenGL pipeline. This makes GPU computing more
 efficient and accessible \cite{AboutCUDA}. \\
 \hline
+2008 &
+\textbf{Open CL} platform developed and announced by Apple as a potential open
+standard for GPGPU computing. Existing as a distinct entity from OpenGL, it has
+its own shader language called \textbf{OpenCL C}. Apple hands over control of
+the OpenCL specification to the Khronos Group, with the first implementation of
+the standard releasing alongside the Snow Leopard OS X update in 2009
+\cite{OpenCL}. \\
+\hline
+%TODO: Vulkan, Mantle, SPIR-V and possibly SYCL. Make multipage as well https://www.sharelatex.com/learn/Tables
 \end{tabular}
 \caption{
 Tabulated history of graphics APIs and graphics card development. Naturally
