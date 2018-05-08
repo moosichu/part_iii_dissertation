@@ -123,6 +123,10 @@ end of this section quickly clarifies common points of confusion.
     to write programs for the CPU. In the world of high performance computing
     these can also be called \textbf{kernel languages}.
 
+    \item \textbf{Host language/code:} Programming languages and the resulting
+    code which is written for and runs on the CPU. \textbf{Host} will also be
+    used as a synonym for the CPU.
+
     \item \textbf{3D graphics library:} These are libraries for the CPU,
     commonly written in C. They provide helpful functions for graphics
     programmers and additionally provide appropriate APIs for interfacing with
@@ -262,8 +266,8 @@ struct WaveParticle {
     int startingFrame;
 };
 \end{lstlisting}
-\label{lst:c_sharp_hlsl_struct_comparison}
 \caption{The same data structure defined separately in C$^\sharp$ and HLSL.}
+\label{lst:c_sharp_hlsl_struct_comparison}
 \end{lstfloat}
 
 Listing \ref{lst:c_sharp_hlsl_struct_comparison} demonstrates a simple example
@@ -345,32 +349,38 @@ round off the section.
 
 \subsection{Desired Outcome}
 
-As described in Section \ref{sec:related_work}, one of the largest stumbling
-blocks that systems which aim to improve over current toolchains face is that
-they sacrifice the control that traditional workflows provide in order to
-improve the user-experience that programmers have. The issue with this approach
-is the fact that performance is still important in many domains where GPUs are
-used -- to the point where programmers still make the trade-off of working
-directly with APIs like OpenGL instead of choosing the usability that
-abstractions could otherwise provide. Therefore, solutions which aim to build
-and improve upon the status quo should provide all the options that traditional
-toolchains do, including exposing any underlying graphics APIs.
+As described in Section \ref{sec:related_work}, systems which aim to improve
+over current toolchains often the sacrifice the control that traditional
+workflows provide in order to improve the user-experience that programmers
+have. The issue with this approach is the fact that performance is still
+important in many domains where GPUs are used -- to the point where programmers
+still choose to make the trade-off of working directly with APIs like OpenGL or
+Vulkan instead of choosing the usability that abstractions could otherwise
+provide \cite{TODO}. Therefore, solutions which aim to build and improve upon
+the status quo should provide all the options that traditional toolchains do,
+including exposing any underlying graphics or compute APIs.
 
-However, there are some ``easy wins'' to be made, as demonstrated by the
-example shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}, which can be
-found in compile-time type-checking. That is, instead of trying to unify code
-that is written for the CPU and GPU under a single language or system, we can
-acknowledge that they are different so have CPU code and shaders written in
-different programming languages. This means that code written for the CPU
-should still manually make API calls as it does in current toolchains. However,
-this does not mean that shaders and CPU code should be entirely separate, and
-we can still improve the programming model by having cross-language
-type-checking to ensure we have achieve the level of consistency that is
-desired.
+Although this means these solutions are limited in the abstractions that they
+can provide, there are some ``easy wins'' to be made. This is demonstrated by
+the example problem shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
+and elaborated on in Section \ref{sec:api_challanges}. It is easy to introduce
+bugs due to errors in using the API, which can be alleviate by compile-time
+checks. That is, instead of trying to unify code that is written for the CPU
+and GPU under a single language or system which is designed to abstract-away
+API calls (thereby reducing the possibility of errors in using them as the
+compiler generates API calls for the programmer), we can acknowledge that they
+are different so have host code and shaders written in different programming
+languages. However, we can use compile-time type-checking \textit{between}
+these languages and compile-time checks on the API calls \textit{themselves} in
+order to have the compiler catch errors which would otherwise be left
+undetected.
 
-Therefore, any solution that aims to improve upon current programming models
-should give the benefits described above without sacrificing anything those
-current systems provide.
+In conclusion, any solution that aims to improve upon current programming
+models should give the benefits described above without sacrificing anything
+current systems toolchains. This can be done by targetting specific classes of
+errors as described in Section \ref{sec:api_challanges}. We can do this with
+two techniques: compile-time cross-language checks and the processing of
+annotations to check the validity of raw API calls.
 
 \subsection{What was done}
 
