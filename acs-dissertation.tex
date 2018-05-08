@@ -785,7 +785,12 @@ identified.
 
 Programmers interact with GPUs using APIs, however, as the development of and
 growth of GPUs in computing has been relatively organic and ad-hoc, these APIs
-themselves have many legacy components and can be difficult to work with.
+themselves have many legacy components and can be difficult to work with
+\cite{NVIDIAInternshipLessons}.
+
+% TODO: can reference this blog:
+% http://aras-p.info/blog/2015/03/13/thoughts-on-explicit-graphics-apis/
+% http://aras-p.info/blog/2014/05/31/rant-about-rants-about-opengl/
 
 To understand the challenges of working GPUs, one must first understand the
 current workflow of GPUs and how that workflow has developed over time.
@@ -1169,7 +1174,11 @@ The benefits of this approach is that the GPU ecosystem will more closely
 resemble the ```hour-glass model'' that CPUs enjoy today, instead of the
 separate fragmented ecosystems it currently suffers. Eventually, the
 higher-level OpenCL and OpenGL could be APIs which are implemented in terms of
-the lower-level Vulkan, bringing this ``dream'' another step closer to reality.
+the lower-level Vulkan, bringing this ``dream'' another step closer to reality
+\cite{OpenGLonVulkan} \cite{VulkanOpenCLMerge} \cite{OpenGLOverload}.
+
+% TODO: Good comparison of mess vs potential future (Unity Pipeline).
+% http://www.g-truc.net/doc/2015%20-%20EuroLLVM%20-%20SPIR-V.pdf
 
 \appendix
 \singlespacing
