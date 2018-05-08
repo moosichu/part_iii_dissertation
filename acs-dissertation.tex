@@ -83,11 +83,12 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-This chapter provides the motivation for the work this paper presents: What the
-problem is, why it is important and why it has not yet been solved. This is
-followed by a brief description of the two solutions this paper presents: a
-cross-module annotation checker and two languages with a unified cross-module
-type checker. Finally, an overview of the entire document is provided.
+This chapter provides the motivation for the work this paper presents:
+Outlining the problem, why it is important and why it has not yet been solved.
+This is followed by a brief description of the two solutions presented in this
+paper: a cross-module annotation checker and two languages with a unified
+cross-module type checker. Finally, an overview of the entire document is
+provided.
 
 \section{Terminology}
 
@@ -134,11 +135,11 @@ end of this section quickly clarifies common points of confusion.
     calls to load and run shaders on the GPU.
 
     \item \textbf{Compute platform:} These are libraries and ecosystems similar
-    to 3D graphics libraries. Despite essentially serving the same purpose of
-    allowing programmers to interface with and load programs onto the GPU. They
-    are designed with a focus on general purpose GPU computations as opposed to
-    using them to render graphics. Additionally, some compute platforms are
-    designed for hardware beyond GPUs.
+    to 3D graphics libraries. Although they serve the same purpose as graphics
+    libraries of allowing programmers to interface with and load programs onto
+    the GPU, they are designed with a focus on general purpose GPU
+    computations. Additionally, some compute platforms are designed for
+    hardware beyond GPUs.
 
     \item \textbf{OpenGL/Direct3D:} These are 3D graphics libraries. The first
     is an open standard maintained by the Khronos Group, and the
@@ -163,10 +164,10 @@ end of this section quickly clarifies common points of confusion.
     platform that is a successor to both OpenGL and OpenCL \cite{Vulkan}. It
     differs from OpenGL and OpenCL in creating a unified approach for
     interacting with GPUs at a much lower level than those libraries. Although
-    it has seen uptake in the gaming industry, it has so far seen little
-    success in fields where OpenCL or CUDA have traditionally been used
-    \cite{TODO} \cite{TODO}. \textbf{Metal} is a similar proprietary library by
-    Apple \cite{Metal}.
+    it has seen uptake in the gaming industry, it has so far had little success
+    in fields where OpenCL or CUDA have traditionally been used \cite{TODO}
+    \cite{TODO}. \textbf{Metal} is a similar proprietary library by Apple
+    \cite{Metal}.
 
     \item \textbf{SPIR-V}: This is an intermediate language successor to GLSL
     that is supported by OpenCL, OpenGL and Vulkan. The idea is that graphics
@@ -192,14 +193,14 @@ confusion. For example, many papers creating custom interfaces or languages
 claim to create ``OpenCL Code'' in their backend \cite{JITGPU} \cite{Lime2012}.
 However, \textit{there is no such thing}. OpenCL is an API, and has
 traditionally defined a C-like language called \textit{OpenCL C} as the
-standard for writing compute kernels that host code can then load onto
+standard for writing compute kernels. Host code can then load it onto
 heterogeneous devices using the OpenCL API. Many papers will output code in
 this langauge for GPUs as a backend, as traditionally this has been the only
 option available (aside from proprietary backends such as CUDA for NVIDIA
-GPUs). However, recently SPIR-V can now be targeted as a back-end by compilers
-instead of \textit{OpenCL C}. However, these APIs are still distinct with their
-own niches, and SPIR-V has yet to be targeted by many new front-ends apart from
-\textit{OpenCL C++} \cite{OpenCLCPPWhitePaper}.
+GPUs). In a recent development, SPIR-V can now be targeted as a back-end by
+compilers instead of \textit{OpenCL C}. However, SPIR-V has yet to be targeted
+by many new front-ends apart from \textit{OpenCL C++}
+\cite{OpenCLCPPWhitePaper}.
 
 \section{Motivation}
 
@@ -218,7 +219,7 @@ NOTE: THIS SECTION HAS NOT BEEN MODIFIED (MUCH) SINCE LAST READ.
 As ``Moore's Law'' is arguably slowing down, Graphical Processing Units (GPUs)
 have provided significant gains in floating-point computing power relative to
 CPUs due to their highly parallel nature \cite{MooreLawSlowdown}
-\cite{CPUGPUOverTime}. This has lead to a growth in the use GPUs for general
+\cite{CPUGPUOverTime}. This has lead to a growth in the use of GPUs for general
 purpose computations (known as GPGPU). Whilst GPUs were originally designed for
 rendering the graphics of games using a fixed-function pipeline, changes in
 their design over time have made them increasingly programmable. These design
@@ -347,12 +348,12 @@ provided.
 
 \label{sec:solutions_introduction}
 
-This section introduces two solutions to the problems described above. First
-by describing what the desired outcomes of those solutions should be and how
-they should improve over the status quo. This is followed by what the solutions
-are; first describing the annotation processor and then the pair of languages
-with a unified type system. The pros and cons of each are then discussed to
-round off the section.
+This section introduces two solutions to the problems described above. First by
+describing what the desired outcomes of those solutions should be and then how
+they should improve over the status quo. This is followed by the solutions;
+first describing the annotation processor and then the pair of languages with a
+unified type system. The pros and cons of each are then discussed to round off
+the section.
 
 \subsection{Desired Outcome}
 
@@ -370,20 +371,20 @@ including exposing any underlying graphics or compute APIs.
 Although this means these solutions are limited in the abstractions that they
 can provide, there are some ``easy wins'' to be made. This is demonstrated by
 the example problem shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
-and elaborated on in Section \ref{sec:api_challanges}. It is easy to introduce
-bugs due to errors in using the API, which can be alleviate by compile-time
+and elaborated in Section \ref{sec:api_challanges}. Bugs may easily be
+introduced to due errors in using teh API; these can prevented by compile-time
 checks. That is, instead of trying to unify code that is written for the CPU
 and GPU under a single language or system which is designed to abstract-away
-API calls (thereby reducing the possibility of errors in using them as the
+API calls (thereby reducing the possibility of introducing errors as the
 compiler generates API calls for the programmer), we can acknowledge that they
-are different so have host code and shaders written in different programming
-languages. However, we can use compile-time type-checking \textit{between}
-these languages and compile-time checks on the API calls \textit{themselves} in
-order to have the compiler catch errors which would otherwise be left
-undetected.
+are different and so have host code and shaders written in different
+programming languages. However, we can use compile-time type-checking
+\textit{between} these languages and compile-time checks on the API calls
+\textit{themselves} in order to have the compiler catch errors which would
+otherwise be left undetected.
 
 In conclusion, any solution that aims to improve upon current programming
-models should give the benefits described above without sacrificing anything
+models should deliver the benefits described above without sacrificing anything
 current systems toolchains. This can be done by targetting specific classes of
 errors as described in Section \ref{sec:api_challanges}. We can do this with
 two techniques: compile-time cross-language checks and the processing of
@@ -398,20 +399,20 @@ checking the validity of raw API calls. We chose to target the Vulkan API to
 demonstrate that these ideas can work at a low-level. However, they are also
 applicable to other APIs such as OpenGL, OpenCL or Direct3D.
 
-The first system is a pre-processor for C and GLSL, that operates on operates
-on annotated sections of code. The goal here was to demonstrate how an existing
-pair of languages with similar type systems could be extended in order to have
+The first system is a pre-processor for C and GLSL that operates on annotated
+sections of code. The goal here was to demonstrate how an existing pair of
+languages with similar type systems could be extended in order to have
 error-checking on raw API calls.
 
 The second is a proof-of-concept pair of languages with the features provided
 by the pre-processing system baked-into the type system at the language level.
 We had two goals with this. The first was to demonstrate that such a system
-could work. The second goal, however, was to show how existing high-level
-languages could be extended with a shader-language. This would be suitable for
-a language such as Rust, which has a strong type system, but is compromised and
-arguably \textit{less safe} than C when using shaders. This is because C and
-GLSL can share code as they have similar syntax. Rust and GLSL do not have
-similar syntax, meaning that the problem shown in Listing
+could work. The second was to show how existing high-level languages could be
+extended with a shader-language. This would be suitable for a language such as
+Rust, which has a strong type system, but is compromised and arguably
+\textit{less safe} than C when using shaders. This is because C and GLSL can
+share code as they have similar syntax. Rust and GLSL do not have similar
+syntax, meaning that the problem shown in Listing
 \ref{lst:c_sharp_hlsl_struct_comparison} becomes a problem.
 
 \subsubsection{Annotation System}
@@ -459,9 +460,9 @@ annotations) is shown in Listing \ref{lst:annotation_example_output}.}
 
 Listing \ref{lst:annotation_example_input} shows an example of an API call that
 can result in an error that could be checked-for at compile-time. In this case
-the running of a shader named \texttt{main}. In this example, the host code
-makes the \texttt{vkCreateComputePipelines} API call in order to create a
-compute pipeline\footnote{This is just an API call that needs to be made TODO:
+the running of a shader named \texttt{main}. Here, the host code makes the
+\texttt{vkCreateComputePipelines} API call in order to create a compute
+pipeline\footnote{This is just an API call that needs to be made TODO:
 reference where more info on this can be found}
 \cite{vkCreateComputePipelines}. An instance of the
 \texttt{VkComputePipelineCreateInfo} containing a
@@ -512,13 +513,13 @@ void main()
 \label{lst:annotation_example_output}
 \end{lstfloat}
 
-The annotation provides two key features in the particular example. The first
+The annotation provides two key features in this particular example. The first
 is the generation of boiler-plate for the creation of the
 \texttt{VkPipelineShaderStageCreateInfo} struct. This was done to investigate
 boiler-plate generation features a pre-processor could provide. The second and
 most important key feature is the compile-time checking of the function name --
-ensuring that \texttt{main} cannot renamed in the host or shader without being
-consistently renamed in the other. If we were to ensure such an error was
+ensuring that \texttt{main} cannot be renamed in the host or shader without
+being consistently renamed in the other. If we were to ensure such an error was
 introduced in raw C and GLSL, the resulting behaviour would be a runtime error.
 However, not all inconsistencies which can be checked like this result in
 runtime errors, others can simply result in incorrect or undefined runtime
@@ -704,11 +705,11 @@ details.
     first graphics card, it dominated the consumer market and brought 3D
     graphics rendering to the mainstream \cite{Voodoo1}.
 
-    \item 1999 \textbf{NVIDIA GeForce 256} released, the first video card to be
+    \item 1999 \textbf{NVIDIA GeForce 256} released; the first video card to be
     called a \textbf{GPU}. It was the first consumer-PC graphics hardware to
     accelerate ``transform and lighting'' operations, allowing them to
     offloaded form the CPU. The ``transform and lighting'' component of GPUs
-    would be what would eventually run shaders \cite{GeForce256}.
+    prefigured what would eventually run shaders \cite{GeForce256}.
 
     \item 2000 \textbf{The Khronos Group} founded to provide structure for open
     standards in 3D graphics. Reflecting the increasing flexibility of graphics
@@ -743,7 +744,7 @@ details.
     parts of the pipeline: the vertex processor (for modifying vertices) and
     the fragment processor (for modifying the final image). Finally, the
     language was forward-looking in supporting many features that hardware at
-    the time didn't \cite{GLSL_1_10}.
+    the time did not \cite{GLSL_1_10}.
 
     \item 2005 \textbf{Unified Shader Architecture} introduced in ATI's
     \textbf{Xenos GPU}, released as part of the Xbox 360. The ``vertex'' and
@@ -772,7 +773,7 @@ details.
     \item 2015 \textbf{SPIR-V} shading language released alongside
     \textbf{OpenCL 2.1} \cite{SPIRVLaunch}. Unlike the high-level
     \textit{OpenCL C} and \textit{GLSL} shading languages which drivers need to
-    compile themselves, it is an intermediate language based on \textit{LLVM
+    compile themselves, this is an intermediate language based on \textit{LLVM
     IR} which compilers for any language can target. \cite{LLVMIR}
     \cite{SPIRV}. SPIR-V support was then added to \textbf{OpenGL 4.6} and
     supported by Vulkan at launch, unifying the shading langauges of Khronos'
@@ -790,14 +791,14 @@ details.
 
 
 The capabilities of GPUs and their related APIs have massively expanded since
-they were both introduced. This has allowed GPUs be used in increasingly
+they were both introduced. This has allowed GPUs to be used in increasingly
 general domains, including scientific computing, crypto-currency mining,
 high-frequency trading, and artificial intelligence \cite{GPUCrypto}
-\cite{GPUScientificComputing} \cite{GPUTrading} \cite{GPUAI}. To the point
-where the hobbyists the cards were originally designed for are being priced out
-of the market \cite{GPUCrypto} \cite{BitcoinRuiningPricing}. However, there are
-many different standards and APIs for different use-cases of the same hardware
-as a result of a complex history. Furthermore, many of these use-cases have
+\cite{GPUScientificComputing} \cite{GPUTrading} \cite{GPUAI}. Some hobbyists
+for home the cards were originally designed are even being priced out of the
+market \cite{GPUCrypto} \cite{BitcoinRuiningPricing}. However, there are many
+different standards and APIs for different use-cases of the same hardware as a
+result of a complex history. Furthermore, many of these use-cases have
 widely-used proprietary alternatives such as CUDA, DirectX, Metal and even
 proprietary game console APIs \cite{CUDA} \cite{Metal} \cite{Direct3D}
 \cite{PS4PortCrew}. However, with the release of SPIR-V, aspects of the various
@@ -840,8 +841,8 @@ themselves have many legacy components and can be difficult to work with
 % http://aras-p.info/blog/2015/03/13/thoughts-on-explicit-graphics-apis/
 % http://aras-p.info/blog/2014/05/31/rant-about-rants-about-opengl/
 
-To understand the challenges of working GPUs, one must first understand the
-current workflow of GPUs and how that workflow has developed over time.
+To understand the challenges of working GPUs, one must first both understand
+the current workflow of GPUs and how that workflow has developed over time.
 
 The best point of comparison is the CPU, and programming for the CPU. When
 programming for the CPU, programmers often have access to a plethora of
@@ -860,7 +861,7 @@ The workflow of the GPU is very different.
 
 Although GPUs do not have a standard ISA, open standards for GPU computing have
 been developed and maintained by the Khronos Group \cite{TODO}, which was
-founded in 2000 by a group companies for this purpose. OpenGL is the most
+founded in 2000 by a group of companies for this purpose. OpenGL is the most
 widely used standard graphics API that they maintain, however, the API has a
 history dating back to the early 1990's \cite{TODO}, with control of the
 standard being passed from Silicon Graphics in 2006 \cite{TODO}. For a long
@@ -1036,7 +1037,7 @@ Open Specification \\
 \caption{ A comparison of different graphics and compute APIs, listed in
 chronological order. These represent lowest-level interfaces for interacting
 with heterogeneous hardware. The fragmentation seen here has resulted in an
-ecosystems very different from the ``hourglass model'' that CPUs enjoy. OpenCL,
+ecosystem very different from the ``hourglass model'' that CPUs enjoy. OpenCL,
 OpenGL, OpenGL ES and Vulkan are simply four standards from a \textit{single
 body} for interacting with the same underlying hardware. Furthermore, there are
 many proprietary alternatives hardware and operating system vendors like to
@@ -1096,10 +1097,10 @@ in a buffer and copies its amplitude to a specific location on a texture.}
 \label{sec:related_work}
 
 This section describes related work in the field of modifying or improving GPU
-toolchains beyond traditional low-level libraries. It aims to show diverse set
-of approaches that have been taken to doing this and the progress that has been
-made, in addition to demonstrating that the specific problems targeted by this
-paper have yet to be addressed.
+toolchains beyond traditional low-level libraries. It aims to show the diverse
+set of approaches that have been taken to doing this and the progress that has
+been made, in addition to demonstrating that the specific problems targeted by
+this paper have yet to be addressed.
 
 Since the creation of the SPIR-V intermediate language for heterogeneous
 programming (as discussed in Chapter \ref{chp:technical_background}), some
@@ -1179,7 +1180,7 @@ shared-memory multiprocessing \cite{OpenMP}. HCC is a project aims to take C++
 code that conforms to any of these standards and compile it to AMD's GCN
 instruction set \cite{HCC}.
 
-As can be seen, there has been progress on making programming for heterogeneous
+As can be seen, there has been progress in making programming for heterogeneous
 architectures easier. However, the focus has been primarily on GPGPU computing.
 Futhermore, although the creation of SPIR-V and Vulkan are slowly changing
 this, all of these systems have had to target fairly-high level backend APIs
@@ -1306,17 +1307,17 @@ NOTE: CURRENTLY ONLY CONTAINS SPECULATION ON THE FUTURE OF HETEROGENEOUS
 PROGRAMMING. IT IS CURRENTLY SLIGHTLY UNSTRUCTURED BUT PRESENTS THE IDEAS
 I THINK THE FINAL CONCLUSION WILL.
 
-Something which the creation SPIR-V enables, and that this paper demonstrates
-is possible, is the ability to \textit{extend} langauges with custom shading
-langauges whilst still preserving existing API interfaces. This is different
-from what is currently done both in industry and reasearch. For example, whilst
-programs for the Unity game engine are written in C$^\sharp$, shaders for it
-have to be written in HLSL \cite{TODO}. Projects such as SYCL and LIME did
-extend C++ and Java respectively to allow shaders to be programmed in their
-host languages, however they used optimising compilers with the goal of
-abstracting away the underlying OpenCL API and outputting OpenCL C code for
+Something which the creation of SPIR-V enables, and that this paper
+demonstrates is possible, is the ability to \textit{extend} langauges with
+custom shading langauges whilst still preserving existing API interfaces. This
+is different from that currently done both in industry and reasearch. For
+example, whilst programs for the Unity game engine are written in C$^\sharp$,
+shaders for it have to be written in HLSL \cite{TODO}. Projects such as SYCL
+and LIME did extend C++ and Java respectively to allow shaders to be programmed
+in their host languages, however they used optimising compilers with the goal
+of abstracting away the underlying OpenCL API and outputting OpenCL C code for
 shaders. However, OpenCL C++ has demonstrated that API interfaces can be
-preservered whilst shaders are written in the host language
+preserved whilst shaders are written in the host language
 \cite{OpenCLCPPWhitePaper}. This also means that SYCL can use this compiler in
 its backend \cite{TODO}.
 
@@ -1331,9 +1332,9 @@ future as, briefly summarised below:
     \item Create a modified extension of your language that can be used to
     program shaders, the compiler for this extension can target SPIR-V.
 
-    \item Use any features you language may have to increase the safety of
+    \item Use any features your language may have to increase the safety of
     specific API calls using techniques similar to what has been demonstrated
-    in this paper. Alternatively custom annotations can be used to strengthen
+    in this paper. Alternatively custom annotations may be used to strengthen
     this system.
 
     \item Create ``single source'' abstractions which an optimising compiler
