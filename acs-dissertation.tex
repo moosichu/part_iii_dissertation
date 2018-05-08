@@ -266,7 +266,10 @@ struct WaveParticle {
     int startingFrame;
 };
 \end{lstlisting}
-\caption{The same data structure defined separately in C$^\sharp$ and HLSL.}
+\caption{The same data structure defined separately in C$^\sharp$ and HLSL. It
+is worth noting that this is much less of an issue when using C as a host
+language. This is because most shading languages are based on C, so they are
+able to share header files.}
 \label{lst:c_sharp_hlsl_struct_comparison}
 \end{lstfloat}
 
@@ -384,17 +387,148 @@ annotations to check the validity of raw API calls.
 
 \subsection{What was done}
 
-I created two systems for type-checking programs across language boundaries in
-CPU-GPU systems. The first is a pre-processing system for C and GLSL that
-operates on annotated sections of code. The second is a proof-of-concept pair
-of languages with the features provided by the pre-processing system baked-into
-the type system at the language level.
+We created two systems for type-checking programs across language boundaries in
+CPU-GPU systems. Each one of these systems is focused on demonstrating a
+different approach to implementing compile-time cross-language checks and
+checking the validity of raw API calls. We chose to target the Vulkan API to
+demonstrate that these ideas can work at a low-level. However, they are also
+applicable to other APIs such as OpenGL, OpenCL or Direct3D.
+
+The first system is a pre-processor for C and GLSL, that operates on operates
+on annotated sections of code. The goal here was to demonstrate how an existing
+pair of languages with similar type systems could be extended in order to have
+error-checking on raw API calls.
+
+The second is a proof-of-concept pair of languages with the features provided
+by the pre-processing system baked-into the type system at the language level.
+We had two goals with this. The first was to demonstrate that such a system
+could work. The second goal, however, was to show how existing high-level
+languages could be extended with a shader-language. This would be suitable for
+a language such as Rust, which has a strong type system, but is compromised and
+arguably \textit{less safe} than C when using shaders. This is because C and
+GLSL can share code as they have similar syntax. Rust and GLSL do not have
+similar syntax, meaning that the problem shown in Listing
+\ref{lst:c_sharp_hlsl_struct_comparison} becomes a problem.
 
 \subsubsection{Annotation System}
 
-The annotation system reads annotated code written in C and annotated code
-written in GLSL.
+The annotation system is a command line program that takes annotated code
+written in C and annotated code written in GLSL as input. An example annotation
+and the code that is generated is shown in Listings
+\ref{lst:annotation_example_input} and \ref{lst:annotation_example_output}.
 
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+VkComputePipelineCreateInfo compute_pipeline_create_info = {
+    .sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+    .pNext = 0,
+    .flags = 0,
+    .stage = @create_verification(
+        struct: VkComputePipelineCreateInfo,
+        name: "test_shader",
+        data: {
+            stage: VK_SHADER_STAGE_COMPUTE_BIT,
+            module: shader_module,
+            pName: "main"
+        }
+    ),
+    .layout = pipeline_layout,
+    .basePipelineHandle = 0,
+    .basePipelineIndex = 0
+};
+VkPipeline pipeline;
+vkCreateComputePipelines(
+    vulkan_device, 0, 1, &compute_pipeline_create_info,
+    0, &pipeline
+);
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+@verify(from: "test_shader", function:
+void main() {
+    output_buffer.values[gl_GlobalInvocationID.x] = input_buffer.values[gl_GlobalInvocationID.x];
+})
+\end{lstlisting}
+\caption{Annotated C and GLSL, the output for these snippets (without
+annotations) is shown in Listing \ref{lst:annotation_example_output}.}
+\label{lst:annotation_example_input}
+\end{lstfloat}
+
+Listing \ref{lst:annotation_example_input} shows an example of an API call that
+can result in an error that could be checked-for at compile-time. In this case
+the running of a shader named \texttt{main}. In this example, the host code
+makes the \texttt{vkCreateComputePipelines} API call in order to create a
+compute pipeline\footnote{This is just an API call that needs to be made TODO:
+reference where more info on this can be found}
+\cite{vkCreateComputePipelines}. An instance of the
+\texttt{VkComputePipelineCreateInfo} containing a
+\texttt{VkPipelineShaderStageCreateInfo} structure is passed to that API call,
+which ultimately specifies which function in the shader to use within the
+compute pipeline \cite{VkComputePipelineCreateInfo}
+\cite{VkPipelineShaderStageCreateInfo}. Annotations are used to label the
+creation of the \texttt{VkPipelineShaderStageCreateInfo} structure on the host
+and the \texttt{main} function within the shader using the
+\texttt{@create\_verification} and \texttt{@verify} commands respectively. The
+annotation itself is given a name, \texttt{"test\_shader"} which both the host
+code and shader reference. The annotation processor takes annotated code as
+input, and produces output similar to Listing
+\ref{lst:annotation_example_output}.
+
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+VkComputePipelineCreateInfo compute_pipeline_create_info = {
+    .sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+    .pNext = 0,
+    .flags = 0,
+    .stage = {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        .pNext = 0,
+        .flags = 0,
+        .stage = VK_SHADER_STAGE_COMPUTE_BIT,
+        .module = shader_module,
+        .pName = "main",
+        .pSpecializationInfo = 0
+    },
+    .layout = pipeline_layout,
+    .basePipelineHandle = 0,
+    .basePipelineIndex = 0
+};
+VkPipeline pipeline;
+vkCreateComputePipelines(
+    vulkan_device, 0, 1, &compute_pipeline_create_info,
+    0, &pipeline
+);
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+void main()
+{
+    output_buffer.values[gl_GlobalInvocationID.x] = input_buffer.values[gl_GlobalInvocationID.x];
+}
+\end{lstlisting}
+\caption{The output generated by Listing \ref{lst:annotation_example_input}.}
+\label{lst:annotation_example_output}
+\end{lstfloat}
+
+The annotation provides two key features in the particular example. The first
+is the generation of boiler-plate for the creation of the
+\texttt{VkPipelineShaderStageCreateInfo} struct. This was done to investigate
+boiler-plate generation features a pre-processor could provide. The second and
+most important key feature is the compile-time checking of the function name --
+ensuring that \texttt{main} cannot renamed in the host or shader without being
+consistently renamed in the other. If we were to ensure such an error was
+introduced in raw C and GLSL, the resulting behaviour would be a runtime error.
+However, not all inconsistencies which can be checked like this result in
+runtime errors, others can simply result in incorrect or undefined runtime
+results!
+
+This example demonstrates how potential runtime errors or incorrect runtime
+behaviour can be detected through the usage of annotations which are checked at
+compile-time using a pre-processor. The flexibility of this system is that the
+programmer can remove the annotations if they desire, especially if they are
+using complex runtime features. However, this system can still be used to help
+ensure that an initial implementation is correct. Furthermore, Section
+\ref{sec:design_annotation_processor} covers design decisions that were made
+with typical shader workflows in mind such that annotations can be kept for
+most use-cases.
 
 \subsubsection{New Language}
 
@@ -1085,6 +1219,8 @@ Therefore this needs to be supported by the system as well.
 One of the important parts of the system is the implementation of the workflow.
 
 \section{Annotation Processor}
+
+\label{sec:design_annotation_processor}
 
 TODO
 
