@@ -485,16 +485,9 @@ GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TOD
 % Can be worth being wary of GPU vs CPU performance based on performance alone.
 % http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
 
-\begin{table}
-\footnotesize
-\begin{tabular}{||c|| m{12cm} ||}
-\hline
-Year &
-Development \\
-\hline
-\hline
-1992 &
-\textbf{OpenGL 1.0} released by Silicon Graphics (SGI) as an API for
+\begin{itemize}
+
+\item 1992 \textbf{OpenGL 1.0} released by Silicon Graphics (SGI) as an API for
 interacting with graphics hardware on 3D graphics workstations. OpenGL was
 created from their proprietary ``IrisGL'' API in order to prevent competitors
 from creating and using their own proprietary graphics APIs. The API allowed
@@ -502,119 +495,112 @@ users to issue basic commands in order to set-up 3D scenes, apply basic
 fixed-function lighting, and then render them \cite{OpenGL_1_0}. Control of the
 OpenGL specification eventually transfers from SGI to various owners before
 landing in the hands of the \textbf{Khronos Group} \cite{OpenCL}. \\
-\hline
-1996 &
-\textbf{Direct3D 2.0} release by Microsoft, so named, because it was the
-\textit{first} version of Direct3D. Although at this point API was designed as
-an abstraction for a software renderer \cite{JohnCarmackPlanDirect3DvsOpenGl},
-it eventually developed into an API for interfacing with graphics cards. \\
-\hline
-1996 &
-\textbf{3Dfx Voodoo} graphics card released. Although not the first graphics
-card, it dominated the consumer market and brought 3D graphics rendering to
-the mainstream. \cite{TODO} \\
-\hline
-1999 &
-\textbf{NVIDIA GeForce 256} released, the first video card to be called a
-\textbf{GPU}. First consumer PC-graphics hardware to accelerate ``transform and
-lighting'' operations, allowing them to offloaded form the CPU. The ``transform
-and lighting'' component of GPUs would be what would eventually run shaders.
-\cite{GeForce256} \\
-\hline
-2000 &
-\textbf{The Khronos Group} founded to provide structure for open standards in
-3D graphics. Reflecting the increasing flexibility of graphics cards over time,
-they now also provide standards virtual and augmented reality, heterogeneous
-computing, computer vision, parallel computing and neural networks
-\cite{KhronosGroupAbout}. In 2006 control of OpenGL is transferred to the
-Khronos Group \cite{OpenGLToKhronos}. \\
-\hline
-2001 &
-\textbf{GPGPU}, \textit{general purpose computations on GPUs}, is demonstrated
-by Larson and McAllister. They perform fast matrix multiplications by encoding
-the matrices as the inputs and outputs of the graphics pipeline such that the
-graphics pipeline can then be configured to perform the desired calculations
-\cite{MatrixGPU}. Subsequent papers then show how GPUs can outperform CPUs for
-many operations that are desirable in scientific computing \cite{CUDAtoOpenCL}
-\cite{Kruger03linearalgebra} \cite{LUGPU} \cite{SparsematrixGPU}. \\
-\hline
-2003 &
-\textbf{OpenGL ES}, \textit{OpenGL for embedded systems}, is released by the
-Khronos Group \cite{OpenGLESRelease}. It is currently the most widely deployed
-3D graphics API in history \cite{OpenGLES}. \\
-\hline
-2004 &
-\textbf{GLSL} (also known as OpenGL Shading Language or glslang) introduced
-into the \textbf{OpenGL 2.0} specification. Introduced to tame the complexity
-and proliferation of custom OpenGL extensions and assembly languages being
-introduced to customise parts of the fixed-function pipeline. Formally replaces
-parts of the pipeline with user-programmable stages defined using a
+
+\item 1996 \textbf{Direct3D 2.0} release by Microsoft, so named, because it was
+the \textit{first} version of Direct3D. Although at this point API was designed
+as an abstraction for a software renderer
+\cite{JohnCarmackPlanDirect3DvsOpenGl}, it eventually developed into an API for
+interfacing with graphics cards. \\
+
+\item 1996 \textbf{3Dfx Voodoo} graphics card released. Although not the first
+graphics card, it dominated the consumer market and brought 3D graphics
+rendering to the mainstream. \cite{TODO} \\
+
+\item 1999 \textbf{NVIDIA GeForce 256} released, the first video card to be
+called a \textbf{GPU}. First consumer PC-graphics hardware to accelerate
+``transform and lighting'' operations, allowing them to offloaded form the CPU.
+The ``transform and lighting'' component of GPUs would be what would eventually
+run shaders. \cite{GeForce256} \\
+
+\item 2000 \textbf{The Khronos Group} founded to provide structure for open
+standards in 3D graphics. Reflecting the increasing flexibility of graphics
+cards over time, they now also provide standards virtual and augmented reality,
+heterogeneous computing, computer vision, parallel computing and neural
+networks \cite{KhronosGroupAbout}. In 2006 control of OpenGL is transferred to
+the Khronos Group \cite{OpenGLToKhronos}. \\
+
+\item 2001 \textbf{GPGPU}, \textit{general purpose computations on GPUs}, are
+demonstrated by Larson and McAllister. They perform fast matrix multiplications
+by encoding the matrices as the inputs and outputs of the graphics pipeline
+such that the graphics pipeline can then be configured to perform the desired
+calculations \cite{MatrixGPU}. Subsequent papers then show how GPUs can
+outperform CPUs for many operations that are desirable in scientific computing
+\cite{CUDAtoOpenCL} \cite{Kruger03linearalgebra} \cite{LUGPU}
+\cite{SparsematrixGPU}. \\
+
+\item 2003 \textbf{OpenGL ES}, \textit{OpenGL for embedded systems}, is
+released by the Khronos Group \cite{OpenGLESRelease}. It is currently the most
+widely deployed 3D graphics API in history \cite{OpenGLES}. \\
+
+\item 2004 \textbf{GLSL} (also known as OpenGL Shading Language or glslang)
+introduced into the \textbf{OpenGL 2.0} specification. Introduced to tame the
+complexity and proliferation of custom OpenGL extensions and assembly languages
+being introduced to customise parts of the fixed-function pipeline. Formally
+replaces parts of the pipeline with user-programmable stages defined using a
 hardware-independent high-level language (replacing proprietary assembler
 languages that individual GPU manufacturers were introducing). GLSL at this
 point is defined as \textit{two} closely-related shading languages for
 different parts of the pipeline: the vertex processor and fragment processor.
 Finally, the language is forward-looking in supporting many features that
 hardware at the time didn't \cite{GLSL_1_10}. \\
-\hline
-2005 &
-\textbf{Unified Shader Architecture} introduced in ATI's \textbf{Xenos GPU},
-released as part of the Xbox 360. The ``vertex'' and ``pixel'' segments of the
-GPU pipeline are unified into a single component that can run either. This
-brings GPUs closer to highly-parallel general computation machines and away
-from being direct fixed-function hardware implementations of the graphics
-pipeline represented by APIs such as OpenGL. \cite{XenosDemystified} All GPUs
-would soon adopt this architecture \cite{HistoryOfTheGPU}. \\
-\hline
-2006 &
-\textbf{CUDA} (Compute Unified Device Architecture) introduced by NVIDIA as a
-parallel platform and API, allowing programmers to exploit the \textbf{GPGPU}
-capabilities of graphics hardware directly, without having to encode data as
-the input and output of the OpenGL pipeline. This makes GPU computing more
-efficient and accessible \cite{AboutCUDA}. \\
-\hline
-2008 &
-\textbf{Open CL} platform developed and announced by Apple as a potential open
-standard for GPGPU computing. Existing as a distinct entity from OpenGL, it has
-its own shader language called \textbf{OpenCL C}. Apple hands over control of
-the OpenCL specification to the Khronos Group, with the first implementation of
-the standard releasing alongside the Snow Leopard OS X update in 2009
-\cite{OpenCL}. \\
-\hline
-2015 &
-\textbf{SPIR-V} shading language released alongside \textbf{OpenCL 2.1}
-\cite{SPIRVLaunch}. Unlike the high-level \textit{OpenCL C} and \textit{GLSL}
-shading languages which drivers need to compile themselves, it is an
-intermediate language based on \textit{LLVM IR} which compilers for any
+
+\item 2005 \textbf{Unified Shader Architecture} introduced in ATI's
+\textbf{Xenos GPU}, released as part of the Xbox 360. The ``vertex'' and
+``pixel'' segments of the GPU pipeline are unified into a single component that
+can run either. This brings GPUs closer to highly-parallel general computation
+machines and away from being direct fixed-function hardware implementations of
+the graphics pipeline represented by APIs such as OpenGL.
+\cite{XenosDemystified} All GPUs would soon adopt this architecture
+\cite{HistoryOfTheGPU}. \\
+
+\item 2006 \textbf{CUDA} (Compute Unified Device Architecture) introduced by
+NVIDIA as a parallel platform and API, allowing programmers to exploit the
+\textbf{GPGPU} capabilities of graphics hardware directly, without having to
+encode data as the input and output of the OpenGL pipeline. This makes GPU
+computing more efficient and accessible \cite{AboutCUDA}. \\
+
+\item 2008 \textbf{Open CL} platform developed and announced by Apple as a
+potential open standard for GPGPU computing. Existing as a distinct entity from
+OpenGL, it has its own shader language called \textbf{OpenCL C}. Apple hands
+over control of the OpenCL specification to the Khronos Group, with the first
+implementation of the standard releasing alongside the Snow Leopard OS X update
+in 2009 \cite{OpenCL}. OpenCL also adds support other heterogeneous
+architectures such as DSPs and FPGAs. \\
+
+\item 2015 \textbf{SPIR-V} shading language released alongside \textbf{OpenCL
+2.1} \cite{SPIRVLaunch}. Unlike the high-level \textit{OpenCL C} and
+\textit{GLSL} shading languages which drivers need to compile themselves, it is
+an intermediate language based on \textit{LLVM IR} which compilers for any
 language can target. \cite{LLVMIR} \cite{SPIRV}. SPIR-V support is then added
 to \textbf{OpenGL 4.6} and supported by Vulkan at launch, unifying the shading
 langauges of Khronos' APIs \cite{SPIRVOpenGL}. \\
-\hline
-2016 &
-\textbf{Vulkan} released by the Khronos Group. A low level graphics and compute
-API for graphics cards that aims to better represent how modern graphics cards
-are designed, this differs from OpenGL, whose abstraction of a traditional
-graphics pipeline no longer represents the unified nature of GPUs
+
+\item 2016 \textbf{Vulkan} released by the Khronos Group. A low level graphics
+and compute API for graphics cards that aims to better represent how modern
+graphics cards are designed, this differs from OpenGL, whose abstraction of a
+traditional graphics pipeline no longer represents the unified nature of GPUs
 \cite{VulkanAnnouncement}. Unlike OpenGL and OpenGL ES, Vulkan is the same on
 both desktop and embedded systems \cite{Vulkan}. \\
-\hline
-%TODO: Vulkan, Mantle, SPIR-V and possibly SYCL. Make multipage as well https://www.sharelatex.com/learn/Tables
-\end{tabular}
-\caption{
-Tabulated history of graphics APIs and graphics card development. Naturally
-this tabled misses many details, especially related to the earlier years when
-there were many hardware vendors, the graphics market was volatile, and there
-were many, many competing graphics APIs each with their own extensions and
-features. Futhermore, the introduction of certain features are really hard to
-pin-down. For example, there is no set-date where GPUs went from being
-fixed-function hardware to becoming programmable hardware. Changes such as
-these happened gradually, with extra configurability being slowly introduced to
-graphics hardware with extensions and additional API calls until shading
-languages needed to be defined in order to program these configurations more
-systematically. However, even these languages were limited in their
-capabilities and support for advanced features like loops and flow-control took
-time to be introduced into hardware.
-}
-\end{table}
+
+
+\end{itemize}
+
+% \caption{
+% Tabulated history of graphics APIs and graphics card development. Naturally
+% this tabled misses many details, especially related to the earlier years when
+% there were many hardware vendors, the graphics market was volatile, and there
+% were many, many competing graphics APIs each with their own extensions and
+% features. Futhermore, the introduction of certain features are really hard to
+% pin-down. For example, there is no set-date where GPUs went from being
+% fixed-function hardware to becoming programmable hardware. Changes such as
+% these happened gradually, with extra configurability being slowly introduced to
+% graphics hardware with extensions and additional API calls until shading
+% languages needed to be defined in order to program these configurations more
+% systematically. However, even these languages were limited in their
+% capabilities and support for advanced features like loops and flow-control took
+% time to be introduced into hardware.
+% }
+% \end{table}
 
 
 
