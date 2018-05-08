@@ -530,13 +530,13 @@ computing, computer vision, parallel computing and neural networks
 Khronos Group \cite{OpenGLToKhronos}. \\
 \hline
 2001 &
-Larson and McAllister demonstrate that GPUs can perform fast matrix
-multiplications by encoding the matrices as the inputs and outputs of the
-graphics pipeline such that the graphics pipeline can then be configured to
-perform the desired calculations \cite{MatrixGPU}. Subsequent papers then
-show how GPUs can outperform CPUs for many operations that are desirable
-in scientific computing \cite{CUDAtoOpenCL} \cite{Kruger03linearalgebra}
-\cite{LUGPU} \cite{SparsematrixGPU}. \\
+\textbf{GPGPU}, \textit{general purpose computations on GPUs}, is demonstrated
+by Larson and McAllister. They perform fast matrix multiplications by encoding
+the matrices as the inputs and outputs of the graphics pipeline such that the
+graphics pipeline can then be configured to perform the desired calculations
+\cite{MatrixGPU}. Subsequent papers then show how GPUs can outperform CPUs for
+many operations that are desirable in scientific computing \cite{CUDAtoOpenCL}
+\cite{Kruger03linearalgebra} \cite{LUGPU} \cite{SparsematrixGPU}. \\
 \hline
 2003 &
 \textbf{OpenGL ES}, \textit{OpenGL for embedded systems}, is released by the
@@ -580,12 +580,22 @@ the OpenCL specification to the Khronos Group, with the first implementation of
 the standard releasing alongside the Snow Leopard OS X update in 2009
 \cite{OpenCL}. \\
 \hline
+2015 &
+\textbf{SPIR-V} shading language released alongside \textbf{OpenCL 2.1}
+\cite{SPIRVLaunch}. Unlike the high-level \textit{OpenCL C} and \textit{GLSL}
+shading languages which drivers need to compile themselves, it is an
+intermediate language based on \textit{LLVM IR} which compilers for any
+language can target. \cite{LLVMIR} \cite{SPIRV}. SPIR-V support is then added
+to \textbf{OpenGL 4.6} and supported by Vulkan at launch, unifying the shading
+langauges of Khronos' APIs \cite{SPIRVOpenGL}. \\
+\hline
 2016 &
 \textbf{Vulkan} released by the Khronos Group. A low level graphics and compute
 API for graphics cards that aims to better represent how modern graphics cards
 are designed, this differs from OpenGL, whose abstraction of a traditional
 graphics pipeline no longer represents the unified nature of GPUs
-\cite{VulkanAnnouncement}. \\
+\cite{VulkanAnnouncement}. Unlike OpenGL and OpenGL ES, Vulkan is the same on
+both desktop and embedded systems \cite{Vulkan}. \\
 \hline
 %TODO: Vulkan, Mantle, SPIR-V and possibly SYCL. Make multipage as well https://www.sharelatex.com/learn/Tables
 \end{tabular}
