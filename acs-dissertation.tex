@@ -1006,6 +1006,49 @@ host languages.
 
 \label{sec:issues_summary}
 
+This section enumerates the specific issues the project aims to solve. This
+project consists of two systems, an annotation system for C and GLSL and a
+custom pair of programming langauges. Although there is overlap in which
+problems they aim to solve, they differ in their approaches. The approaches
+they each take will be briefly described. Furthermore, some of the issues are
+only tackled by one of the systems, in this case that will be mentioned.
+
+The examples listed here are taken from various sources. Due to the limited
+space available, only the relevant fragments of these sources are displayed.
+TODO: List those sources, and provide a reference to a complete summary of
+them.
+
+\subsubsection{Issue 1: Redefining Datastructures}
+
+This issue is demonstrated in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
+and is extremely common when writing host code in a language that differs
+significantly from C.
+
+TODO: write it out.
+
+\subsubsection{Issue 2: Refering to function names using strings}
+
+This issue is demonstrated in Listing \ref{lst:annotation_example_output}
+
+TODO: write out it
+
+\subsubsection{Issue 3: Texture Business}
+
+TODO: write it out
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{texture_copy_issues}
+\caption{An error caused by incompatible texture definitions.}
+\label{fig:texture_copy_issues}
+\end{figure}
+
+Figure \ref{fig:texture_copy_issues} demonstrates the issue.
+
+
+\subsubsection{Issue 4: Uninitialised Data}
+
+TODO: write it out
 
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
