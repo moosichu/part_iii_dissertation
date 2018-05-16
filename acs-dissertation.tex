@@ -1216,7 +1216,7 @@ standards such as GLSL and OpenGL. This includes not limiting the possible
 programs programmers can make. Naturally there pros and cons to this approach.
 
 There are other concerns beyond performance that need to be taken into account
-which inform the design the system. For example, a commonly used feature is two
+which inform the design the system. For example, a commonly used feature is too
 \textit{swap} shaders with identical interfaces in-and-out at runtime.
 Therefore this needs to be supported by the system as well.
 
@@ -1237,7 +1237,7 @@ Therefore this needs to be supported by the system as well.
 
 One of the important parts of the system is the implementation of the workflow.
 
-\section{Annotation Processor}
+\section{Annotation System}
 
 \label{sec:design_annotation_processor}
 
@@ -1245,7 +1245,33 @@ TODO
 
 \section{Language}
 
-TODO
+The language is meant to demonstrate how a higher-level language than C
+\textit{could} have an be designed with GPUs in mind such that a shader
+language derived from it can make use of modern language features in addition
+to features specifically designed to ensure programming for the GPU is less
+error-prone. However, this differs from many other custom langauges which have
+aimed to do this, as we are not abstracting-away any API calls. Therefore the
+features these languages provide are the same as those from the annotation
+system, but with them baked-in to the type-system of these languages.
+
+Due to resource constraints, these languages do not aim to replicate
+\textit{all} of the features that one would expect from an industrial language
+such a Java, C, C++, C$^\sharp$, Swift, Rust, etc. They merely aim to provide
+the bare-minimum feature-set needed in order to demonstrate the ideas of this
+paper. They are very much toy languages.
+
+\subsection{C-interoperability}
+
+In order to provide zero-overhead API calls, the host-language must be able to
+call directly into C. This also has an additional benefit, in that C libraries
+can be leveraged in order to make up for deficiencies in the language itself.
+
+Multiple design decisions were made in order to achieve this as easily as
+possible. It is worth noting that a more robust implementation of these
+languages would go about things differently. We mention if this is the case.
+
+TODO: continue.
+
 
 \chapter{Implementation}
 
@@ -1265,6 +1291,8 @@ cross-platform builds. The project was developed and tested on both Ubuntu
 TODO:
 
 \section{Compiler}
+
+
 
 TODO: reference usage of FNV hash for symbol table. \cite{FNVHash}.
 
