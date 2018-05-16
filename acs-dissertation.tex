@@ -1290,7 +1290,11 @@ modified, that would massively impede productivity.
 Therefore we take a novel approach in type-checking between CPU and GPU code.
 Firstly, shaders and host code are written in different files, using different
 langauges in the traditional manner. However, the host code is analysed using a
-program which generates metadata at the compile-time of the host code.
+program which generates metadata at the compile-time of the host code. This
+approach does have limitations: it relies on the programmer to correctly
+mark-up their CPU code so that the errors can be checked-for. However, the
+benefit of this is that raw-and-unchecked API calls always exists as an option.
+This system does not impose any limitations on existing workflows.
 
 This metadata can then be fed as input when the GPU code is compiled. Which can
 be at some arbitrary point after the CPU code is compiled, or even when the
@@ -1473,6 +1477,29 @@ as} performant as C - the compiler may not optimise as well as it should.
 
 TODO:
 
+\section{Error-Prevention}
+
+In this section we analyse each of the errors shown in Section
+\ref{sec:sec:issues_summary}, demonstrating how both the annotation system and
+custom heterogeneous languages prevent the programmer from making them.
+
+\subsection{The Errors}
+
+\subsubsection{Issue 1: Redefining Datastructures}
+
+TODO:
+
+\subsubsection{Issue 2: Referring to function names using strings}
+
+TODO:
+
+\subsubsection{Issue 3: Texture Business}
+
+TODO:
+
+\subsubsection{Issue 4: Uninitialised Data}
+
+TODO:
 
 \chapter{Conclusion, Further Work and the Future of Heterogeneous Programming}
 
