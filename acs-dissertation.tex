@@ -1024,13 +1024,68 @@ This issue is demonstrated in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
 and is extremely common when writing host code in a language that differs
 significantly from C.
 
-TODO: write it out.
+A common example is wanting to run a shader which takes a buffer of structs as
+input or output. When using C/C++ as the host language, you do not really have
+any problems, because most common shader langauges are based on C. Therefore,
+you can define a struct in a \texttt{.h} header file and include it in both
+your shader and host code.
 
-\subsubsection{Issue 2: Refering to function names using strings}
+An issue arises when host code is written in another language that is distinct
+from C. In this case, when using shaders, you have to define the datastructure
+in both the host and the shader langauge separately. This is what Listing
+\ref{lst:c_sharp_hlsl_struct_comparison} demonstrates.
 
-This issue is demonstrated in Listing \ref{lst:annotation_example_output}
+Errors can easily occur when these representations of the same datastructure
+differ. For example, given different definitions, if the CPU fills a buffer
+with a given datastructure and then transfers it to the GPU for it to operate
+on, the resulting behaviour will simply be incorrect. Debugging these kind of
+errors is hard, as there are no runtime or compile time checks, so a programmer
+has to locate it by manual inspection.
 
-TODO: write out it
+Futhermore, this is not a niche error. For example, the Unity game engine uses
+C$^\sharp$ as a scripting language, whilst using HLSL for shaders \cite{TODO}.
+Between April and July 2015, Unity applications from over 170,000 developers
+were installed on mobile hardware alone \cite{UnityByTheNumbers}.
+
+We hope to demonstrate how this issue could be tackled through the development
+of a pair of custom languages. We aim to demonstrate how a language that differs
+from C can have a shader language derived from it, so that these errors can
+be avoided. For example, going forward, it could be possible to write shaders
+in Unity using a shader language based on C$^\sharp$ instead of one based on C.
+
+The reason this has not been previously possible, is because of TODO: find
+other sections explaining why and reference them.
+
+\subsubsection{Issue 2: Refering to kernel/shader names using strings}
+
+This issue is demonstrated in Listing \ref{lst:annotation_example_output}.
+
+Running a shader consists of multiple steps, the following are important and
+relevant to this problem. Firstly, a shader needs to be written and saved in a
+file. Then, depending on the API, the shader may need to be compiled into an
+intermediary format in order to run on the GPU. Then, when the application is
+running, it performs three important steps. First, it passes a pointer to the
+the shader data to the API, so that it can handle loading the code onto the
+GPU. Second, it identifies which kernel (essentially a function) within that
+code should be run. Third, it then makes an API call to run that kernel.
+
+However, this has an issue, and that is that the kernel is identified by a
+string, as shown in Listing \ref{lst:annotation_example_output}, and there are
+no compile-time checks between the shader and the host code in order to make
+sure that the host code identifies a kernel that actually exists. As there is
+no direct link between the string that the host code uses to identify the
+kernel and the name of the kernel itself, refactoring and renaming kernels can
+be tricky.
+
+For example, misnaming the kernel in Vulkan, causes a
+\texttt{VK\_ERROR\_INVALID\_SHADER\_NV} error at runtime.
+
+% https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html
+
+% https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResult.html
+
+The annotation system and the new langauges both aim to catch these errors at
+compile-time using different mechanisms.
 
 \subsubsection{Issue 3: Texture Business}
 
@@ -1194,6 +1249,8 @@ would otherwise be lost by abstractions. Furthermore, we targeted both
 on compute.
 
 % TODO: Future roadmap confusion
+
+% TODO: Vulkan Validation Layers
 
 \chapter{Design}
 
