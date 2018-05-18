@@ -1087,62 +1087,62 @@ For example, misnaming the kernel in Vulkan, causes a
 The annotation system and the new langauges both aim to catch these errors at
 compile-time using different mechanisms.
 
-\subsubsection{Issue 3: Texture Business}
+% \subsubsection{Issue 3: Texture Business}
 
-TODO: write it out
+% Another issue is that of
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\linewidth]{texture_copy_issues}
-\caption{An error caused by incompatible texture definitions.}
-\label{fig:texture_copy_issues}
-\end{figure}
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=0.8\linewidth]{texture_copy_issues}
+% \caption{An error caused by incompatible texture definitions.}
+% \label{fig:texture_copy_issues}
+% \end{figure}
 
-Figure \ref{fig:texture_copy_issues} demonstrates the issue.
+% Figure \ref{fig:texture_copy_issues} demonstrates the issue.
 
 
-\subsubsection{Issue 4: Uninitialised Data}
+% \subsubsection{Issue 4: Uninitialised Data}
 
-TODO: write it out
+% TODO: write it out
 
-\begin{lstfloat}
-\begin{lstlisting}[language=C]
-const float fixedDeltaTime;
-const int currentFrame;
-const float particleSpeed;
-float2 getPosition(int startingFrame, float2 velocity, float2 origin) {
-    float t = (fixedDeltaTime * (float)(currentFrame - startingFrame));
-    return origin + (t * particleSpeed * velocity);
-}
+% \begin{lstfloat}
+% \begin{lstlisting}[language=C]
+% const float fixedDeltaTime;
+% const int currentFrame;
+% const float particleSpeed;
+% float2 getPosition(int startingFrame, float2 velocity, float2 origin) {
+%     float t = (fixedDeltaTime * (float)(currentFrame - startingFrame));
+%     return origin + (t * particleSpeed * velocity);
+% }
 
-const int horiRes;
-const int vertRes;
-const float planeWidth;
-const float planeHeight;
-StructuredBuffer<WaveParticle> waveParticleBuffer;
-RWTexture2D<float4> amplitudeTexture;
+% const int horiRes;
+% const int vertRes;
+% const float planeWidth;
+% const float planeHeight;
+% StructuredBuffer<WaveParticle> waveParticleBuffer;
+% RWTexture2D<float4> amplitudeTexture;
 
-///
-/// Splat the wave particles to the splatTexture
-///
-#pragma kernel SplatParticles
-[numthreads(THREAD_GROUPS_X, 1, 1)]
-void DrawParticles(uint3 id : SV_DispatchThreadID)
-{
-    WaveParticle particle = waveParticleBuffer[id.x];
-    float2 waveParticlePosition = getPosition(
-        particle.startingFrame, particle.velocity, particle.origin
-    );
-    int xPos = (int)round((waveParticlePosition.x / planeWidth) * horiRes);
-    int yPos = (int)round((waveParticlePosition.y / planeHeight) * vertRes);
-    amplitudeTexture[int2(xPos, yPos)] +=
-        float4(0.0, particle.amplitude, 0.0, 0.0);
-}
-\end{lstlisting}
-\label{lst:draw_particles}
-\caption{An example of an HLSL computer shader that takes a particle stored in
-in a buffer and copies its amplitude to a specific location on a texture.}
-\end{lstfloat}
+% ///
+% /// Splat the wave particles to the splatTexture
+% ///
+% #pragma kernel SplatParticles
+% [numthreads(THREAD_GROUPS_X, 1, 1)]
+% void DrawParticles(uint3 id : SV_DispatchThreadID)
+% {
+%     WaveParticle particle = waveParticleBuffer[id.x];
+%     float2 waveParticlePosition = getPosition(
+%         particle.startingFrame, particle.velocity, particle.origin
+%     );
+%     int xPos = (int)round((waveParticlePosition.x / planeWidth) * horiRes);
+%     int yPos = (int)round((waveParticlePosition.y / planeHeight) * vertRes);
+%     amplitudeTexture[int2(xPos, yPos)] +=
+%         float4(0.0, particle.amplitude, 0.0, 0.0);
+% }
+% \end{lstlisting}
+% \label{lst:draw_particles}
+% \caption{An example of an HLSL computer shader that takes a particle stored in
+% in a buffer and copies its amplitude to a specific location on a texture.}
+% \end{lstfloat}
 
 \section{Related Work}
 
