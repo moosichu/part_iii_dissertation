@@ -1708,18 +1708,37 @@ can be in three possible states for parsing:
 
 \end{itemize}
 
-\subsection{Intermediate Code}
+\subsection{Semantic Analysis}
 
-TODO(Content!):
+Semantic analysis is fairly straightforward. It's done by recursing on the AST,
+and regardless of the language being compiled, the same semantic analysis
+algorithm is performed. However, in order to handle different types which may
+be available in the different langauges, the symbol tables have different types
+inserted into them when initialised. Additionally, externally declared types,
+constants and functions are added to the \texttt{C} namespace for host code and
+to the \texttt{GLSL} namespace for shader code.
+
+\subsection{Intermediate Representation}
+
+After parsing, an intermediate representation (IR) is generated from the AST.
+This IR takes the form of a three-address code, stored in a quadruple format.
+Both backends share the same IR, however, some opcodes are only permissable for
+certain target backends. Examples of this include the \texttt{MALLOC\_OP}
+instruction, which is only present for the CPU backend. Name mangling is
+performed at this stage of the compilation, however, uses of functions and
+types in the reserved C and GLSL namespaces for host and shader code
+respectively are left untouched.
 
 \subsection{Backends}
 
-TODO(Content!):
+There are two different backends, a C backend when compiling the host langauge
+and a GLSL backend when compiling the shader langauge. These are handled by
+directly translating given quadruples to source code for the target langauges.
+The reason for targetting these as backends is given in Section TODO(Helpful).
 
+% \subsection{Interfacing with existing langauges}
 
-\subsection{Interfacing with existing langauges}
-
-TODO(Content!): reference usage of FNV hash for symbol table. \cite{FNVHash}.
+% TODO(Helpful): reference usage of FNV hash for symbol table. \cite{FNVHash}.
 
 
 \chapter{Evaluation}
@@ -1728,18 +1747,25 @@ TODO(Content!): reference usage of FNV hash for symbol table. \cite{FNVHash}.
 % some kind of evaluation, and it's often useful to separate
 % this out into its own chapter.
 
+In this chapter, we analyse how the two systems help prevent errors of the kind
+described, which will be shown through different code snippets. Due to the
+complexity of using graphics APIs, these snippets are incomplete. For example,
+the host code which makes the appropriate API calls to run a simple compute
+shader that copies items from one file to another is over 750 lines long
+\cite{TODO}. The source for all of these examples will be referenced.
 
-\section{Performance}
 
-Ideally, there shouldn't be any performance overhead in either of the
-solutions. For the annotation processor, that's fairly straight-forward to
-establish, as it is essentially syntactic sugar that sits on-top-of C and GLSL.
+% \section{Performance}
 
-However, although the custom language has semantics very similar to C and GLSL,
-and in theory identical programs in both environments should be \textit{just
-as} performant as C - the compiler may not optimise as well as it should.
+% Ideally, there shouldn't be any performance overhead in either of the
+% solutions. For the annotation processor, that's fairly straight-forward to
+% establish, as it is essentially syntactic sugar that sits on-top-of C and GLSL.
 
-TODO(Content!):
+% However, although the custom language has semantics very similar to C and GLSL,
+% and in theory identical programs in both environments should be \textit{just
+% as} performant as C - the compiler may not optimise as well as it should.
+
+% TODO(Content!):
 
 \section{Error-Prevention}
 
@@ -1751,9 +1777,14 @@ custom heterogeneous languages prevent the programmer from making them.
 
 \subsubsection{Issue 1: Redefining Datastructures}
 
+This is an issue solved by the new set of custom langauges.
+
 TODO(Content!):
 
 \subsubsection{Issue 2: Referring to function names using strings}
+
+This is an issue solved by both the annotation system and the new set of custom
+langauges.
 
 TODO(Content!):
 
