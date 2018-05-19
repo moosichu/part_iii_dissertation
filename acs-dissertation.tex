@@ -465,8 +465,8 @@ Listing \ref{lst:annotation_example_input} shows an example of an API call that
 can result in an error that could be checked-for at compile-time. In this case
 the running of a shader named \texttt{main}. Here, the host code makes the
 \texttt{vkCreateComputePipelines} API call in order to create a compute
-pipeline\footnote{This is just an API call that needs to be made TODO:
-reference where more info on this can be found}
+pipeline\footnote{This is just an API call that needs to be made \cite{TODO}}
+% reference where more info on this can be found}
 \cite{vkCreateComputePipelines}. An instance of the
 \texttt{VkComputePipelineCreateInfo} containing a
 \texttt{VkPipelineShaderStageCreateInfo} structure is passed to that API call,
@@ -550,15 +550,15 @@ language that is designed to be compiled for the CPU. The second language,
 called the \textit{the shader langauge} is similarly designed to target GPUs.
 
 The goal here was to leverage the opportunities intermediate shader languages
-present. Section TODO explains how historically compiling custom langauges to
+present. Section TODO(Content) explains how historically compiling custom langauges to
 shaders has been a difficult endeavour, due to a plethora of inconsistencies
 between the implementation of shader languages by different GPU vendors.
 Intermediate shader langauges help solve this problem.
 
-% TODO: Read https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
+% TODO(Task): Read https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
 
 Listing \ref{lst:language_example} shows the same snippet of code as the
-annotation example shown in Listin \ref{lst:annotation_example_input}.
+annotation example shown in Listing \ref{lst:annotation_example_input}.
 
 \begin{lstfloat}
 \begin{center} Host Language \end{center}
@@ -609,7 +609,15 @@ Compared with using raw graphics APIs, these techniques present an obvious
 benefit: they reduce the likelyhood of certain classes of errors from being
 made. However, they do potentially cost of friction.
 
-TODO:
+\begin{itemize}
+
+    \item PROS:
+
+        \item Reduce friction
+
+        \item Help Me s
+
+\end{itemize}
 
 \section{Overview}
 
@@ -627,11 +635,11 @@ TODO:
 % document, although without care this can appear formulaic
 % and tedious. Your call.
 
-TODO: Give overview of paper.
+TODO(Content!): Give overview of paper.
 
 \section{Summary}
 
-TODO: summarise introduction.
+TODO(Content!): summarise introduction.
 
 \chapter{Technical Background}
 
@@ -682,7 +690,7 @@ chapter finishes of with an overview of related research in this area,
 demonstrating both were they succeed and how they fail to tackle the specific
 problems that are solved here.
 
-% TODO: Why low level details are important (eg unified memory versus seperate
+% TODO(Citation): Why low level details are important (eg unified memory versus seperate
 % memory)
 % https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
 % https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
@@ -691,7 +699,7 @@ problems that are solved here.
 
 \label{sec:gpu_hardware}
 
-TODO:
+TODO(Content!):
 
 \begin{center}
 \begin{tabular}{||c||c|c|c||}
@@ -881,9 +889,9 @@ those APIs as light shims above the others \cite{VulkanPortabilityInitiative}
 
 \label{sec:api_challanges}
 
-% TODO mention how Vulkan is merging the OpenGL, OpenCL and OpenGL ES.
+% TODO(Content) mention how Vulkan is merging the OpenGL, OpenCL and OpenGL ES.
 
-% TODO: Good comparison of mess vs potential future (Unity Pipeline).
+% TODO(Helpful): Good comparison of mess vs potential future (Unity Pipeline).
 % http://www.g-truc.net/doc/2015%20-%20EuroLLVM%20-%20SPIR-V.pdf
 % can also be shown in conclusion.
 
@@ -965,7 +973,7 @@ Drawbacks include:
     that drivers use are not-only proprietary but developed by much smaller
     teams. This can lead to bugs where even fuzzing programs with changes which
     should result in identical outcomes results in breaking the output
-    \cite{GLFuzz}. %TODO: maybe include an image of this
+    \cite{GLFuzz}. %TODO(Helpful): maybe include an image of this
 
     \item Applications must be distributed with the high-level source-code to
     these shaders, meaning the shaders themselves must be tokenised, parsed,
@@ -1032,7 +1040,7 @@ target many APIs. Furthermore, the Vulkan portability initiative allows
 developers to run Vulkan on-top-of different APIs on platforms which may not
 natively support Vulkan itself \cite{TODO}. This will hopefully result in an
 ecosystem which much more closely resembles the ``hourglass model'' that CPUs
-enjoy today. %TODO cite unity presentation slide.
+enjoy today. %TODO(Helpful) cite unity presentation slide.
 
 Cross-compiling between different intermediate languages for different APIs is
 easier than doing the same for high-level languages \cite{TODO}.
@@ -1082,8 +1090,8 @@ only tackled by one of the systems, in this case that will be mentioned.
 
 The examples listed here are taken from various sources. Due to the limited
 space available, only the relevant fragments of these sources are displayed.
-TODO: List those sources, and provide a reference to a complete summary of
-them.
+TODO(Content): List those sources, and provide a reference to a complete summary of
+them (maybe put into appendix).
 
 \subsubsection{Issue 1: Redefining Datastructures}
 
@@ -1120,7 +1128,7 @@ from C can have a shader language derived from it, so that these errors can
 be avoided. For example, going forward, it could be possible to write shaders
 in Unity using a shader language based on C$^\sharp$ instead of one based on C.
 
-The reason this has not been previously possible, is because of TODO: find
+The reason this has not been previously possible, is because of TODO(Content): find
 other sections explaining why and reference them.
 
 \subsubsection{Issue 2: Refering to kernel/shader names using strings}
@@ -1170,7 +1178,7 @@ compile-time using different mechanisms.
 
 % \subsubsection{Issue 4: Uninitialised Data}
 
-% TODO: write it out
+% TODO(Helpful): write it out
 
 % \begin{lstfloat}
 % \begin{lstlisting}[language=C]
@@ -1315,9 +1323,9 @@ would otherwise be lost by abstractions. Furthermore, we targeted both
 \textit{compute} and \textit{graphics} back-ends, as opposed to focusing only
 on compute.
 
-% TODO: Future roadmap confusion
+% TODO(Helpful): Future roadmap confusion
 
-% TODO: Vulkan Validation Layers
+% TODO(Helpful): Vulkan Validation Layers
 
 \chapter{Design}
 
@@ -1374,8 +1382,8 @@ of our systems \cite{Vulkan}. Done for the following reasons:
     systems could introduce compile-time checks for these errors.
 
     \item Vulkan is already being widely used in the gaming industry, so the
-    use cases described here are applicable to a wide audience (TODO: phrase
-    better).
+    use cases described here are applicable to a wide audience.
+    %TODO(Helpful) : phrase better).
 
     \item Vulkan is a low-level API. One of the goals of our systems was to
     demonstrate how they have no runtime overhead, this is done by allowing
@@ -1539,22 +1547,24 @@ used to interact with C.
 
 \subsection{Shader Language}
 
-TODO: Describe shader language.
+TODO(Content!): Describe shader language.
 
 \subsection{Cross-Language type system}
 
-TODO: Describe the cross-langauge type system.
+TODO(Conent!): Describe the cross-langauge type system.
 
 \subsection{Other Features}
 
 Although not directly-relevant to the problem at-hand, the language has the
 following features which distinguish it from C:
 
+TODO(Content!)
+
 \begin{itemize}
 
-    \item TODO
+    \item BLAH
 
-    \item TODO
+    \item BLAH
 
 \end{itemize}
 
@@ -1573,13 +1583,13 @@ cross-platform builds. The project was developed and tested on both Ubuntu
 
 \section{Pre-processor}
 
-TODO:
+TODO(Content!):
 
 \section{Compiler}
 
 
 
-TODO: reference usage of FNV hash for symbol table. \cite{FNVHash}.
+TODO(Content!): reference usage of FNV hash for symbol table. \cite{FNVHash}.
 
 
 \chapter{Evaluation}
@@ -1599,7 +1609,7 @@ However, although the custom language has semantics very similar to C and GLSL,
 and in theory identical programs in both environments should be \textit{just
 as} performant as C - the compiler may not optimise as well as it should.
 
-TODO:
+TODO(Conent!):
 
 \section{Error-Prevention}
 
@@ -1611,19 +1621,19 @@ custom heterogeneous languages prevent the programmer from making them.
 
 \subsubsection{Issue 1: Redefining Datastructures}
 
-TODO:
+TODO(Content!):
 
 \subsubsection{Issue 2: Referring to function names using strings}
 
-TODO:
+TODO(Conent!):
 
-\subsubsection{Issue 3: Texture Business}
+% \subsubsection{Issue 3: Texture Business}
 
-TODO:
+% TODO(Helpful):
 
-\subsubsection{Issue 4: Uninitialised Data}
+% \subsubsection{Issue 4: Uninitialised Data}
 
-TODO:
+% TODO(Helpful):
 
 \chapter{Conclusion, Further Work and the Future of Heterogeneous Programming}
 
@@ -1634,7 +1644,7 @@ TODO:
 % You will generally want to draw some conclusions, and point
 % to potential future work. \cite{DirectXWorkings}
 
-TODO:
+TODO(Content!):
 
 NOTE: CURRENTLY ONLY CONTAINS SPECULATION ON THE FUTURE OF HETEROGENEOUS
 PROGRAMMING. IT IS CURRENTLY SLIGHTLY UNSTRUCTURED BUT PRESENTS THE IDEAS
@@ -1684,6 +1694,9 @@ and OpenGL could be APIs which are implemented in terms of the lower-level
 Vulkan, bringing this ``dream'' another step closer to reality
 \cite{OpenGLonVulkan} \cite{VulkanOpenCLMerge} \cite{OpenGLOverload}.
 
+% TODO(Helpful): Software renderer + Vulkan CPU for CPU side debugging
+
+
 \bibliographystyle{unsrt}
 \bibliography{references}
 
@@ -1708,7 +1721,7 @@ growth of GPUs in computing has been relatively organic and ad-hoc, these APIs
 themselves have many legacy components and can be difficult to work with
 \cite{NVIDIAInternshipLessons}.
 
-% TODO: can reference this blog:
+% TODO(Citation): can reference this blog:
 % http://aras-p.info/blog/2015/03/13/thoughts-on-explicit-graphics-apis/
 % http://aras-p.info/blog/2014/05/31/rant-about-rants-about-opengl/
 
@@ -1755,7 +1768,7 @@ focus on the OpenGL family of graphics APIs.
 
 \subsection{Vulkan}
 
-TODO:
+TODO(Content?):
 
 \subsection{Graphics workflow and pipeline}
 
@@ -1914,7 +1927,7 @@ body} for interacting with the same underlying hardware. Furthermore, there are
 many proprietary alternatives hardware and operating system vendors like to
 push themselves.}
 
-%TODO: add references to this table.
+%TODO(Citation): add references to this table.
 
 \label{tbl:api_comparison}
 
