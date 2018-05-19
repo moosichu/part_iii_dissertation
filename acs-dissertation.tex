@@ -1675,7 +1675,49 @@ The annotated GLSL code is checked using a similar strategy.
 
 \section{Compiler}
 
-The compiler is a much more complex endeavor than the annotation processor.
+The compiler is a much more complex endeavor than the annotation processor, and
+consists of a single program which is able to compile code written in three
+languages: the host language, the shader language, and the subset of the two.
+Input for the compiler is achieved in a similar manner to the input into the
+annotation processor.
+
+\subsection{Parsing multiple langauges}
+
+The reason the different langauges share the same compiler program is to allow
+for the easy sharing of code and to ensure consistency between the two.
+However, by sharing the same compiler, can needs to be taken to ensure that the
+compiler handles code intended for a particular backend in the desired manner.
+
+This is achieved through the use of an internal state machine within the
+recursive descent parser , where during parsing of a given input, the compiler
+can be in three possible states for parsing:
+
+\begin{itemize}
+
+    \item \textbf{\texttt{HOST}:} When in the \texttt{HOST} state, the compiler
+    ensures that it only compiles code that conforms to the host language. It
+    fails, with a compilation error, if code does not conform.
+
+    \item \textbf{\texttt{SHADER}:} When in the \texttt{SHADER} state,
+    similarly, only shader language conforming code is parsed.
+
+    \item \textbf{\texttt{SHARED}:} When in the \texttt{SHARED} state, only
+    code which is of the valid subset of the host and shader langauges is
+    parsed. Source files indicate themselves as shared through an
+    \texttt{@shared} directive as the first token of the source file.
+
+\end{itemize}
+
+\subsection{Intermediate Code}
+
+TODO(Content!):
+
+\subsection{Backends}
+
+TODO(Content!):
+
+
+\subsection{Interfacing with existing langauges}
 
 TODO(Content!): reference usage of FNV hash for symbol table. \cite{FNVHash}.
 
