@@ -214,7 +214,9 @@ by many new front-ends apart from \textit{OpenCL C++}
 % This is an important problem to work on due to the benefits solutions could
 % provide to the wide number of developers programming for GPUs.
 
-NOTE: THIS SECTION HAS NOT BEEN MODIFIED (MUCH) SINCE LAST READ.
+% NOTE: THIS SECTION HAS NOT BEEN MODIFIED (MUCH) SINCE LAST READ.
+
+TODO(Rewrite):
 
 As ``Moore's Law'' is arguably slowing down, Graphical Processing Units (GPUs)
 have provided significant gains in floating-point computing power relative to
@@ -1547,24 +1549,72 @@ used to interact with C.
 
 \subsection{Shader Language}
 
-TODO(Content!): Describe shader language.
+The shader language is based on the host langauge, but differs with both
+restrictions and enhancements, reflecting the capabilities of GPUs.
+
+The biggest restriction is the lack of a \texttt{\#c\_environment} command
+which can be used to embed C in the host langauge. Additionally, this means
+that there is no \texttt{C} namespace which can be used to access C functions.
+Futher restrictions include the inability to use certain datatypes such as
+pointers and strings.
+
+However, the shader languages has the addition of a
+\texttt{\#glsl\_environment} command, which can be used to embed GLSL within
+the langauge, statements which are accessed using the \texttt{GLSL} namespace.
+Furthermore, the shader langauge is supplemented by the addition of basic
+vector datatypes.
+
+
+% TODO(Content): Add more detail once shader langauge is well defined
 
 \subsection{Cross-Language type system}
 
-TODO(Content!): Describe the cross-langauge type system.
+A big benefit of these pair of languages is that they have a cross-language
+type-system. This different significantly from many GPU programming models,
+where the host language and the shader language differ significantly. Although
+when using C or C++, existing shader languages are syntactically similar enough
+to them for some code such as data structures to be shared. However, even
+sharing code like this is limited, as C has a fairly limited type system.
+Furthermore, there are no mechanisms for expressing within files that they are
+intended to be used for both shader and host code.
+
+We there improve over the status quo in one significant way, by allowing files
+to be explicitly marked as a shared module for both our host and shader
+languages. Therefore, the compiler can compile files marked in this way whilst
+being aware of this fact, meaning that when shared modules are included by any
+code, the compiler can emit errors if those modules do not conform to the
+restricted subset of features which are available in both the host and shader
+langauges.
+
+%TODO(Content): Add more details and examples once these mechanisms are well defined.
 
 \subsection{Other Features}
 
 Although not directly-relevant to the problem at-hand, the language has the
 following features which distinguish it from C:
 
-TODO(Content!)
-
 \begin{itemize}
 
-    \item BLAH
+    \item Instead of declaring variables by writing \texttt{type\_name
+    variable\_name = expression}, the user writes \texttt{var variable\_name :
+    type\_name = expression}.
 
-    \item BLAH
+    \item Type inference is supported with the syntax \texttt{var variable\_name
+    := expression}.
+
+    \item Immutable values can be declared with \texttt{let value\_name :
+    type\_name = expression}.
+
+    \item Strings and arrays both explicitly store there own length values.
+
+    \item Forward declarations are not needed, the compiler can lookahead for
+    function and structure definitions. Futhermore, it can detect if there are
+    cycles within structs automatically.
+
+    \item Pointers in the host language can be nullable or non-nullable.
+    Assigning \texttt{null} explicitly to non-nullable pointers is illegal, and
+    assigning from nullable to non-nullable pointers must either be guarded or
+    use an explicit cast.
 
 \end{itemize}
 
@@ -1583,11 +1633,49 @@ cross-platform builds. The project was developed and tested on both Ubuntu
 
 \section{Pre-processor}
 
-TODO(Content!):
+The pre-processor takes the form of a commandline program, that can operate
+in two modes:
+
+\begin{itemize}
+
+    \item \textbf{Host Mode}: indicated by the \texttt{-h} flag, allows the
+    user to provide an annotated C file as input, with two outputs being given.
+    The first output is indicated by the \texttt{--out-c} flag, which tells the
+    annnotation processor where to output the processed C file. The second
+    output is indicated by the \texttt{--out-metadata} flag, which tells the
+    annotation processor where to output metadata associated with the
+    annotations. This metadata is used to check GLSL files. An example command
+    line instruction would be: \texttt{./annotation\_processor -h input.c
+    --out-c output.c --out-metadata check.metadata}.
+
+    \item \textbf{Shader Mode}: indicated by the \texttt{-s} flag, allows the
+    user to provide annotated GLSL and metadata file as input, with GLSL being
+    provided as the output, or an error, if the GLSL and the metadata are
+    inconsistent. An example command line instruction would be:
+    \texttt{./annotation\_processor -s input.glsl check.metadata --out-glsl
+    output.glsl}.
+
+\end{itemize}
+
+Although the pre-processor seems simple, the intention is for it to be used as
+a command-line program that can be used by more comprehensive build systems.
+
+The annotation processor works by looking for ``\texttt{@}'' directives within
+C or GLSL code. When such a directive is found, it tokenises and parses the
+relevant sections of the provided input using a recursive descent parser,
+creating an abstract syntax tree.
+
+For annotated C code, the AST is semantically analysed, with a special
+dataformat to store metadata which can be used to ensure that GLSL annotations
+which are checked later are consistent with the annotated C.
+
+The annotated GLSL code is checked using a similar strategy.
+
+% TODO(Content): flesh this out more
 
 \section{Compiler}
 
-
+The compiler is a much more complex endeavor than the annotation processor.
 
 TODO(Content!): reference usage of FNV hash for symbol table. \cite{FNVHash}.
 
@@ -1646,9 +1734,9 @@ TODO(Content!):
 
 TODO(Content!):
 
-NOTE: CURRENTLY ONLY CONTAINS SPECULATION ON THE FUTURE OF HETEROGENEOUS
-PROGRAMMING. IT IS CURRENTLY SLIGHTLY UNSTRUCTURED BUT PRESENTS THE IDEAS
-I THINK THE FINAL CONCLUSION WILL.
+% NOTE: CURRENTLY ONLY CONTAINS SPECULATION ON THE FUTURE OF HETEROGENEOUS
+% PROGRAMMING. IT IS CURRENTLY SLIGHTLY UNSTRUCTURED BUT PRESENTS THE IDEAS
+% I THINK THE FINAL CONCLUSION WILL.
 
 Something which the creation of SPIR-V enables, and that this paper
 demonstrates is possible, is the ability to \textit{extend} langauges with

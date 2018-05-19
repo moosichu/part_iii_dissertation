@@ -3,4 +3,5 @@ TODO(Content) - Minor pieces of missing Content
 TODO(Content!) - Important pieces of missing Content
 TODO(Content?) - Possible content, but stuff needs to be deleted around it if it isn't used
 TODO(Citation) - Useful citation which could be used
+TODO(Rewrite) - Proof read section and makes sure it fits into the whole of the dissertation
 \cite{TODO} - Missing citation
