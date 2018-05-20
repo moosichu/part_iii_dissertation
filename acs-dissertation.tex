@@ -363,12 +363,12 @@ tackle these problems.
 
 \label{sec:solutions_introduction}
 
-This section introduces two solutions to the problems described above. First by
-describing what the desired outcomes of those solutions should be and then how
-they should improve over the status quo. This is followed by the solutions;
-first describing the annotation processor and then the pair of languages with a
-unified type system. The pros and cons of each are then discussed to round off
-the section.
+This section introduces the two systems this paper presents as solutions to the
+problems described above. First by describing what the desired outcomes of
+those solutions should be and then how they should improve over the status quo.
+This is followed by the solutions themselves; first describing the annotation
+processor and then the pair of languages with a unified type system. The pros
+and cons of each are then discussed to round off the section.
 
 \subsection{Desired Outcome}
 
@@ -386,21 +386,21 @@ including exposing any underlying graphics or compute APIs.
 Although this means these solutions are limited in the abstractions that they
 can provide, there are some ``easy wins'' to be made. This is demonstrated by
 the example problem shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
-and elaborated in Section \ref{sec:api_challanges}. Bugs may easily be
-introduced to due errors in using teh API; these can prevented by compile-time
+and elaborated on in Section \ref{sec:api_challanges}. Bugs may easily be
+introduced to due errors in using the API; these can prevented by compile-time
 checks. That is, instead of trying to unify code that is written for the CPU
 and GPU under a single language or system which is designed to abstract-away
 API calls (thereby reducing the possibility of introducing errors as the
-compiler generates API calls for the programmer), we can acknowledge that they
-are different and so have host code and shaders written in different
-programming languages. However, we can use compile-time type checking
+compiler generates API calls for the programmer), we can acknowledge that these
+targets are different enough to justify writing host code and shaders in
+different programming languages. However, we can use compile-time type checking
 \textit{between} these languages and compile-time checks on the API calls
 \textit{themselves} in order to have the compiler catch errors which would
 otherwise be left undetected.
 
 In conclusion, any solution that aims to improve upon current programming
 models should deliver the benefits described above without sacrificing anything
-current systems toolchains. This can be done by targetting specific classes of
+current toolchains provide. This can be done by targetting specific classes of
 errors as described in Section \ref{sec:api_challanges}. We can do this with
 two techniques: compile-time cross-language checks and the processing of
 annotations to check the validity of raw API calls.
