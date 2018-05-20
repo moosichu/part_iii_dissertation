@@ -101,13 +101,12 @@ end of this section quickly clarifies common points of confusion.
 
     \item \textbf{GPU:} This is a \textit{Graphical Processing Unit}, and is a
     piece of hardware that performs computations using a massively parallel
-    architecture (see Section \ref{sec:gpu_hardware}. GPUs are always
-    controlled by the CPU through an API, which the CPU uses to manage GPU
-    resources and load code onto the GPU. The RAM a GPU directly accesses is
-    called VRAM. Although computing architectures do exist where the CPU and
-    GPU share access to a single pool of memory, in most architectures data
-    must be explicitly transferred from the CPU's RAM to the GPU's VRAM through
-    a bus.
+    architecture. GPUs are always controlled by the CPU through an API, which
+    the CPU uses to manage GPU resources and load code onto the GPU. The RAM a
+    GPU directly accesses is called VRAM. Although computing architectures do
+    exist where the CPU and GPU share access to a single pool of memory, in
+    most architectures data must be explicitly transferred from the CPU's RAM
+    to the GPU's VRAM through a bus.
 
     \item \textbf{Shader/Kernel:} A \textit{shader} is \textit{any} computer
     program written for the GPU. These are named \textit{shaders} because they
@@ -121,7 +120,7 @@ end of this section quickly clarifies common points of confusion.
     within this dissertation, as both of these refer to the same concept, with
     the term differing depending on the domain.
 
-    \item \textbf{Shading langauge:} These are programming languages that are
+    \item \textbf{Shading language:} These are programming languages that are
     used to write shaders. These are usually distinct languages from those used
     to write programs for the CPU. In the world of high performance computing
     these can also be called \textbf{kernel languages}.
@@ -145,7 +144,7 @@ end of this section quickly clarifies common points of confusion.
     hardware beyond GPUs.
 
     \item \textbf{OpenGL/Direct3D:} These are 3D graphics libraries. The first
-    is an open standard maintained by the Khronos Group, and the
+    is an open standard maintained by the \textit{Khronos Group}, and the
     latter is Microsoft's proprietary 3D graphics API supported by Windows
     platforms \cite{OpenGL} \cite{Direct3D}.
 
@@ -197,7 +196,7 @@ However, \textit{there is no such thing}. OpenCL is an API, and has
 traditionally defined a C-like language called \textit{OpenCL C} as the
 standard for writing compute kernels. Host code can then load it onto
 heterogeneous devices using the OpenCL API. Many papers will output code in
-this langauge for GPUs as a backend, as traditionally this has been the only
+this language for GPUs as a backend, as traditionally this has been the only
 option available (aside from proprietary backends such as CUDA for NVIDIA
 GPUs). In a recent development, SPIR-V can now be targeted as a back-end by
 compilers instead of \textit{OpenCL C}. However, SPIR-V has yet to be targeted
@@ -239,7 +238,7 @@ graphics programmers in the early-to-mid 2000s:
 
 \begin{itemize}
 
-    \item Unless using C/C++ as the host langauge, the layout of data
+    \item Unless using C/C++ as the host language, the layout of data
     structures must be defined separately in both shaders and the host
     language, with erroneous behaviour if they differ.
 
@@ -253,7 +252,7 @@ graphics programmers in the early-to-mid 2000s:
 
 A large root-cause of these problems is the fact that regardless of the API
 used, the programs written for GPUs (known as \textit{shaders}) have to be
-developed in a separate environment using high-level langauges based on C.
+developed in a separate environment using high-level languages based on C.
 Therefore although data is shared between the CPU and GPU via a bus, the
 programmer has to manually ensure that the data structures used to encode that
 data is consistent between the programs written for the GPU and CPU.
@@ -571,20 +570,20 @@ most use-cases.
 \subsubsection{New Set of Languages}
 
 The new set of languages takes the form of a compiler that can compile code
-written in two related langauges which are each designed to target different
-architectures. The first language, called \textit{the host langauge}, is a
+written in two related languages which are each designed to target different
+architectures. The first language, called \textit{the host language}, is a
 language that is designed to be compiled for the CPU. The second language,
-called the \textit{the shader langauge} is similarly designed to target GPUs.
+called the \textit{the shader language} is similarly designed to target GPUs.
 
 % TODO(Content!): Massively expand!
 
 The goal here was to leverage the opportunities intermediate shader languages
 present. Section TODO(Content) explains how historically compiling custom
-langauges to shaders has been a difficult endeavour, due to a plethora of
+languages to shaders has been a difficult endeavour, due to a plethora of
 inconsistencies between the implementation of shader languages by different GPU
-vendors. Intermediate shader langauges help solve this problem. We wanted to
+vendors. Intermediate shader languages help solve this problem. We wanted to
 demonstrate how this can then be used to allow programmers to write host-code
-and shaders in programming langauges that have modern features, without
+and shaders in programming languages that have modern features, without
 sacrificing the performance that C and GLSL provide. An example of such a
 feature is the integration of non-nullable pointers into the type system of the
 host language.
@@ -624,7 +623,7 @@ let main() {
         input_buffer.values[gl_GlobalInvocationID.x];
 }
 \end{lstlisting}
-\caption{Code written in the pair of new langauges that has the same
+\caption{Code written in the pair of new languages that has the same
 functionality as Listing \ref{lst:annotation_example_input}. The full
 example can be found on the project GitHub repository \cite{ProjectSource}.}
 \label{lst:language_example}
@@ -639,10 +638,10 @@ interface with the name ``main''. The compiler can then check for conformance
 of that interface when compiling the shader. The primary thing we aim to
 demonstrate is not any particular features of these languages themselves, but
 simply the gains that can be made by programming in a shader language that is
-derived from the host langauge that is being used.
+derived from the host language that is being used.
 
 The syntax, semantics and particular features of these languages are provided
-in-depth in Section \ref{sec:design_langauges}.
+in-depth in Section \ref{sec:design_languages}.
 
 
 % \subsection{Pros and Cons}
@@ -905,7 +904,7 @@ relevant background needed to understand the projects themselves.
     compile themselves, this is an intermediate language based on \textit{LLVM
     IR} which compilers for any language can target. \cite{LLVMIR}
     \cite{SPIRV}. SPIR-V support was then added to \textbf{OpenGL 4.6} and
-    supported by Vulkan at launch, unifying the shading langauges of Khronos'
+    supported by Vulkan at launch, unifying the shading languages of Khronos'
     APIs \cite{SPIRVOpenGL}.
 
     \item 2016 \textbf{Vulkan} released by the Khronos Group. A low level
@@ -995,7 +994,7 @@ functions that the user can call in order to direct an abstracted model of the
 GPU to perform specific operations. Some of those API calls enable the user to
 load their shaders onto the GPU, transfer data to the GPU, and then execute the
 shaders on that data. Historically, most, if not all, shaders and kernel
-language have been heavily based on the C-programming langauge. This has had a
+language have been heavily based on the C-programming language. This has had a
 few benefits and drawbacks:
 
 Benefits include:
@@ -1051,7 +1050,7 @@ Drawbacks include:
     \item Cross-compiling is difficult, as optimisation can depend on specific
     tweaks and implementations of the same shading language can be
     incompatible. This means that it has been difficult to develop shading
-    langauges with semantics and syntax similar to non-C-like langauges
+    languages with semantics and syntax similar to non-C-like languages
     \cite{TODO}.
 
 \end{itemize}
@@ -1070,7 +1069,7 @@ of which hardware code will eventually be compiled for, resulting in much more
 consistent behaviour. As the behaviour of the intermediate language itself is
 more consistent on different platforms configurations, it can be targetted by
 different languages with more stability. An optimiser of the intermediate
-langauge itself can also be shared.
+language itself can also be shared.
 
 The reference compiler has also enabled the creation of more-complex shading
 languages, such as the creation of \textit{OpenCL C++}, which would have been
@@ -1141,7 +1140,7 @@ host languages.
 
 This section enumerates the specific issues the project aims to solve. This
 project consists of two systems, an annotation system for C and GLSL and a
-custom pair of programming langauges. Although there is overlap in which
+custom pair of programming languages. Although there is overlap in which
 problems they aim to solve, they differ in their approaches. The approaches
 they each take will be briefly described. Furthermore, some of the issues are
 only tackled by one of the systems, in this case that will be mentioned.
@@ -1159,13 +1158,13 @@ significantly from C.
 
 A common example is wanting to run a shader which takes a buffer of structs as
 input or output. When using C/C++ as the host language, you do not really have
-any problems, because most common shader langauges are based on C. Therefore,
+any problems, because most common shader languages are based on C. Therefore,
 you can define a struct in a \texttt{.h} header file and include it in both
 your shader and host code.
 
 An issue arises when host code is written in another language that is distinct
 from C. In this case, when using shaders, you have to define the datastructure
-in both the host and the shader langauge separately. This is what Listing
+in both the host and the shader language separately. This is what Listing
 \ref{lst:c_sharp_hlsl_struct_comparison} demonstrates.
 
 Errors can easily occur when these representations of the same datastructure
@@ -1217,7 +1216,7 @@ For example, misnaming the kernel in Vulkan, causes a
 
 % https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResult.html
 
-The annotation system and the new langauges both aim to catch these errors at
+The annotation system and the new languages both aim to catch these errors at
 compile-time using different mechanisms.
 
 % \subsubsection{Issue 3: Texture Business}
@@ -1319,7 +1318,7 @@ compute platform such as OpenCL or CUDA using a framework or library
 \cite{Theano2016} \cite{TensorFlowWhitePaper}. This technique has primarily
 seen success in scientific computing and machine learning. Others have created
 custom high-level languages which target GPUs directly. Harlan, developed by
-Holk et al., is a domain-specific langauge (DSL) based on Scheme for GPUS, with
+Holk et al., is a domain-specific language (DSL) based on Scheme for GPUS, with
 support for higher order programming with Scheme-influenced syntax and
 semantics \cite{Harlan} \cite{HarlanAnnouncement}. GPipe extends the functional
 language Haskell such that shaders can be written functionally and OpenGL calls
@@ -1333,7 +1332,7 @@ compiling R to an OpenCL C backend \cite{JITGPU}. Futhark is an attempt to
 design a functional data-parallel array language from the ground-up that can
 target GPUs, targeting an OpenCL backend \cite{Futhark}.
 
-Existing langauges have also been extended with the functionality to compile
+Existing languages have also been extended with the functionality to compile
 parts of their programs to heterogeneous architectures. Lime and JCUDA take the
 approach of compiling Java or Java-like code in such a manner \cite{Lime2010}
 \cite{Lime2012} \cite{JCUDA2009}. However, they differ in their approaches.
@@ -1479,7 +1478,7 @@ modified, that would massively impede productivity.
 
 Therefore we take a novel approach in type checking between CPU and GPU code.
 Firstly, shaders and host code are written in different files, using different
-langauges in the traditional manner. However, the host code is analysed using a
+languages in the traditional manner. However, the host code is analysed using a
 program which generates metadata at the compile-time of the host code. This
 approach does have limitations: it relies on the programmer to correctly
 mark-up their CPU code so that the errors can be checked-for. However, the
@@ -1501,9 +1500,9 @@ workflows using C and a C-like shader can be improved in order to be less
 error-prone, without compromising on the control they provide. Furthermore, the
 lessons learned from designing and implementing it influenced the design of the
 pair of languages which provide these benefits natively as described in Section
-\ref{sec:design_langauges}. The annotation system is specifically designed to
+\ref{sec:design_languages}. The annotation system is specifically designed to
 make the errors described in Section \ref{sec:api_challanges} as hard as
-possible. Although Vulkan uses SPIR-V as an intermediate shader langauge, most
+possible. Although Vulkan uses SPIR-V as an intermediate shader language, most
 programmers use the open-source GLSL-to-SPIR-V compiler to write high-level
 shaders \cite{TODO}. Additionally, the Vulkan API is defined in C. For these
 reasons, the decision was made to target C and GLSL using the annotation
@@ -1513,13 +1512,13 @@ system.
 
 \section{Languages}
 
-\label{sec:design_langauges}
+\label{sec:design_languages}
 
 The language is meant to demonstrate how a higher-level language than C
 \textit{could} have an be designed with GPUs in mind such that a shader
 language derived from it can make use of modern language features in addition
 to features specifically designed to ensure programming for the GPU is less
-error-prone. However, this differs from many other custom langauges which have
+error-prone. However, this differs from many other custom languages which have
 aimed to do this, as we are not abstracting-away any API calls. Therefore the
 features these languages provide are the same as those from the annotation
 system, but with them baked-in to the type-system of these languages.
@@ -1545,7 +1544,7 @@ host language. Although an intermediate language such as LLVM-IR would be the
 optimal choice for a more-developed language \cite{TODO}, C was chosen as it
 was easier to do in the time available. Furthermore, the output of the compiler
 can in-turn be included by C-programs. This was a feature that was taken
-advantage of in order to easily implement automated tests of langauge features,
+advantage of in order to easily implement automated tests of language features,
 by having C++ call-into code generated by the compiler \cite{AutomatedTestCode}
 \cite{AutomatedTestOutput}.
 
@@ -1581,7 +1580,7 @@ that C functions can be type-checked within the language.
 
 let print_fish() {
     // Note: c_str is a `magic` function that converts
-    // in-langauge strings to c-strings. A mature
+    // in-language strings to c-strings. A mature
     // implementation would have a standard library that
     // provided this feature.
     C::printf(format = c_str(
@@ -1605,23 +1604,23 @@ used to interact with C.
 
 \subsection{Shader Language}
 
-The shader language is based on the host langauge, but differs with both
+The shader language is based on the host language, but differs with both
 restrictions and enhancements, reflecting the capabilities of GPUs.
 
 The biggest restriction is the lack of a \texttt{\#c\_environment} command
-which can be used to embed C in the host langauge. Additionally, this means
+which can be used to embed C in the host language. Additionally, this means
 that there is no \texttt{C} namespace which can be used to access C functions.
 Futher restrictions include the inability to use certain datatypes such as
 pointers and strings.
 
 However, the shader languages has the addition of a
 \texttt{\#glsl\_environment} command, which can be used to embed GLSL within
-the langauge, statements which are accessed using the \texttt{GLSL} namespace.
-Furthermore, the shader langauge is supplemented by the addition of basic
+the language, statements which are accessed using the \texttt{GLSL} namespace.
+Furthermore, the shader language is supplemented by the addition of basic
 vector datatypes.
 
 
-% TODO(Content): Add more detail once shader langauge is well defined
+% TODO(Content): Add more detail once shader language is well defined
 
 \subsection{Cross-Language type system}
 
@@ -1640,7 +1639,7 @@ languages. Therefore, the compiler can compile files marked in this way whilst
 being aware of this fact, meaning that when shared modules are included by any
 code, the compiler can emit errors if those modules do not conform to the
 restricted subset of features which are available in both the host and shader
-langauges.
+languages.
 
 %TODO(Content): Add more details and examples once these mechanisms are well defined.
 
@@ -1737,9 +1736,9 @@ languages: the host language, the shader language, and the subset of the two.
 Input for the compiler is achieved in a similar manner to the input into the
 annotation processor.
 
-\subsection{Parsing multiple langauges}
+\subsection{Parsing multiple languages}
 
-The reason the different langauges share the same compiler program is to allow
+The reason the different languages share the same compiler program is to allow
 for the easy sharing of code and to ensure consistency between the two.
 However, by sharing the same compiler, can needs to be taken to ensure that the
 compiler handles code intended for a particular backend in the desired manner.
@@ -1758,7 +1757,7 @@ can be in three possible states for parsing:
     similarly, only shader language conforming code is parsed.
 
     \item \textbf{\texttt{SHARED}:} When in the \texttt{SHARED} state, only
-    code which is of the valid subset of the host and shader langauges is
+    code which is of the valid subset of the host and shader languages is
     parsed. Source files indicate themselves as shared through an
     \texttt{@shared} directive as the first token of the source file.
 
@@ -1769,7 +1768,7 @@ can be in three possible states for parsing:
 Semantic analysis is fairly straightforward. It's done by recursing on the AST,
 and regardless of the language being compiled, the same semantic analysis
 algorithm is performed. However, in order to handle different types which may
-be available in the different langauges, the symbol tables have different types
+be available in the different languages, the symbol tables have different types
 inserted into them when initialised. Additionally, externally declared types,
 constants and functions are added to the \texttt{C} namespace for host code and
 to the \texttt{GLSL} namespace for shader code.
@@ -1787,12 +1786,12 @@ respectively are left untouched.
 
 \subsection{Backends}
 
-There are two different backends, a C backend when compiling the host langauge
-and a GLSL backend when compiling the shader langauge. These are handled by
-directly translating given quadruples to source code for the target langauges.
+There are two different backends, a C backend when compiling the host language
+and a GLSL backend when compiling the shader language. These are handled by
+directly translating given quadruples to source code for the target languages.
 The reason for targetting these as backends is given in Section TODO(Helpful).
 
-% \subsection{Interfacing with existing langauges}
+% \subsection{Interfacing with existing languages}
 
 % TODO(Helpful): reference usage of FNV hash for symbol table. \cite{FNVHash}.
 
@@ -1833,14 +1832,14 @@ custom heterogeneous languages prevent the programmer from making them.
 
 \subsubsection{Issue 1: Redefining Datastructures}
 
-This is an issue solved by the new set of custom langauges.
+This is an issue solved by the new set of custom languages.
 
 TODO(Content!):
 
 \subsubsection{Issue 2: Referring to function names using strings}
 
 This is an issue solved by both the annotation system and the new set of custom
-langauges.
+languages.
 
 TODO(Content!):
 
@@ -1864,8 +1863,8 @@ TODO(Content!):
 We have shown two novel systems which can make programming for GPUs using
 conventional low-level APIs less error-prone. The first, an annotation
 processor for C and GLSL, aims to demonstrate how existing workflows which use
-these langauges can be improved in this way, without sacrificing performance.
-We also demonstrate a novel pair of langauges, demonstrating how modern type
+these languages can be improved in this way, without sacrificing performance.
+We also demonstrate a novel pair of languages, demonstrating how modern type
 systems can bring these kind of checks to GPU programming, whilst still
 allowing programmers to use the low-level C APIs and writing their shaders
 explicitly.
@@ -1883,8 +1882,8 @@ TODO(Content):
 % I THINK THE FINAL CONCLUSION WILL.
 
 Something which the creation of SPIR-V enables, and that this paper
-demonstrates is possible, is the ability to \textit{extend} langauges with
-custom shading langauges whilst still preserving existing API interfaces. This
+demonstrates is possible, is the ability to \textit{extend} languages with
+custom shading languages whilst still preserving existing API interfaces. This
 is different from that currently done both in industry and reasearch. For
 example, whilst programs for the Unity game engine are written in C$^\sharp$,
 shaders for it have to be written in HLSL \cite{TODO}. Projects such as SYCL
@@ -2110,7 +2109,7 @@ Compute and Graphics \\
 \hline
 Name &
 Targets &
-Langauge &
+language &
 License \\
 \hline
 OpenGL &
