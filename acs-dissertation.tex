@@ -281,10 +281,10 @@ struct WaveParticle {
     int startingFrame;
 };
 \end{lstlisting}
-\caption{The same data structure defined separately in C$^\sharp$ and HLSL. It
-is worth noting that this is much less of an issue when using C as a host
-language. This is because most shading languages are based on C, so they are
-able to share header files.}
+\caption{The same data structure defined separately in C$^\sharp$ and HLSL
+\cite{WaveParticlesGPU}. It is worth noting that this is much less of an issue
+when using C as a host language. This is because most shading languages are
+based on C, so they are able to share header files.}
 \label{lst:c_sharp_hlsl_struct_comparison}
 \end{lstfloat}
 
@@ -347,7 +347,7 @@ of the heterogeneous backends the language targets, there is an unavoidable
 run-time overhead. Working with current toolchains is an odd mix of using an
 API and writing code in a GPU-specific language -- research has primarily
 focused on hiding the API and simplifying GPU-specific elements by designing
-unified languages abstract those details. We aim to demonstrate that
+unified languages to abstract those details. We aim to demonstrate that
 alternative approaches which improve aspects of current toolchains do exist.
 
 We have provided the motivation for the solutions described in this paper,
@@ -355,8 +355,8 @@ first by demonstrating the prevalence of GPUs and how important improvements to
 toolchains which target them could be. Secondly, we have demonstrated the
 problems current toolchains face with a brief example showing how data
 structures must be defined separately in programming languages for the GPU and
-the CPU. Finally, we provided a brief explanation of why research has yet to
-tackle these problems.
+the CPU. Finally, we have provided a brief explanation of why research has yet
+to tackle these problems.
 
 \section{The Solutions}
 
@@ -364,29 +364,29 @@ tackle these problems.
 
 This section introduces the two systems this paper presents as solutions to the
 problems described above. First by describing what the desired outcomes of
-those solutions should be and then how they should improve over the status quo.
-This is followed by the solutions themselves; first describing the annotation
+those solutions should be and how they should improve over the status quo. This
+is followed by the solutions themselves; firstly describing the annotation
 processor and then the pair of languages with a unified type system. The pros
 and cons of each are then discussed to round off the section.
 
 \subsection{Desired Outcome}
 
 As described in Section \ref{sec:related_work}, systems which aim to improve
-over current toolchains often the sacrifice the control that traditional
-workflows provide in order to improve the user-experience that programmers
-have. The issue with this approach is the fact that performance is still
-important in many domains where GPUs are used -- to the point where programmers
-still choose to make the trade-off of working directly with APIs like OpenGL or
-Vulkan instead of choosing the usability that abstractions could otherwise
-provide \cite{TODO}. Therefore, solutions which aim to build and improve upon
-the status quo should provide all the options that traditional toolchains do,
-including exposing any underlying graphics or compute APIs.
+over current toolchains often sacrifice the control that traditional workflows
+provide in order to improve the user-experience of programmers. The issue with
+this approach is the fact that performance is still important in many domains
+where GPUs are used -- to the point where programmers still choose to make the
+trade-off of working directly with APIs like OpenGL or Vulkan instead of
+choosing the usability that abstractions could otherwise provide \cite{TODO}.
+Therefore, solutions which aim to build and improve upon the status quo should
+provide all the options that traditional toolchains do, including exposing any
+underlying graphics or compute APIs.
 
 Although this means these solutions are limited in the abstractions that they
 can provide, there are some ``easy wins'' to be made. This is demonstrated by
 the example problem shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
 and elaborated on in Section \ref{sec:api_challanges}. Bugs may easily be
-introduced to due errors in using the API; these can prevented by compile-time
+introduced due to errors in using the API; these can prevented by compile-time
 checks. That is, instead of trying to unify code that is written for the CPU
 and GPU under a single language or system which is designed to abstract-away
 API calls (thereby reducing the possibility of introducing errors as the
@@ -418,8 +418,8 @@ The first system is a pre-processor for C and GLSL that operates on annotated
 sections of code. The goal here was to demonstrate how an existing pair of
 languages with similar type systems could be extended in order to have
 error-checking on raw API calls. Furthermore, as C and GLSL are one of the most
-language-pairings for graphics programming, this was done to show how a lot of
-existing code could stand to benefit from these techniques.
+used language-pairings for graphics programming, this was done to show how a
+lot of existing code could stand to benefit from these techniques.
 
 The second system is a proof-of-concept pair of languages with the features
 provided by the pre-processing system baked-into the type system at the
@@ -503,7 +503,7 @@ and the \texttt{main} function within the shader using the
 \texttt{@create\_verification} and \texttt{@verify} commands respectively. The
 annotation itself is given a name, \texttt{"test\_shader"} which both the host
 code and shader reference. The annotation processor takes annotated code as
-input, and produces output similar to Listing
+input and produces output similar to Listing
 \ref{lst:annotation_example_output}.
 
 \begin{lstfloat}
@@ -544,18 +544,20 @@ example can be found on the project GitHub repository \cite{ProjectSource}.}
 \label{lst:annotation_example_output}
 \end{lstfloat}
 
-The annotation provides two key features in this particular example. The first
-is the generation of boiler-plate for the creation of the
-\texttt{VkPipelineShaderStageCreateInfo} struct. This was done to investigate
-boiler-plate generation features a pre-processor could provide. The second and
-most important key feature is the compile-time checking of the function name --
-ensuring that \texttt{main} cannot be renamed in the host or shader without
-being consistently renamed in the other. If we were to ensure such an error was
-introduced in raw C and GLSL, the resulting behaviour would be a runtime error.
-However, not all inconsistencies which can be checked like this result in
-runtime errors, others can simply result in incorrect or undefined runtime
-results, so these ideas could be even more helpful when expanded to these
-problems.
+% @Old
+% The annotation provides two key features in this particular example. The first
+% is the generation of boiler-plate for the creation of the
+% \texttt{VkPipelineShaderStageCreateInfo} struct. This was done to investigate
+% boiler-plate generation features a pre-processor could provide. The second and
+
+The important key feature this example provides is the compile-time checking of
+the function name -- ensuring that \texttt{main} cannot be renamed in the host
+or shader without being consistently renamed in the other. If we were to ensure
+such an error was introduced in raw C and GLSL, the resulting behaviour would
+be a runtime error. However, not all inconsistencies which can be checked like
+this result in runtime errors, others can simply result in incorrect or
+undefined runtime results, so these ideas could be even more helpful when
+expanded to these problems.
 
 This example demonstrates how potential runtime errors or incorrect runtime
 behaviour can be detected through the usage of annotations which are checked at
@@ -571,9 +573,9 @@ most use-cases.
 
 The new set of languages takes the form of a compiler that can compile code
 written in two related languages which are each designed to target different
-architectures. The first language, called \textit{the host language}, is a
-language that is designed to be compiled for the CPU. The second language,
-called the \textit{the shader language} is similarly designed to target GPUs.
+architectures. The first language, called \textit{the host language}, is one
+designed to be compiled for the CPU. The second language, called the
+\textit{the shader language} is similarly designed to target GPUs.
 
 % TODO(Content!): Massively expand!
 
@@ -635,10 +637,10 @@ same functionality as the annotation example shown in Listing
 in-built directive system similar to the annotation system we created for C and
 GLSL. This is used to tell the compiler about the existence of a shader
 interface with the name ``main''. The compiler can then check for conformance
-of that interface when compiling the shader. The primary thing we aim to
-demonstrate is not any particular features of these languages themselves, but
-simply the gains that can be made by programming in a shader language that is
-derived from the host language that is being used.
+of that interface when compiling the shader. We are aiming show the general
+benefits of programming in a shader language that is derived from the host
+language that is being used, and not any particular features of these
+languages.
 
 The syntax, semantics and particular features of these languages are provided
 in-depth in Section \ref{sec:design_languages}.
@@ -686,7 +688,7 @@ in-depth in Section \ref{sec:design_languages}.
 
 \section{Summary}
 
-We have introduced the two systems we created and have given the motivation for
+We have presented the two systems we created and have given the motivation for
 why we created them. We have explained that despite the existence of many
 techniques which abstract-away graphics and compute APIs, therefore simplifying
 heterogeneous programming, traditional toolchains will still be used in many
@@ -736,11 +738,11 @@ how it developed over time to become useful in many fields beyond real-time
 rendering in video games. Following that, a breakdown of graphics APIs is
 provided, to give both the context for the problem this paper aims to tackle
 and the underlying technology the solutions depend upon. Then, the difficulties
-and issues with programming for GPUs is summarised from the contents of this
+and issues with programming for GPUs are summarised from the contents of this
 chapter with a brief explanation of which ones the solutions presented in this
 paper aim to tackle and which ones they do not. The chapter finishes of with an
-overview of related research in this area, demonstrating both were they succeed
-and how they fail to tackle the specific problems that are solved here.
+overview of related research in this area, demonstrating both where they
+succeed and how they fail to tackle the specific problems that are solved here.
 
 % TODO(Citation): Why low level details are important (eg unified memory versus seperate
 % memory)
