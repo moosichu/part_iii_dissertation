@@ -493,7 +493,7 @@ can result in an error that could be checked-for at compile-time. In this case
 the running of a shader named \texttt{main}. Here, the host code makes the
 \texttt{vkCreateComputePipelines} API call in order to create a compute
 pipeline\footnote{This is just an API call that needs to be made in order to
-run a computer shader on the GPU \cite{TODO}} \cite{vkCreateComputePipelines}.
+run a computer shader on the GPU \cite{TODO}.} \cite{vkCreateComputePipelines}.
 An instance of the \texttt{VkComputePipelineCreateInfo} struct containing a
 \texttt{VkPipelineShaderStageCreateInfo} struct is passed to that API call,
 which ultimately specifies which function in the shader to use within the
@@ -732,42 +732,40 @@ made when programming using graphics APIs.
 % much. The correct choice will depend on what you're writing up, and
 % your own personal preference.
 
-We introduce what a GPU is and how it is a good benchark for heterogeneous
-hardware in general. We then provide extensive coverage of the relevant history
-of graphics hardware and how it developed over time to become useful in many
-fields beyond real-time rendering in video games. Following that, a breakdown
-of graphics APIs is provided, to give both the context for the problem this
-paper aims to tackle and the underlying technology the solutions depend upon.
-Then, the difficulties and issues with programming for GPUs is summarised from
-the contents of this chapter with a brief explanation of which ones the
-solutions presented in this paper aim to tackle and which ones they do not. The
-chapter finishes of with an overview of related research in this area,
-demonstrating both were they succeed and how they fail to tackle the specific
-problems that are solved here.
+We provide extensive coverage of the relevant history of graphics hardware and
+how it developed over time to become useful in many fields beyond real-time
+rendering in video games. Following that, a breakdown of graphics APIs is
+provided, to give both the context for the problem this paper aims to tackle
+and the underlying technology the solutions depend upon. Then, the difficulties
+and issues with programming for GPUs is summarised from the contents of this
+chapter with a brief explanation of which ones the solutions presented in this
+paper aim to tackle and which ones they do not. The chapter finishes of with an
+overview of related research in this area, demonstrating both were they succeed
+and how they fail to tackle the specific problems that are solved here.
 
 % TODO(Citation): Why low level details are important (eg unified memory versus seperate
 % memory)
 % https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
 % https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
 
-\section{The GPU}
+% \section{The GPU}
 
-\label{sec:gpu_hardware}
+% \label{sec:gpu_hardware}
 
-TODO(Content!):
+% TODO(Content!):
 
-\begin{center}
-\begin{tabular}{||c||c|c|c||}
-\hline
-        & Number of Cores  & FLOPS                                         & Type of parallelism \\
-\hline
-\hline
-CPU     & 1 - O(10)        & Up to 1 Teraflop \cite{IntelTeraFlop}         & TODO                \\
-\hline
-GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TODO                \\
-\hline
-\end{tabular}
-\end{center}
+% \begin{center}
+% \begin{tabular}{||c||c|c|c||}
+% \hline
+%         & Number of Cores  & FLOPS                                         & Type of parallelism \\
+% \hline
+% \hline
+% CPU     & 1 - O(10)        & Up to 1 Teraflop \cite{IntelTeraFlop}         & TODO                \\
+% \hline
+% GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TODO                \\
+% \hline
+% \end{tabular}
+% \end{center}
 
 % Can be worth being wary of GPU vs CPU performance based on performance alone.
 % http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
@@ -793,8 +791,9 @@ future roadmap of both graphics and compute APIs.
 
 This section summarises relevant milestones related to the history of
 heterogeneous computing in order to help the reader understand why the field is
-in its present state. However, it is not comprehensive and excludes many
-details.
+in its present state. Furthermore, by giving context to development of the
+terms and technologies used by both of the systems we describe, it provides the
+relevant background needed to understand the projects themselves.
 
 % \caption{
 % Tabulated history of graphics APIs and graphics card development. Naturally
@@ -952,18 +951,19 @@ those APIs as light shims above the others \cite{VulkanPortabilityInitiative}
 
 Due to the complex history of GPUs and their APIs as described in Section
 \ref{sec:history_gpu}, the APIs used to interact with GPUs naturally have many
-issues as many of them have evolved over the course of many years. However,
-this situation has recently improved with the creation of the Vulkan graphics
-and compute API. This is a very low-level API that has been designed from the
-ground-up to reflect the way modern GPUs \textit{actually} operate
-\cite{Vulkan}. This contrasts with graphics APIs like OpenGL, which reflect how
-GPUs \textit{historically} operated \cite{TODO}. Therefore, this section is not
-going to enumerate all of the issues graphics APIs have, but instead will
-briefly describe the workflow and toolchains of using a graphics or compute
-API, and then enumerate the challenges our systems aim to ease.
+issues as many of them have evolved over the course of many years instead of
+being designed from the ground-up. However, this situation has recently
+improved with the creation of the Vulkan graphics and compute API. This is a
+very low-level API that has been designed from the ground-up to reflect the way
+modern GPUs \textit{actually} operate \cite{Vulkan}. This contrasts with
+graphics APIs like OpenGL, which reflect how GPUs \textit{historically}
+operated \cite{TODO}. Therefore, this section is not going to enumerate all of
+the issues graphics APIs have, but instead will briefly describe the workflow
+and toolchains of using a graphics or compute API, and then enumerate the
+challenges our systems aim to ease.
 
-A comprehensive overview of the challenges graphics and compute API present is
-given in Appendix \ref{app:other_API_issues}.
+A comprehensive overview of the challenges graphics and compute API present
+beyond those we aim to tackle is given in Appendix \ref{app:other_API_issues}.
 
 \subsection{An overview of a typical graphics or compute API}
 
