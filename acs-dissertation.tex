@@ -1034,25 +1034,25 @@ Drawbacks include:
     these shaders, meaning the shaders themselves must be tokenised, parsed,
     type-checked, compiled and optimised at run-time \cite{TODO}.
 
-    \item If the host-language is in a language with enough syntactic
-    differences from the shader languages, data-structures must be defined in
-    both languages (Listing \ref{lst:c_sharp_hlsl_struct_comparison}).
-    Furthermore, there are no built-in mechanisms to ensure these definitions
-    are consistent - even at run-time.
+    \item If the host-language hash enough syntactic differences from the
+    shader language, data-structures must be defined in both languages (Listing
+    \ref{lst:c_sharp_hlsl_struct_comparison}). Furthermore, there are no
+    built-in mechanisms to ensure these definitions are consistent -- even at
+    run-time.
 
     \item The C type system is limited compared with more modern programming
     languages. So even when using C and a C-based shader language, many things
-    remain unchecked (Section \ref{sec:issues_summary}.
+    remain unchecked (Section \ref{sec:issues_summary}).
 
     \item As the drivers have their own optimisation systems, code does need to
-    be tuned for specific hardware if you want to maximise performance
-    \cite{TODO}.
+    be tuned in non-portable ways for specific hardware if you want to maximise
+    performance \cite{TODO}.
 
     \item Cross-compiling is difficult, as optimisation can depend on specific
     tweaks and implementations of the same shading language can be
-    incompatible. This has resulted in the same shading C-based shading
-    langauges being used, even when host-code is written in something
-    completely different \cite{TODO}.
+    incompatible. This means that it has been difficult to develop shading
+    langauges with semantics and syntax similar to non-C-like langauges
+    \cite{TODO}.
 
 \end{itemize}
 
@@ -1070,14 +1070,17 @@ of which hardware code will eventually be compiled for, resulting in much more
 consistent behaviour. As the behaviour of the intermediate language itself is
 more consistent on different platforms configurations, it can be targetted by
 different languages with more stability. An optimiser of the intermediate
-langauge itself can also be shared. The reference compiler has also enabled the
-creation of more-complex shading languages, such as the creation of
-\textit{OpenCL C++}, which would have been much harder to create if each
-hardware vendor had to write their own compilers for this language within their
-drivers. This is a shader language based on C++ that allows programmers to use
-many of C++'s features. Therefore more code can be shared between the host and
-shader, in addition to the advanced type checking features C++ provides over C.
-Finally, the same compiler can be shared by the \textit{shader language},
+langauge itself can also be shared.
+
+The reference compiler has also enabled the creation of more-complex shading
+languages, such as the creation of \textit{OpenCL C++}, which would have been
+much harder to create if each hardware vendor had to write their own compilers
+for this language within their drivers. This is a shader language based on C++
+that allows programmers to use many of C++'s features. Therefore more code can
+be shared between the host and shader, in addition to the advanced type
+checking features C++ provides over C.
+
+Additionally, the same compiler can be shared by the \textit{shader language},
 OpenCL C++, and the ``single-source'' heterogeneous computing system known as
 SYCL. SYCL is a way of writing code for heterogeneous hardware within C++, such
 that the compiler then automatically generates the necessary API calls to run
