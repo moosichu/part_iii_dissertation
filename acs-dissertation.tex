@@ -783,7 +783,7 @@ GLQuake demonstrated the improvements dedicated 3D graphics hardware could
 achieve relative to CPUs \cite{GLQuake}. Since then, due to rapid developments
 and competition, the scope and capabilities of graphics cards has expanded such
 that they are the highly-parallel general computation machines we find them to
-be today. However, the developments GPUs experienced weren't pre-planned, and
+be today. However, the developments GPUs experienced were not pre-planned, and
 despite their current general-purpose nature, the terminology surrounding
 graphics cards has its foundation in graphics. Furthermore, as the industry has
 been so volatile, standards around using GPUs and heterogeneous hardware are
@@ -818,12 +818,12 @@ relevant background needed to understand the projects themselves.
     \item 1992 \textbf{OpenGL 1.0} released by Silicon Graphics (SGI) as an API
     for interacting with graphics hardware on 3D graphics workstations. OpenGL
     was created from their proprietary ``IrisGL'' API in order to prevent
-    competitors from creating their own proprietary graphics APIs and
-    fragmenting the market. The API allowed users to issue basic commands in
-    order to set-up 3D scenes, apply basic fixed-function lighting, and then
-    render the scenes \cite{OpenGL_1_0}. Control of the OpenGL specification
-    eventually transfers from SGI to various owners before landing in the hands
-    of the \textbf{Khronos Group} \cite{OpenGL}.
+    competitors creating their own proprietary graphics APIs and fragmenting
+    the market. The API allowed users to issue basic commands in order to
+    set-up 3D scenes, apply basic fixed-function lighting, and then render the
+    scenes \cite{OpenGL_1_0}. Control of the OpenGL specification eventually
+    transfers from SGI to various owners before landing in the hands of the
+    \textbf{Khronos Group} \cite{OpenGL}.
 
     \item 1996 \textbf{Direct3D 2.0} release by Microsoft, so named, because it
     was the \textit{first} version of Direct3D. Although at this point API was
@@ -837,16 +837,17 @@ relevant background needed to understand the projects themselves.
 
     \item 1999 \textbf{NVIDIA GeForce 256} released; the first video card to be
     called a \textbf{GPU}. It was the first consumer-PC graphics hardware to
-    accelerate ``transform and lighting'' operations, allowing them to
-    offloaded form the CPU. The ``transform and lighting'' component of GPUs
+    accelerate ``transform and lighting'' operations, allowing them to be
+    offloaded from the CPU. The ``transform and lighting'' component of GPUs
     prefigured what would eventually run shaders \cite{GeForce256}.
 
-    \item 2000 \textbf{The Khronos Group} founded to provide structure for open
-    standards in 3D graphics. Reflecting the increasing flexibility of graphics
-    cards over time, they now also provide standards virtual and augmented
-    reality, heterogeneous computing, computer vision, parallel computing and
-    neural networks \cite{KhronosGroupAbout}. In 2006 control of OpenGL was
-    transferred to the Khronos Group \cite{OpenGLToKhronos}.
+    \item 2000 \textbf{The Khronos Group} was founded to provide structure for
+    open standards in 3D graphics. Reflecting the increasing flexibility of
+    graphics cards over time, they have come to additionally provide standards
+    in virtual and augmented reality, heterogeneous computing, computer vision,
+    parallel computing and neural networks \cite{KhronosGroupAbout}. In 2006
+    control of OpenGL was transferred to the Khronos Group
+    \cite{OpenGLToKhronos}.
 
     \item 2001 \textbf{GPGPU}, \textit{general purpose computations on GPUs},
     are demonstrated by Larson and McAllister. They perform fast matrix
@@ -879,7 +880,7 @@ relevant background needed to understand the projects themselves.
     \item 2005 \textbf{Unified Shader Architecture} introduced in ATI's
     \textbf{Xenos GPU}, released as part of the Xbox 360. The ``vertex'' and
     ``pixel'' segments of the GPU pipeline are unified into a single component
-    that can run either. This brought GPUs closer to being highly-parallel
+    that can run either of these. This brought GPUs closer to being highly-parallel
     general computation machines and away from being direct fixed-function
     hardware implementations of the graphics pipeline represented by APIs such
     as OpenGL \cite{XenosDemystified}. All GPUs would soon adopt this
@@ -924,20 +925,20 @@ The capabilities of GPUs and their related APIs have massively expanded since
 they were both introduced. This has allowed GPUs to be used in increasingly
 general domains, including scientific computing, crypto-currency mining,
 high-frequency trading, and artificial intelligence \cite{GPUCrypto}
-\cite{GPUScientificComputing} \cite{GPUTrading} \cite{GPUAI}. Some hobbyists
-for home the cards were originally designed are even being priced out of the
-market \cite{GPUCrypto} \cite{BitcoinRuiningPricing}. However, there are many
-different standards and APIs for different use-cases of the same hardware as a
-result of a complex history. Furthermore, many of these use-cases have
-widely-used proprietary alternatives such as CUDA, DirectX, Metal and even
-proprietary game console APIs \cite{CUDA} \cite{Metal} \cite{Direct3D}
-\cite{PS4PortCrew}. However, with the release of SPIR-V, aspects of the various
-Khronos Standards are converging. Additionally, despite a foundation in
-graphics, the compute capabilities of Vulkan are expanding such that OpenCL
-could eventually be merged into the API \cite{VulkanOpenCLMerge}. Furthermore,
-the low-level nature of new graphics and compute APIs such a Vulkan, Metal and
-DirectX 12 have allowed portability initiatives to bring implementations of
-those APIs as light shims above the others \cite{VulkanPortabilityInitiative}
+\cite{GPUScientificComputing} \cite{GPUTrading} \cite{GPUAI}.This has even led
+to some hobbyists being priced out of the market \cite{GPUCrypto}
+\cite{BitcoinRuiningPricing}. However, there are many different standards and
+APIs for different use-cases of the same hardware as a result of a complex
+history. Furthermore, many of these use-cases have widely-used proprietary
+alternatives such as CUDA, DirectX, Metal and even proprietary game console
+APIs \cite{CUDA} \cite{Metal} \cite{Direct3D} \cite{PS4PortCrew}. However, with
+the release of SPIR-V, aspects of the various Khronos Standards are converging.
+Additionally, despite a foundation in graphics, the compute capabilities of
+Vulkan are expanding such that OpenCL could eventually be merged into the API
+\cite{VulkanOpenCLMerge}. Furthermore, the low-level nature of new graphics and
+compute APIs such a Vulkan, Metal and DirectX 12 have allowed portability
+initiatives to bring implementations of those APIs as light shims above the
+others \cite{VulkanPortabilityInitiative}
 \cite{VulkanPortabilityInitiativeAnnouncement}.
 
 \section{The Challenges with the APIs}
@@ -951,17 +952,17 @@ those APIs as light shims above the others \cite{VulkanPortabilityInitiative}
 % can also be shown in conclusion.
 
 Due to the complex history of GPUs and their APIs as described in Section
-\ref{sec:history_gpu}, the APIs used to interact with GPUs naturally have many
-issues as many of them have evolved over the course of many years instead of
-being designed from the ground-up. However, this situation has recently
-improved with the creation of the Vulkan graphics and compute API. This is a
-very low-level API that has been designed from the ground-up to reflect the way
-modern GPUs \textit{actually} operate \cite{Vulkan}. This contrasts with
-graphics APIs like OpenGL, which reflect how GPUs \textit{historically}
-operated \cite{TODO}. Therefore, this section is not going to enumerate all of
-the issues graphics APIs have, but instead will briefly describe the workflow
-and toolchains of using a graphics or compute API, and then enumerate the
-challenges our systems aim to ease.
+\ref{sec:history_gpu}, the APIs used to interact with GPUs naturally issues as
+a result of being developed over the course of many years instead of being
+designed from the ground-up. However, this situation has recently improved with
+the creation of the Vulkan graphics and compute API. This is a very low-level
+API that has been designed from the bottom-up to reflect the way modern GPUs
+\textit{actually} operate \cite{Vulkan}. This contrasts with graphics APIs like
+OpenGL, which reflect how GPUs \textit{historically} operated \cite{TODO}.
+Therefore, this section is not going to enumerate all of the issues graphics
+APIs have, but instead will briefly describe the workflow and toolchains of
+using a graphics or compute API, and then enumerate the challenges our systems
+aim to ease.
 
 A comprehensive overview of the challenges graphics and compute API present
 beyond those we aim to tackle is given in Appendix \ref{app:other_API_issues}.
@@ -1035,8 +1036,8 @@ Drawbacks include:
     these shaders, meaning the shaders themselves must be tokenised, parsed,
     type-checked, compiled and optimised at run-time \cite{TODO}.
 
-    \item If the host-language hash enough syntactic differences from the
-    shader language, data-structures must be defined in both languages (Listing
+    \item If the host-language has enough syntactic differences from the shader
+    language, data-structures must be defined in both languages (Listing
     \ref{lst:c_sharp_hlsl_struct_comparison}). Furthermore, there are no
     built-in mechanisms to ensure these definitions are consistent -- even at
     run-time.
@@ -1094,12 +1095,13 @@ code, and migrating between these systems is now possible without having to
 re-write all of the code that has been written for heterogeneous hardware.
 
 Furthermore, this intermediate language is used by OpenGL, OpenCL and Vulkan,
-meaning new shader/kernel languages can target a single back-end in order to
-target many APIs. Furthermore, the Vulkan portability initiative allows
-developers to run Vulkan on-top-of different APIs on platforms which may not
-natively support Vulkan itself \cite{TODO}. This will hopefully result in an
-ecosystem which much more closely resembles the ``hourglass model'' that CPUs
-enjoy today. %TODO(Helpful) cite unity presentation slide.
+meaning new shader/kernel languages can target a single back-end and be
+compatible with many APIs. Furthermore, the Vulkan portability initiative
+allows developers to run Vulkan on-top-of different APIs on platforms which may
+not natively support Vulkan itself \cite{TODO}. This will hopefully result in
+an ecosystem which much more closely resembles the ``hourglass model'' that
+CPUs enjoy today.
+%TODO(Helpful) cite unity presentation slide.
 
 Cross-compiling between different intermediate languages for different APIs is
 easier than doing the same for high-level languages \cite{TODO}.
@@ -1116,10 +1118,10 @@ shader-language counterpart. This demonstration is with multiple goals in mind:
     need no-longer exist.
 
     \item To demonstrate how a language which is designed with GPUs as a
-    first-class citizens can have a type-system which results in less
+    first-class citizen can have a type-system which results in less
     error-prone programming for the GPU. However, unlike many other
     such-languages, explicit API calls can still be made, ensuring programmers
-    still have they control they need in order to optimise code how they would
+    still have the control they need in order to optimise code how they would
     like.
 
 \end{itemize}
@@ -1401,12 +1403,14 @@ programming for GPUs less frustrating and error prone by catching errors which
 can commonly occur. However, unlike other systems which do this, we cannot have
 \textit{any} compromises to runtime performance relative to existing industry
 standards such as GLSL and OpenGL. This includes not limiting the possible
-programs programmers can make. Naturally there pros and cons to this approach.
+programs programmers can make.
+
+% Naturally there are pros and cons to this approach.
 
 There are other concerns beyond performance that need to be taken into account
-which inform the design the system. For example, a commonly used feature is too
-\textit{swap} shaders with identical interfaces in-and-out at runtime.
-Therefore this needs to be supported by the system as well.
+which inform the design of the system. For example, a commonly used feature is
+the ability to \textit{swap} shaders with identical interfaces in-and-out at
+runtime. Therefore this needs to be supported by the system as well.
 
 % \begin{itemize}
 
@@ -1441,7 +1445,7 @@ of our systems \cite{Vulkan}. Done for the following reasons:
     systems could introduce compile-time checks for these errors.
 
     \item Vulkan is already being widely used in the gaming industry, so the
-    use cases described here are applicable to a wide audience.
+    use-cases described here are applicable to a wide audience.
     %TODO(Helpful) : phrase better).
 
     \item Vulkan is a low-level API. One of the goals of our systems was to
@@ -1450,7 +1454,7 @@ of our systems \cite{Vulkan}. Done for the following reasons:
 
 \end{itemize}
 
-\subsubsection{Build Strategy}
+\subsection{Build Strategy}
 
 Due to the fact that they aim to solve similar problems, both the annotation
 processor and compiler have a similar build strategy in order to ensure that
@@ -1517,9 +1521,9 @@ system.
 \label{sec:design_languages}
 
 The language is meant to demonstrate how a higher-level language than C
-\textit{could} have an be designed with GPUs in mind such that a shader
-language derived from it can make use of modern language features in addition
-to features specifically designed to ensure programming for the GPU is less
+\textit{could} be designed with GPUs in mind such that a shader language
+derived from it can make use of modern language features in addition to
+features specifically designed to ensure programming for the GPU is less
 error-prone. However, this differs from many other custom languages which have
 aimed to do this, as we are not abstracting-away any API calls. Therefore the
 features these languages provide are the same as those from the annotation
@@ -1601,8 +1605,8 @@ represented within the language.}
 
 \end{lstfloat}
 
-Listing \ref{lst:lst:lang_c_interop} demonstrates an example of the features
-used to interact with C.
+Listing \ref{lst:lang_c_interop} demonstrates an example of the features used
+to interact with C.
 
 \subsection{Shader Language}
 
