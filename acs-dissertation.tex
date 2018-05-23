@@ -86,9 +86,11 @@
 This chapter provides the motivation for the work this paper presents:
 Outlining the problem, why it is important and why it has not yet been solved.
 This is followed by a brief description of the two solutions presented in this
-paper: a cross-module annotation checker and two languages with a unified
-cross-module type checker. Finally, an overview of the entire document is
-provided.
+paper: a cross-module annotation checker called AnnoCheck and two languages
+with a unified cross-module type checker. Each language is designed to target a
+different backend, with the language targeting the CPU being called CPULang and
+the language targetting the GPU being called GPULang. The compiler for both is
+called CPUGPUCompiler. Finally, an overview of the entire document is provided.
 
 \section{Terminology}
 
@@ -366,8 +368,9 @@ This section introduces the two systems this paper presents as solutions to the
 problems described above. First by describing what the desired outcomes of
 those solutions should be and how they should improve over the status quo. This
 is followed by the solutions themselves; firstly describing the annotation
-processor and then the pair of languages with a unified type system. The pros
-and cons of each are then discussed to round off the section.
+processor AnnoCheck and then the pair of languages with a unified type system,
+CPULang and GPULang. The pros and cons of each are then discussed to round off
+the section.
 
 \subsection{Desired Outcome}
 
@@ -414,26 +417,27 @@ target the Vulkan API to demonstrate that these ideas can work at the lowest
 low-level. However, the ideas are also applicable to other APIs such as OpenGL,
 OpenCL or Direct3D.
 
-The first system is a pre-processor for C and GLSL that operates on annotated
-sections of code. The goal here was to demonstrate how an existing pair of
-languages with similar type systems could be extended in order to have
-error-checking on raw API calls. Furthermore, as C and GLSL are one of the most
-used language-pairings for graphics programming, this was done to show how a
-lot of existing code could stand to benefit from these techniques.
+The first system is a pre-processor for C and GLSL called AnnoCheck that
+operates on annotated sections of code. The goal here was to demonstrate how an
+existing pair of languages with similar type systems could be extended in order
+to have error-checking on raw API calls. Furthermore, as C and GLSL are one of
+the most used language-pairings for graphics programming, this was done to show
+how a lot of existing code could stand to benefit from these techniques.
 
-The second system is a proof-of-concept pair of languages with the features
-provided by the pre-processing system baked-into the type system at the
-language level. We had two goals with this. The first was to demonstrate that
-such a system could work. The second was to show how existing high-level
-languages could be extended with a shader-language. This would be suitable for
-a language such as C$^\sharp$, which has a strong type system, but is
-compromised and arguably \textit{less safe} than C when using shaders. This is
-because C and GLSL can share code as they have similar syntax. $C^\sharp$ and
-GLSL do not have similar syntax, meaning that the problem shown in Listing
+The second system is a compiler called CPUGPUCompiler for a proof-of-concept
+pair of languages called CPULang and GPULang with the features provided by the
+pre-processing system baked-into their type systems at the language level. We
+had two goals with this. The first was to demonstrate that such a system could
+work. The second was to show how existing high-level languages could be
+extended with a shader-language. This would be suitable for a language such as
+C$^\sharp$, which has a strong type system, but is compromised and arguably
+\textit{less safe} than C when using shaders. This is because C and GLSL can
+share code as they have similar syntax. $C^\sharp$ and GLSL do not have similar
+syntax, meaning that the problem shown in Listing
 \ref{lst:c_sharp_hlsl_struct_comparison} becomes a problem. Due to resource
-limitations, we designed a pair of languages from scratch with the minimum
+limitations, we designed CPULang and GPULang from scratch with the minimum
 subset of features required in order to demonstrate that this is possible,
-instead of extending an existing full-features language such as $C^\sharp$.
+instead of extending an existing full-featured language such as $C^\sharp$.
 
 One thing to note is that our goal was not to write a comprehensive set of
 tools which could be used to catch all errors of this nature at compile-time.
@@ -443,10 +447,10 @@ have been designed to capture a small subset of them.
 
 \subsubsection{Annotation System}
 
-The annotation system is a command line program that takes annotated code
-written in C and annotated code written in GLSL as input. An example annotation
-and the code that is generated is shown in Listings
-\ref{lst:annotation_example_input} and \ref{lst:annotation_example_output}.
+AnnoCheck is a command-line program that takes annotated code written in C and
+annotated code written in GLSL as input. An example annotation and the code
+that is generated is shown in Listings \ref{lst:annotation_example_input} and
+\ref{lst:annotation_example_output}.
 
 \begin{lstfloat}
 \begin{center} Annotated C \end{center}
@@ -481,9 +485,10 @@ void main() {
     output_buffer.values[gl_GlobalInvocationID.x] = input_buffer.values[gl_GlobalInvocationID.x];
 })
 \end{lstlisting}
-\caption{Annotated C and GLSL, the output for these snippets (without
-annotations) is shown in Listing \ref{lst:annotation_example_output}. The full
-example can be found on the project GitHub repository \cite{ProjectSource}.}
+\caption{Annotated C and GLSL that can be processed by AnnoCheck, the output
+for these snippets (without annotations) is shown in Listing
+\ref{lst:annotation_example_output}. The full example can be found on the
+project GitHub repository \cite{ProjectSource}.}
 \label{lst:annotation_example_input}
 \end{lstfloat}
 
@@ -502,7 +507,7 @@ creation of the \texttt{VkPipelineShaderStageCreateInfo} structure on the host
 and the \texttt{main} function within the shader using the
 \texttt{@create\_verification} and \texttt{@verify} commands respectively. The
 annotation itself is given a name, \texttt{"test\_shader"} which both the host
-code and shader reference. The annotation processor takes annotated code as
+code and shader reference. AnnoCheck takes annotated code as
 input and produces output similar to Listing
 \ref{lst:annotation_example_output}.
 
@@ -561,21 +566,20 @@ expanded to these problems.
 
 This example demonstrates how potential runtime errors or incorrect runtime
 behaviour can be detected through the usage of annotations which are checked at
-compile-time using a pre-processor. The flexibility of this system is that the
+compile-time using a pre-processor. The flexibility of AnnoCheck is that the
 programmer can remove the annotations if they desire, especially if they are
-using complex runtime features. However, this system can still be used to help
+using complex runtime features. However, AnnoCheck can still be used to help
 ensure that an initial implementation is correct. Furthermore, Section
 \ref{sec:design_annotation_processor} covers design decisions that were made
 with typical shader workflows in mind such that annotations can be kept for
 most use-cases.
 
-\subsubsection{New Set of Languages}
+\subsubsection{CPULang, GPULang and CPUGPUCompiler}
 
-The new set of languages takes the form of a compiler that can compile code
-written in two related languages which are each designed to target different
-architectures. The first language, called \textit{the host language}, is one
-designed to be compiled for the CPU. The second language, called the
-\textit{the shader language} is similarly designed to target GPUs.
+CPUGPUCompiler can compile code written in two related languages which are each
+designed to target different architectures. The first language, called
+\textit{CPULang}, is one designed to be compiled for the CPU. The second
+language, called the \textit{GPULang} is similarly designed to target GPUs.
 
 % TODO(Content!): Massively expand!
 
@@ -590,10 +594,13 @@ sacrificing the performance that C and GLSL provide. An example of such a
 feature is the integration of non-nullable pointers into the type system of the
 host language.
 
+% TODO(Content): Find a suitable place to mention how non-nullable pointers can
+% enrich an existing graphics API.
+
 % TODO(Task): Read https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
 
 \begin{lstfloat}
-\begin{center} Host Language \end{center}
+\begin{center} CPULang \end{center}
 \begin{lstlisting}[language=C]
 let shader_interface :Shader_Interface = @define_shader_interface(name="main");
 let compute_pipeline_create_info: [] C::VkComputePipelineCreateInfo = [{
@@ -616,31 +623,28 @@ C::vkCreateComputePipelines(
     pPipelines=&pipeline
 );
 \end{lstlisting}
-\begin{center}
-Shader Language
-\end{center}
+\begin{center} GPULang \end{center}
 \begin{lstlisting}[language=C]
 let main() {
     output_buffer.values[gl_GlobalInvocationID.x] =
         input_buffer.values[gl_GlobalInvocationID.x];
 }
 \end{lstlisting}
-\caption{Code written in the pair of new languages that has the same
-functionality as Listing \ref{lst:annotation_example_input}. The full
-example can be found on the project GitHub repository \cite{ProjectSource}.}
+\caption{Code written in CPULang and GPULang that has the same functionality as
+Listing \ref{lst:annotation_example_input}. The full example can be found on
+the project GitHub repository \cite{ProjectSource}.}
 \label{lst:language_example}
 \end{lstfloat}
 
 Listing \ref{lst:language_example} shows the snippets of code which perform the
 same functionality as the annotation example shown in Listing
-\ref{lst:annotation_example_input}. As can be seen, the host language has an
-in-built directive system similar to the annotation system we created for C and
-GLSL. This is used to tell the compiler about the existence of a shader
-interface with the name ``main''. The compiler can then check for conformance
-of that interface when compiling the shader. We are aiming show the general
-benefits of programming in a shader language that is derived from the host
-language that is being used, and not any particular features of these
-languages.
+\ref{lst:annotation_example_input}. As can be seen, CPULang has an in-built
+directive system similar to the annotation system we created for C and GLSL.
+This is used to tell CPUGPUCompiler about the existence of a shader interface
+with the name ``main''. The compiler can then check for conformance of that
+interface when compiling GPULang. We are aiming show the general benefits of
+programming in a shader language that is derived from the host language that is
+being used, and not any particular features of these languages.
 
 The syntax, semantics and particular features of these languages are provided
 in-depth in Section \ref{sec:design_languages}.
@@ -688,8 +692,8 @@ in-depth in Section \ref{sec:design_languages}.
 
 \section{Summary}
 
-We have presented the two systems we created and have given the motivation for
-why we created them. We have explained that despite the existence of many
+We have presented AnnoCheck and CPUGPUCompiler and have given the motivation
+for why we created them. We have explained that despite the existence of many
 techniques which abstract-away graphics and compute APIs, therefore simplifying
 heterogeneous programming, traditional toolchains will still be used in many
 contexts for the forseeable future. However, this does not mean that those
@@ -1107,8 +1111,9 @@ Cross-compiling between different intermediate languages for different APIs is
 easier than doing the same for high-level languages \cite{TODO}.
 
 Part of this project aims to capitalise on this recent development in GPU
-computing, with the demonstration of a custom language for the CPU which has a
-shader-language counterpart. This demonstration is with multiple goals in mind:
+computing, with the demonstration of a custom language for the CPU (CPULang)
+which has a shading-language counterpart (GPULang). This demonstration is with
+multiple goals in mind:
 
 \begin{itemize}
 
@@ -1390,10 +1395,11 @@ on compute.
 
 \chapter{Design}
 
-The project is composed of two systems. The first is a pre-processing system for
-C and GLSL that ensures the enforcement of interfaces between the two
-languages. The second is a set of two novel toy languages which natively
-support such enforcement. How these are used is described in Section
+The project is composed of two systems. The first is AnnoCheck, a
+pre-processing system for C and GLSL that ensures the enforcement of interfaces
+between the two languages. The second, CPUGPUCompiler, is a compiler for
+CPULang and GPULang, a set of two novel toy languages which natively support
+such enforcement. How these are used is described in Section
 \ref{sec:solutions_introduction}
 
 \section{Design Goals}
@@ -1456,9 +1462,9 @@ of our systems \cite{Vulkan}. Done for the following reasons:
 
 \subsection{Build Strategy}
 
-Due to the fact that they aim to solve similar problems, both the annotation
-processor and compiler have a similar build strategy in order to ensure that
-they work with typical shader workflows and toolchains.
+Due to the fact that they aim to solve similar problems, both AnnoCheck and
+CPUGPUCompiler have a similar build strategy in order to ensure that they work
+with typical shader workflows and toolchains.
 
 One of the reasons it is hard to check the consistency between shaders and host
 code is the fact that shaders are loaded onto the GPU by the CPU at run-time
@@ -1548,10 +1554,10 @@ languages would go about things differently. We mention if this is the case.
 The first design decision that was made was to target C as the backend for the
 host language. Although an intermediate language such as LLVM-IR would be the
 optimal choice for a more-developed language \cite{TODO}, C was chosen as it
-was easier to do in the time available. Furthermore, the output of the compiler
+was easier to do in the time available. Furthermore, the output of CPUGPUCompiler
 can in-turn be included by C-programs. This was a feature that was taken
 advantage of in order to easily implement automated tests of language features,
-by having C++ call-into code generated by the compiler \cite{AutomatedTestCode}
+by having C++ call-into code generated by CPUGPUCompiler \cite{AutomatedTestCode}
 \cite{AutomatedTestOutput}.
 
 The second decision was to provide a keyword for the inlining of C code in the
@@ -1641,9 +1647,9 @@ intended to be used for both shader and host code.
 
 We there improve over the status quo in one significant way, by allowing files
 to be explicitly marked as a shared module for both our host and shader
-languages. Therefore, the compiler can compile files marked in this way whilst
+languages. Therefore, CPUGPUCompiler can compile files marked in this way whilst
 being aware of this fact, meaning that when shared modules are included by any
-code, the compiler can emit errors if those modules do not conform to the
+code, CPUGPUCompiler can emit errors if those modules do not conform to the
 restricted subset of features which are available in both the host and shader
 languages.
 
@@ -1668,7 +1674,7 @@ following features which distinguish it from C:
 
     \item Strings and arrays both explicitly store there own length values.
 
-    \item Forward declarations are not needed, the compiler can lookahead for
+    \item Forward declarations are not needed, CPUGPUCompiler can lookahead for
     function and structure definitions. Futhermore, it can detect if there are
     cycles within structs automatically.
 
@@ -1721,10 +1727,10 @@ in two modes:
 Although the pre-processor seems simple, the intention is for it to be used as
 a command-line program that can be used by more comprehensive build systems.
 
-The annotation processor works by looking for ``\texttt{@}'' directives within
-C or GLSL code. When such a directive is found, it tokenises and parses the
-relevant sections of the provided input using a recursive descent parser,
-creating an abstract syntax tree.
+AnnoCheck works by looking for ``\texttt{@}'' directives within C or GLSL code.
+When such a directive is found, it tokenises and parses the relevant sections
+of the provided input using a recursive descent parser, creating an abstract
+syntax tree.
 
 For annotated C code, the AST is semantically analysed, with a special
 dataformat to store metadata which can be used to ensure that GLSL annotations
@@ -1736,11 +1742,10 @@ The annotated GLSL code is checked using a similar strategy.
 
 \section{Compiler}
 
-The compiler is a much more complex endeavor than the annotation processor, and
-consists of a single program which is able to compile code written in three
-languages: the host language, the shader language, and the subset of the two.
-Input for the compiler is achieved in a similar manner to the input into the
-annotation processor.
+The compiler, CPUGPUCompiler, is a much more complex endeavor than AnnoCheck,
+and consists of a single program which is able to compile code written in three
+languages: CPULang, GPULang, and the subset of the two. Input for CPUGPUCompiler
+is achieved in a similar manner to the input into AnnoCheck.
 
 \subsection{Parsing multiple languages}
 
@@ -1750,12 +1755,12 @@ However, by sharing the same compiler, can needs to be taken to ensure that the
 compiler handles code intended for a particular backend in the desired manner.
 
 This is achieved through the use of an internal state machine within the
-recursive descent parser , where during parsing of a given input, the compiler
+recursive descent parser , where during parsing of a given input, CPUGPUCompiler
 can be in three possible states for parsing:
 
 \begin{itemize}
 
-    \item \textbf{\texttt{HOST}:} When in the \texttt{HOST} state, the compiler
+    \item \textbf{\texttt{HOST}:} When in the \texttt{HOST} state, CPUGPUCompiler
     ensures that it only compiles code that conforms to the host language. It
     fails, with a compilation error, if code does not conform.
 
@@ -1819,12 +1824,12 @@ shader that copies items from one file to another is over 750 lines long
 % \section{Performance}
 
 % Ideally, there shouldn't be any performance overhead in either of the
-% solutions. For the annotation processor, that's fairly straight-forward to
+% solutions. For AnnoCheck, that's fairly straight-forward to
 % establish, as it is essentially syntactic sugar that sits on-top-of C and GLSL.
 
 % However, although the custom language has semantics very similar to C and GLSL,
 % and in theory identical programs in both environments should be \textit{just
-% as} performant as C - the compiler may not optimise as well as it should.
+% as} performant as C - CPUGPUCompiler may not optimise as well as it should.
 
 % TODO(Content!):
 
