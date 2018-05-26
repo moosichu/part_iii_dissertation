@@ -360,16 +360,16 @@ GPUs, as is the case with Lime \cite{Lime2010}. However, by hiding the details
 of the heterogeneous backends it targets, Lime has no facility for allowing the
 programmer to control how data is transferred between various components,
 something which is crucial in game development \cite{TODO}. Working with
-current toolchains is an odd mix of using an API and writing code in a
+low-level toolchains is an odd mix of using an API and writing code in a
 GPU-specific language such as GLSL or HLSL -- research has primarily focused on
 hiding the API and simplifying GPU-specific elements by designing unified
 languages to abstract those details. We aim to demonstrate that alternative
-approaches which improve aspects of current toolchains do exist.
+approaches which improve aspects of low-level toolchains do exist.
 
 We provided the motivation for the solutions described in this paper, first by
 demonstrating the prevalence of GPUs and how important improvements to
 toolchains which target them could be. Secondly, we demonstrated the problems
-current toolchains face with a brief example showing how data structures must
+low-level toolchains face with a brief example showing how data structures must
 be defined separately in programming languages for the GPU and the CPU.
 Finally, we provided a brief explanation of why research has yet to tackle
 these problems.
@@ -388,10 +388,10 @@ CUG: a programming language with two distinct dialects.
 \subsection{Desired Outcome}
 
 As we describe in Chapter \ref{chp:related_work}, systems which aim to improve
-over current toolchains often sacrifice some control that traditional workflows
-provide: whether its memory management, scheduling, or which backend sections
-of code eventually compile down to. This has two benefits: improving the
-user-experience by abstracting-away low-level details, and providing an
+over low-level toolchains often sacrifice some control that those traditional
+workflows provide: whether its memory management, scheduling, or which backend
+sections of code eventually compile down to. This has two benefits: improving
+the user-experience by abstracting-away low-level details, and providing an
 optimising compiler the control necessary to optimise scheduling. The issue
 with this approach is the fact that precise control is still important in many
 domains where GPUs are used -- to the point where programmers still choose to
@@ -407,59 +407,68 @@ the example problem shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
 and elaborated on in Section \ref{sec:api_challanges}. Bugs may easily be
 introduced due to errors in using the API; these can prevented by compile-time
 checks. That is, instead of trying to unify code that is written for the CPU
-and GPU under a single language or system which is designed to abstract-away
-API calls (thereby reducing the possibility of introducing errors as the
-compiler generates API calls for the programmer), we can acknowledge that these
-targets are different enough to justify writing host code and shaders in
-different programming languages. However, we can use compile-time type checking
-\textit{between} these languages and compile-time checks on the API calls
-\textit{themselves} in order to have the compiler catch errors which would
-otherwise be left undetected.
+and GPU under a single language or system which is designed to generate API
+calls for the programmer, we can use compile-time type checking
+\textit{between} CPU and GPU languages and compile-time checks on the API calls
+that the programmer has written \textit{themselves} in order to have the
+compiler catch errors which would otherwise be left undetected.
 
 In conclusion, any solution that aims to improve upon current programming
 models should deliver the benefits described above without sacrificing anything
-current toolchains provide. This can be done by targetting specific classes of
+low-level toolchains provide. This can be done by targetting specific classes of
 errors as described in Section \ref{sec:api_challanges}. We can do this with
 two techniques: compile-time cross-language checks and the processing of
 annotations to check the validity of raw API calls.
 
 \subsection{What was done}
 
-We created two systems for checking programs across language boundaries in
-CPU-GPU systems. Each one of these systems is focused on demonstrating a
-different approach to implementing compile-time cross-language checks and
-checking the validity of raw API calls for graphics programming. We chose to
-target the Vulkan API to demonstrate that these ideas can work at the lowest
-low-level. However, the ideas are also applicable to other APIs such as OpenGL,
-OpenCL or Direct3D.
+We created two prototype systems for checking programs across language
+boundaries in CPU-GPU systems. Both demonstrate a different approach in
+implementing compile-time cross-language checks and checking the validity of
+raw API calls for graphics programming. We chose to target the Vulkan API to
+demonstrate that these ideas can work at the very lowest-level. However, the
+ideas are also applicable to other APIs such as OpenGL, OpenCL or Direct3D.
 
-The first system is a pre-processor for C and GLSL called AnnoCheck that
-operates on annotated sections of code. The goal here was to demonstrate how an
-existing pair of languages with similar type systems could be extended in order
-to have error-checking on raw API calls. Furthermore, as C and GLSL are one of
-the most used language-pairings for graphics programming, this was done to show
-how a lot of existing code could stand to benefit from these techniques.
+We first developed \textit{AnnoCheck}, a pre-processor for C and GLSL called
+AnnoCheck that operates on annotated sections of code. The goal here was to
+demonstrate how an existing pair of languages with similar type systems could
+be extended in order to have error-checking on raw API calls. Furthermore, as C
+and GLSL are a common language pairing for graphics programming, a lot of
+existing code could stand to benefit from these techniques \cite{TODO}. We
+chose C and GLSL as they share enough similar \textit{syntactic} properties to
+already allow the programmer to share some code between them (such as struct
+definitions). However, although this approach has the benefit of being able to
+\textit{plug-in} to existing C and GLSL code, it does have some limitations.
+Firstly, the sharing of code is limited to a syntactic happenstance which falls
+apart as soon as languages are used without this feature. Secondly, C's type
+system does have limitations compared with many modern languages, and we could
+think of many opportunities is sharing code \textit{semantically} instead of
+just \textit{syntactically}.
 
-The second system is a compiler called the CUG compiler for a proof-of-concept
-pair of languages called CUG-C and CUG-G with the features provided by the
-pre-processing system baked-into their type systems at the language level. We
-had two goals with this. The first was to demonstrate that such a system could
-work. The second was to show how existing high-level languages could be
+% TODO(Image!): include diagram of all the wokflows?
+
+This led us to develop the \textit{CUG} compiler, which can compile two
+language \textit{dialects} called CUG-C and CUG-G. We had two goals with this.
+The first was to demonstrate the power that the semantic sharing of code could
+provide in solving the problems we describe in Section
+\ref{sec:sec:api_challanges}, especially as these two dialects share the same
+compiler. The second was to show how existing high-level languages could be
 extended with a shader-language. This would be suitable for a language such as
 C$^\sharp$, which has a strong type system, but is compromised and arguably
-\textit{less safe} than C when using shaders. This is because C and GLSL can
-share code as they have similar syntax. $C^\sharp$ and GLSL do not have similar
-syntax, meaning that the problem shown in Listing
-\ref{lst:c_sharp_hlsl_struct_comparison} becomes a problem. Due to resource
-limitations, we designed CUG-C and CUG-G from scratch with the minimum
+\textit{less safe} than C when using shaders, as it cannot share any code with
+them as show in Listing \ref{lst:c_sharp_hlsl_struct_comparison}. Due to
+resource limitations, we designed CUG-C and CUG-G from scratch with the minimum
 subset of features required in order to demonstrate that this is possible,
 instead of extending an existing full-featured language such as $C^\sharp$.
 
 One thing to note is that our goal was not to write a comprehensive set of
 tools which could be used to catch all errors of this nature at compile-time.
-We instead hope to demonstrate some ideas which could be used to catch
-many-kinds of errors, by demonstrating implementations of two systems which
-have been designed to capture a small subset of them.
+We instead hope to demonstrate some ideas which could be used to catch various
+kinds of errors, by demonstrating implementations of two prototype systems
+which have been designed to capture a small subset of them. Although limited,
+both projects came to a total of over 14,000 lines of code, not including
+whitespace, comments, or any example programs that we to test these two
+systems.
 
 \subsubsection{Annotation System}
 
@@ -1773,6 +1782,9 @@ TODO(Content!):
 \chapter{Related Work and Discussion}
 
 %TODO(Content!) Rewrite this so that comments on the related work is made
+
+%TODO: interesting point, how our annotation system differs from the one where
+% you can annotate portable C++ (find out which it is)
 
 \label{chp:related_work}
 
