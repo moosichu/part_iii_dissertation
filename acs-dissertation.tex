@@ -472,7 +472,7 @@ both projects came to a total of over 14,000 lines of code, not including
 whitespace, comments, or any example programs that we to test these two
 systems.
 
-\subsubsection{Annotation System}
+\subsection{AnnoCheck}
 
 AnnoCheck is a command-line program that takes annotated code written in C and
 annotated code written in GLSL as input. An example annotation and the code
@@ -599,25 +599,29 @@ correct. Furthermore, Section \ref{sec:design_annotation_processor} covers
 design decisions that were made with typical shader workflows in mind such that
 annotations can be kept for most use-cases.
 
-\subsubsection{CUG-C, CUG-G and the CUG Compiler}
+\subsection{CUG}
 
-The CUG compiler can compile code written in two related languages which are each
-designed to target different architectures. The first language, called
-\textit{CUG-C}, is one designed to be compiled for the CPU. The second
-language, called the \textit{CUG-G} is similarly designed to target GPUs.
+CUG consists of two \textit{seperate} but \textit{semantically related}
+languages called \textit{CUG-C} and \textit{CUG-G}, each designed to target
+different architectures. However, due to them being semantically related, we
+refer to them as \textbf{dialects}. The first dialect, \textit{CUG-C}, is
+designed to be compiled for the CPU. The second language, \textit{CUG-G} is
+similarly designed to target GPUs.
 
-% TODO(Content!): Massively expand!
+% Section \ref{sec:TODO} explains how historically compiling custom languages to
+% shaders has been a difficult endeavour, due to a plethora of inconsistencies
+% between the implementation of shader languages by different GPU vendors. The
+% recent development of intermediate shader languages mitigate this problem,
+% allowing custom shader languages to be developed \cite{TODO}. TODO(Content): is this really needed?
 
-The goal here was to leverage the opportunities intermediate shader languages
-present. Section TODO(Content) explains how historically compiling custom
-languages to shaders has been a difficult endeavour, due to a plethora of
-inconsistencies between the implementation of shader languages by different GPU
-vendors. Intermediate shader languages help solve this problem. We wanted to
-demonstrate how this can then be used to allow programmers to write host-code
+We demonstrate a prototype system that allows programmers to write host-code
 and shaders in programming languages that have modern features, without
-sacrificing the performance that C and GLSL provide. An example of such a
-feature is the integration of non-nullable pointers into the type system of the
-host language.
+sacrificing the performance that C and GLSL provide. We additionally
+demonstrate the power of semantically sharing code can provide, compared with
+the syntactic sharing of code that typically happens between C and GLSL.
+Similar to how different natural-language dialects have mutually-intelligible
+subsets, CUG-C and CUG-G have a mutually intelligible subset called CUG-min
+that allows them to share code \textit{modules}.
 
 % TODO(Content): Find a suitable place to mention how non-nullable pointers can
 % enrich an existing graphics API.
@@ -657,7 +661,8 @@ let main() {
 \end{lstlisting}
 \caption{Code written in CUG-C and CUG-G that has the same functionality as
 Listing \ref{lst:annotation_example_input}. The full example can be found on
-the project GitHub repository \cite{ProjectSource}.}
+the project GitHub repository \cite{ProjectSource}. The Syntax is given in
+\ref{sec:language_syntax}.}
 \label{lst:language_example}
 \end{lstfloat}
 
@@ -667,64 +672,30 @@ same functionality as the annotation example shown in Listing
 directive system similar to the annotation system we created for C and GLSL.
 This is used to tell the CUG compiler about the existence of a shader interface
 with the name ``main''. The compiler can then check for conformance of that
-interface when compiling CUG-G. We are aiming show the general benefits of
-programming in a shader language that is derived from the host language that is
-being used, and not any particular features of these languages.
+interface when compiling CUG-G. We are not advocating for any particular
+features of these dialects, but demonstrate some of the benefits a
+multi-dialect system can provide. We also explore the opportunities such a
+system presents Chapter \ref{chp:conclusion_and_further_work}.
 
 The syntax, semantics and particular features of these languages are provided
-in-depth in Section \ref{sec:design_languages}.
-
-
-% \subsection{Pros and Cons}
-
-% These approaches naturally have their own pros and cons relative to each other
-% and relative to other related work in the field (Section
-% \ref{chp:related_work}).
-
-% Compared with using raw graphics APIs, these techniques present an obvious
-% benefit: they reduce the likelyhood of certain classes of errors from being
-% made. However, they do potentially cost of friction.
-
-% % TODO:(Content!)
-
-% \begin{itemize}
-
-%     \item PROS:
-
-%         \item Reduce friction
-
-%         \item Help Me s
-
-% \end{itemize}
-
-% \section{Overview}
-
-% % This is the introduction where you should introduce your work.  In
-% % general the thing to aim for here is to describe a little bit of the
-% % context for your work -- why did you do it (motivation), what was the
-% % hoped-for outcome (aims) -- as well as trying to give a brief
-% % overview of what you actually did.
-
-% % It's often useful to bring forward some ``highlights'' into
-% % this chapter (e.g.\ some particularly compelling results, or
-% % a particularly interesting finding).
-
-% % It's also traditional to give an outline of the rest of the
-% % document, although without care this can appear formulaic
-% % and tedious. Your call.
-
-% TODO(Content): Give overview of paper.
+in-depth in Section \ref{sec:design_languages}. Due to the verbose nature of
+using graphics APIs, further CUG examples are given in Appendix
+\ref{app:other_cug_examples}.
 
 \section{Summary}
 
-We have presented AnnoCheck and the CUG compiler and have given the motivation
-for why we created them. We have explained that despite the existence of many
-techniques which abstract-away graphics and compute APIs, therefore simplifying
-heterogeneous programming, traditional toolchains will still be used in many
-contexts for the forseeable future. However, this does not mean that those
-traditional toolchains cannot themselves be improved, and we have shown through
-some brief examles, how our systems can help prevent common errors that can be
-made when programming using graphics APIs.
+We have presented AnnoCheck and CUG, giving the motivation for why we created
+them. We have explained that despite the existence of many techniques which
+abstract-away graphics and compute APIs, therefore simplifying heterogeneous
+programming, traditional toolchains will still be used in many contexts for the
+forseeable future. However, this does not mean that those traditional
+toolchains cannot themselves be improved. Our first attempt, AnnoCheck, is
+designed to allow programmers to annotate C and GLSL code in order to provide
+limited cross-language checking. However, due to limitations with this
+approach, we developed CUG, a multi-dialect programming language that solves
+some of the problems we had with AnnoCheck. However, both systems have merits,
+and we demonstrated some examples where they can help prevent common errors
+that are when programming using graphics APIs.
 
 \chapter{Technical Background}
 
@@ -1458,6 +1429,12 @@ such a Java, C, C++, C$^\sharp$, Swift, Rust, etc. They merely aim to provide
 the bare-minimum feature-set needed in order to demonstrate the ideas of this
 paper. They are very much toy languages.
 
+\subsection{Syntax}
+
+\label{sec:language_syntax}
+
+TODO(Content!):
+
 \subsection{C-interoperability}
 
 In order to provide zero-overhead API calls, the host-language must be able to
@@ -1894,6 +1871,8 @@ on compute.
 
 \chapter{Conclusion, Further Work and the Future of Heterogeneous Programming}
 
+\label{chp:conclusion_and_further_work}
+
 % As you might imagine: summarizes the dissertation, and draws
 % any conclusions. Depending on the length of your work, and
 % how well you write, you may not need a summary here.
@@ -2204,5 +2183,12 @@ push themselves.}
 \label{tbl:api_comparison}
 
 \end{table}
+
+\chapter{Other CUG Examples}
+
+\label{app:other_cug_examples}
+
+TODO(Content!)
+
 
 \end{document}
