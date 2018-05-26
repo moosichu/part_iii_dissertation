@@ -83,14 +83,14 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-This chapter provides the motivation for the work this paper presents:
-Outlining the problem, why it is important and why it has not yet been solved.
-This is followed by a brief description of the two solutions presented in this
-paper: a cross-module annotation checker called AnnoCheck and two languages
-with a unified cross-module type checker. Each language is designed to target a
-different backend, with the language targeting the CPU being called CPULang and
-the language targetting the GPU being called GPULang. The compiler for both is
-called CPUGPUCompiler. Finally, an overview of the entire document is provided.
+We outline the problem, why it is important and why it has not yet been solved.
+We then provide a brief description of the two solutions presented in this
+paper. \textbf{AnnoCheck} is a cross-module annotation checker for the C and
+GLSL programming languages that can be used to catch common errors when using
+them to control the GPU. \textbf{CUG} takes this approach to the next level,
+being a programming language with two \textit{dialects} which are each designed
+to target a different backend. The dialect which targets the CPU is called
+\textbf{CUG-C} and the language targetting the GPU is called \textbf{CUG-G}.
 
 \section{Terminology}
 
@@ -369,7 +369,7 @@ problems described above. First by describing what the desired outcomes of
 those solutions should be and how they should improve over the status quo. This
 is followed by the solutions themselves; firstly describing the annotation
 processor AnnoCheck and then the pair of languages with a unified type system,
-CPULang and GPULang. The pros and cons of each are then discussed to round off
+CUG-C and CUG-G. The pros and cons of each are then discussed to round off
 the section.
 
 \subsection{Desired Outcome}
@@ -424,8 +424,8 @@ to have error-checking on raw API calls. Furthermore, as C and GLSL are one of
 the most used language-pairings for graphics programming, this was done to show
 how a lot of existing code could stand to benefit from these techniques.
 
-The second system is a compiler called CPUGPUCompiler for a proof-of-concept
-pair of languages called CPULang and GPULang with the features provided by the
+The second system is a compiler called the CUG compiler for a proof-of-concept
+pair of languages called CUG-C and CUG-G with the features provided by the
 pre-processing system baked-into their type systems at the language level. We
 had two goals with this. The first was to demonstrate that such a system could
 work. The second was to show how existing high-level languages could be
@@ -435,7 +435,7 @@ C$^\sharp$, which has a strong type system, but is compromised and arguably
 share code as they have similar syntax. $C^\sharp$ and GLSL do not have similar
 syntax, meaning that the problem shown in Listing
 \ref{lst:c_sharp_hlsl_struct_comparison} becomes a problem. Due to resource
-limitations, we designed CPULang and GPULang from scratch with the minimum
+limitations, we designed CUG-C and CUG-G from scratch with the minimum
 subset of features required in order to demonstrate that this is possible,
 instead of extending an existing full-featured language such as $C^\sharp$.
 
@@ -574,12 +574,12 @@ ensure that an initial implementation is correct. Furthermore, Section
 with typical shader workflows in mind such that annotations can be kept for
 most use-cases.
 
-\subsubsection{CPULang, GPULang and CPUGPUCompiler}
+\subsubsection{CUG-C, CUG-G and the CUG Compiler}
 
-CPUGPUCompiler can compile code written in two related languages which are each
+The CUG compiler can compile code written in two related languages which are each
 designed to target different architectures. The first language, called
-\textit{CPULang}, is one designed to be compiled for the CPU. The second
-language, called the \textit{GPULang} is similarly designed to target GPUs.
+\textit{CUG-C}, is one designed to be compiled for the CPU. The second
+language, called the \textit{CUG-G} is similarly designed to target GPUs.
 
 % TODO(Content!): Massively expand!
 
@@ -600,7 +600,7 @@ host language.
 % TODO(Task): Read https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
 
 \begin{lstfloat}
-\begin{center} CPULang \end{center}
+\begin{center} CUG-C \end{center}
 \begin{lstlisting}[language=C]
 let shader_interface :Shader_Interface = @define_shader_interface(name="main");
 let compute_pipeline_create_info: [] C::VkComputePipelineCreateInfo = [{
@@ -623,14 +623,14 @@ C::vkCreateComputePipelines(
     pPipelines=&pipeline
 );
 \end{lstlisting}
-\begin{center} GPULang \end{center}
+\begin{center} CUG-G \end{center}
 \begin{lstlisting}[language=C]
 let main() {
     output_buffer.values[gl_GlobalInvocationID.x] =
         input_buffer.values[gl_GlobalInvocationID.x];
 }
 \end{lstlisting}
-\caption{Code written in CPULang and GPULang that has the same functionality as
+\caption{Code written in CUG-C and CUG-G that has the same functionality as
 Listing \ref{lst:annotation_example_input}. The full example can be found on
 the project GitHub repository \cite{ProjectSource}.}
 \label{lst:language_example}
@@ -638,11 +638,11 @@ the project GitHub repository \cite{ProjectSource}.}
 
 Listing \ref{lst:language_example} shows the snippets of code which perform the
 same functionality as the annotation example shown in Listing
-\ref{lst:annotation_example_input}. As can be seen, CPULang has an in-built
+\ref{lst:annotation_example_input}. As can be seen, CUG-C has an in-built
 directive system similar to the annotation system we created for C and GLSL.
-This is used to tell CPUGPUCompiler about the existence of a shader interface
+This is used to tell the CUG compiler about the existence of a shader interface
 with the name ``main''. The compiler can then check for conformance of that
-interface when compiling GPULang. We are aiming show the general benefits of
+interface when compiling CUG-G. We are aiming show the general benefits of
 programming in a shader language that is derived from the host language that is
 being used, and not any particular features of these languages.
 
@@ -692,7 +692,7 @@ in-depth in Section \ref{sec:design_languages}.
 
 \section{Summary}
 
-We have presented AnnoCheck and CPUGPUCompiler and have given the motivation
+We have presented AnnoCheck and the CUG compiler and have given the motivation
 for why we created them. We have explained that despite the existence of many
 techniques which abstract-away graphics and compute APIs, therefore simplifying
 heterogeneous programming, traditional toolchains will still be used in many
@@ -1111,8 +1111,8 @@ Cross-compiling between different intermediate languages for different APIs is
 easier than doing the same for high-level languages \cite{TODO}.
 
 Part of this project aims to capitalise on this recent development in GPU
-computing, with the demonstration of a custom language for the CPU (CPULang)
-which has a shading-language counterpart (GPULang). This demonstration is with
+computing, with the demonstration of a custom language for the CPU (CUG-C)
+which has a shading-language counterpart (CUG-G). This demonstration is with
 multiple goals in mind:
 
 \begin{itemize}
@@ -1289,8 +1289,8 @@ compile-time using different mechanisms.
 
 The project is composed of two systems. The first is AnnoCheck, a
 pre-processing system for C and GLSL that ensures the enforcement of interfaces
-between the two languages. The second, CPUGPUCompiler, is a compiler for
-CPULang and GPULang, a set of two novel toy languages which natively support
+between the two languages. The second, the CUG compiler, is a compiler for
+CUG-C and CUG-G, a set of two novel toy languages which natively support
 such enforcement. How these are used is described in Section
 \ref{sec:solutions_introduction}
 
@@ -1355,7 +1355,7 @@ of our systems \cite{Vulkan}. Done for the following reasons:
 \subsection{Build Strategy}
 
 Due to the fact that they aim to solve similar problems, both AnnoCheck and
-CPUGPUCompiler have a similar build strategy in order to ensure that they work
+the CUG compiler have a similar build strategy in order to ensure that they work
 with typical shader workflows and toolchains.
 
 One of the reasons it is hard to check the consistency between shaders and host
@@ -1446,10 +1446,10 @@ languages would go about things differently. We mention if this is the case.
 The first design decision that was made was to target C as the backend for the
 host language. Although an intermediate language such as LLVM-IR would be the
 optimal choice for a more-developed language \cite{TODO}, C was chosen as it
-was easier to do in the time available. Furthermore, the output of CPUGPUCompiler
+was easier to do in the time available. Furthermore, the output of the CUG compiler
 can in-turn be included by C-programs. This was a feature that was taken
 advantage of in order to easily implement automated tests of language features,
-by having C++ call-into code generated by CPUGPUCompiler \cite{AutomatedTestCode}
+by having C++ call-into code generated by the CUG compiler \cite{AutomatedTestCode}
 \cite{AutomatedTestOutput}.
 
 The second decision was to provide a keyword for the inlining of C code in the
@@ -1539,9 +1539,9 @@ intended to be used for both shader and host code.
 
 We there improve over the status quo in one significant way, by allowing files
 to be explicitly marked as a shared module for both our host and shader
-languages. Therefore, CPUGPUCompiler can compile files marked in this way whilst
+languages. Therefore, the CUG compiler can compile files marked in this way whilst
 being aware of this fact, meaning that when shared modules are included by any
-code, CPUGPUCompiler can emit errors if those modules do not conform to the
+code, the CUG compiler can emit errors if those modules do not conform to the
 restricted subset of features which are available in both the host and shader
 languages.
 
@@ -1566,7 +1566,7 @@ following features which distinguish it from C:
 
     \item Strings and arrays both explicitly store there own length values.
 
-    \item Forward declarations are not needed, CPUGPUCompiler can lookahead for
+    \item Forward declarations are not needed, the CUG compiler can lookahead for
     function and structure definitions. Futhermore, it can detect if there are
     cycles within structs automatically.
 
@@ -1634,9 +1634,9 @@ The annotated GLSL code is checked using a similar strategy.
 
 \section{Compiler}
 
-The compiler, CPUGPUCompiler, is a much more complex endeavor than AnnoCheck,
+The compiler, the CUG compiler, is a much more complex endeavor than AnnoCheck,
 and consists of a single program which is able to compile code written in three
-languages: CPULang, GPULang, and the subset of the two. Input for CPUGPUCompiler
+languages: CUG-C, CUG-G, and the subset of the two. Input for the CUG compiler
 is achieved in a similar manner to the input into AnnoCheck.
 
 \subsection{Parsing multiple languages}
@@ -1647,12 +1647,12 @@ However, by sharing the same compiler, can needs to be taken to ensure that the
 compiler handles code intended for a particular backend in the desired manner.
 
 This is achieved through the use of an internal state machine within the
-recursive descent parser , where during parsing of a given input, CPUGPUCompiler
+recursive descent parser , where during parsing of a given input, the CUG compiler
 can be in three possible states for parsing:
 
 \begin{itemize}
 
-    \item \textbf{\texttt{HOST}:} When in the \texttt{HOST} state, CPUGPUCompiler
+    \item \textbf{\texttt{HOST}:} When in the \texttt{HOST} state, the CUG compiler
     ensures that it only compiles code that conforms to the host language. It
     fails, with a compilation error, if code does not conform.
 
@@ -1721,7 +1721,7 @@ shader that copies items from one file to another is over 750 lines long
 
 % However, although the custom language has semantics very similar to C and GLSL,
 % and in theory identical programs in both environments should be \textit{just
-% as} performant as C - CPUGPUCompiler may not optimise as well as it should.
+% as} performant as C - the CUG compiler may not optimise as well as it should.
 
 % TODO(Content!):
 
