@@ -5,4 +5,6 @@ TODO(Content?) - Possible content, but stuff needs to be deleted around it if it
 TODO(Citation) - Useful citation which could be used
 TODO(Task)     - A task TODO
 TODO(Rewrite) - Proof read section and makes sure it fits into the whole of the dissertation
+TODO(Image!)   - an important image to add!
 \cite{TODO} - Missing citation
+\ref{sec:TODO} - Missing back/forwards reference

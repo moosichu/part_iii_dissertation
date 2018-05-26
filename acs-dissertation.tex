@@ -83,16 +83,22 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
+\label{sec:TODO}
+
 We outline the problem, why it is important and why it has not yet been solved.
 We then provide a brief description of the two solutions presented in this
 paper. \textbf{AnnoCheck} is a cross-module annotation checker for the C and
 GLSL programming languages that can be used to catch common errors when using
-them to control the GPU. \textbf{CUG} takes this approach to the next level,
-being a programming language with two \textit{dialects} which are each designed
-to target a different backend. The dialect which targets the CPU is called
-\textbf{CUG-C} and the language targetting the GPU is called \textbf{CUG-G}.
+them to control the GPU. \textbf{CUG}\footnote{This is short for
+\textit{CPU-Union-GPU}, similar logic applies to the naming of the dialects.}
+takes this approach to the next level, being a programming language with two
+\textit{dialects} which are each designed to target a different backend. The
+dialect which targets the CPU is called \textbf{CUG-C} and the language
+targetting the GPU is called \textbf{CUG-G}.
 
 \section{Terminology}
+
+%TODO: look to delete this maybe?
 
 Useful terms and domain-specific jargon are briefly explained below. Although
 the concepts here are explored in depth in Chapter
@@ -114,7 +120,7 @@ end of this section quickly clarifies common points of confusion.
     program written for the GPU. These are named \textit{shaders} because they
     were originally used for shading computer graphics images, but the term now
     applies to all GPU programs including those which are not related to
-    graphics at all \footnote{The original specification for the first OpenGL
+    graphics at all\footnote{The original specification for the first OpenGL
     shading language discusses how this decision was made \cite{GLSL_1_10}.} A
     \textit{kernel} is a name used for a computer program that runs on any
     non-CPU \textit{accelerator}, and is a term that is widely used for general
@@ -223,16 +229,18 @@ by many new front-ends apart from \textit{OpenCL C++}
 
 Graphical Processing Units (GPUs) can provide significant gains in
 floating-point computing power relative to CPUs due to their highly parallel
-nature \cite{CPUGPUOverTime}. This has lead to a growth in the use of GPUs for
+nature \cite{CPUGPUOverTime}. This has led to a growth in the use of GPUs for
 general purpose computations (known as GPGPU). Whilst GPUs were originally
-designed for rendering the graphics of games using a fixed-function pipeline,
-changes in their design over time have made them increasingly programmable.
-These design changes were driven by the desire of game developers to have
+designed for rendering game graphics using a fixed-function pipeline, changes
+in their design over time have made them increasingly programmable. These
+design changes were driven by the desire of game developers to have
 increasingly realistic, complex and diverse graphics in their games.
 Furthermore, this has allowed GPUs to be used in a broadening domain of
 applications, including machine learning, scientific computing, and bitcoin
 mining \cite{GPUCrypto} \cite{GPUScientificComputing} \cite{GPUAI}. Section
 \ref{sec:history_gpu} provides more details on this.
+
+%TODO(Image!): Add an image of how a GPU works/how it compares with a CPU.
 
 However despite this growth, the traditional toolchains used to program GPUs
 still suffer from many of the problems they did when originally used by
@@ -240,12 +248,13 @@ graphics programmers in the early-to-mid 2000s:
 
 \begin{itemize}
 
-    \item Unless using C/C++ as the host language, the layout of data
+    \item Unless using a host language with C-like syntax, the layout of data
     structures must be defined separately in both shaders and the host
-    language, with erroneous behaviour if they differ.
+    language, with erroneous behaviour if they differ (Section \ref{sec:TODO}).
 
     \item Shader functions are identified by the CPU using strings, with no
-    compile-time mechanisms available to ensure that they are correct.
+    compile-time mechanisms available to ensure that they are correct (Section
+    \ref{sec:TODO}).
 
     % \item TODO(Content) find more errors which are not addressed by this paper
     % (such as texture mis-match).
@@ -254,10 +263,11 @@ graphics programmers in the early-to-mid 2000s:
 
 A large root-cause of these problems is the fact that regardless of the API
 used, the programs written for GPUs (known as \textit{shaders}) have to be
-developed in a separate environment using high-level languages based on C.
-Therefore although data is shared between the CPU and GPU via a bus, the
-programmer has to manually ensure that the data structures used to encode that
-data is consistent between the programs written for the GPU and CPU.
+developed in a separate environment using high-level languages based on C
+(Section \ref{sec:TODO}) \cite{TripThroughGraphicsPipeline1}. Therefore
+although data is shared between the CPU and GPU via a bus, the programmer has
+to manually ensure that the data structures used to encode that data is
+consistent between the programs written for the GPU and CPU.
 
 \begin{lstfloat}
 \begin{center} C$^\sharp$ \end{center}
@@ -286,7 +296,7 @@ struct WaveParticle {
 \caption{The same data structure defined separately in C$^\sharp$ and HLSL
 \cite{WaveParticlesGPU}. It is worth noting that this is much less of an issue
 when using C as a host language. This is because most shading languages are
-based on C, so they are able to share header files.}
+syntactically based on C, so they are able to share header files.}
 \label{lst:c_sharp_hlsl_struct_comparison}
 \end{lstfloat}
 
@@ -294,17 +304,19 @@ Listing \ref{lst:c_sharp_hlsl_struct_comparison} demonstrates a simple example
 of this kind of issue, extracted from a simple GPU-accelerated water-wave
 simulator \cite{WaveParticlesGPU}. In this example, units of distortion on the
 surface of a liquid are represented using a data structure known as a
-\textit{Wave Particle} \cite{WaveParticlesOriginalPaper}. The CPU handles
-in-world physics which result in these particles being generated. However, the
-GPU is used to simulate the particles themselves and additionally calculates
-the shape of the resulting surface they represent before rendering the results
-as shown in Figure \ref{fig:waveparticles_example}. In this case, C$^\sharp$
-was the language used to write code for the CPU, and HLSL was the language used
-to write shaders for the GPU. Therefore, even though both languages share the
-same data structure, it has to separately be defined in both languages. If
-these definitions do not agree with each other, there are no in-built
-mechanisms to catch the errors this causes, at run-time or otherwise. The
-outcome of such a is simply undefined runtime behaviour. Section
+\textit{Wave Particle} \cite{WaveParticlesOriginalPaper}. In the simulator, the
+CPU simulates an in-world physics-system calculates how these particles are
+generated. This particle data is then transferred to the GPU which simulates
+\textit{their} behaviour and then uses them in in rendering the surface of a
+liquid as shown in Figure \ref{fig:waveparticles_example}. In this case,
+C$^\sharp$ was the language used to write code for the CPU, and HLSL was the
+language used to write shaders for the GPU\footnote{This is a common language
+combination for scripting and writing shaders for the popular Unity game
+engine\cite{UnityScripting} \cite{UnityShaders}.}. Therefore, even though both
+languages share the same data structure, it has to separately be defined in
+both languages. If these definitions do not agree with each other, there are no
+in-built mechanisms to catch the errors this causes, at run-time or otherwise.
+The outcome of such a is simply undefined runtime behaviour. Section
 \ref{sec:api_challanges} fleshes out how in detail how the APIs used to write
 programs for GPUs work, and demonstrates other examples of how errors such as
 these can occur.
@@ -340,50 +352,54 @@ these can occur.
 
 There has been research into pushing forward the state-of-the-art in developing
 code for heterogeneous platforms in more programmer-friendly ways. However, as
-covered in Section \ref{chp:related_work}, much of the research has either been
+covered in Chapter \ref{chp:related_work}, much of the research has either been
 domain-specific or provided abstractions which have an unacceptable performance
 overhead for many use-cases involving GPUs. For example, a common approach is
 to design a unified language which can be compiled to a run-time that supports
 GPUs, as is the case with Lime \cite{Lime2010}. However, by hiding the details
-of the heterogeneous backends the language targets, there is an unavoidable
-run-time overhead. Working with current toolchains is an odd mix of using an
-API and writing code in a GPU-specific language -- research has primarily
-focused on hiding the API and simplifying GPU-specific elements by designing
-unified languages to abstract those details. We aim to demonstrate that
-alternative approaches which improve aspects of current toolchains do exist.
+of the heterogeneous backends it targets, Lime has no facility for allowing the
+programmer to control how data is transferred between various components,
+something which is crucial in game development \cite{TODO}. Working with
+current toolchains is an odd mix of using an API and writing code in a
+GPU-specific language such as GLSL or HLSL -- research has primarily focused on
+hiding the API and simplifying GPU-specific elements by designing unified
+languages to abstract those details. We aim to demonstrate that alternative
+approaches which improve aspects of current toolchains do exist.
 
-We have provided the motivation for the solutions described in this paper,
-first by demonstrating the prevalence of GPUs and how important improvements to
-toolchains which target them could be. Secondly, we have demonstrated the
-problems current toolchains face with a brief example showing how data
-structures must be defined separately in programming languages for the GPU and
-the CPU. Finally, we have provided a brief explanation of why research has yet
-to tackle these problems.
+We provided the motivation for the solutions described in this paper, first by
+demonstrating the prevalence of GPUs and how important improvements to
+toolchains which target them could be. Secondly, we demonstrated the problems
+current toolchains face with a brief example showing how data structures must
+be defined separately in programming languages for the GPU and the CPU.
+Finally, we provided a brief explanation of why research has yet to tackle
+these problems.
 
 \section{The Solutions}
 
 \label{sec:solutions_introduction}
 
-This section introduces the two systems this paper presents as solutions to the
-problems described above. First by describing what the desired outcomes of
-those solutions should be and how they should improve over the status quo. This
-is followed by the solutions themselves; firstly describing the annotation
-processor AnnoCheck and then the pair of languages with a unified type system,
-CUG-C and CUG-G. The pros and cons of each are then discussed to round off
-the section.
+We introduce AnnoCheck and CUG, explaining the approaches they take in solving
+problems described above. First we describe what the desired outcomes of those
+solutions should be and how they should improve over the status quo. We then
+introduce by the solutions themselves; firstly describing the annotation
+processor AnnoCheck and then explaining its limitations which led us to develop
+CUG: a programming language with two distinct dialects.
 
 \subsection{Desired Outcome}
 
-As described in Section \ref{chp:related_work}, systems which aim to improve
-over current toolchains often sacrifice the control that traditional workflows
-provide in order to improve the user-experience of programmers. The issue with
-this approach is the fact that performance is still important in many domains
-where GPUs are used -- to the point where programmers still choose to make the
-trade-off of working directly with APIs like OpenGL or Vulkan instead of
-choosing the usability that abstractions could otherwise provide \cite{TODO}.
-Therefore, solutions which aim to build and improve upon the status quo should
-provide all the options that traditional toolchains do, including exposing any
-underlying graphics or compute APIs.
+As we describe in Chapter \ref{chp:related_work}, systems which aim to improve
+over current toolchains often sacrifice some control that traditional workflows
+provide: whether its memory management, scheduling, or which backend sections
+of code eventually compile down to. This has two benefits: improving the
+user-experience by abstracting-away low-level details, and providing an
+optimising compiler the control necessary to optimise scheduling. The issue
+with this approach is the fact that precise control is still important in many
+domains where GPUs are used -- to the point where programmers still choose to
+make the trade-off of working directly with APIs like OpenGL or Vulkan instead
+of choosing the usability that abstractions could otherwise provide
+\cite{TODO}. Therefore, solutions which aim to build and improve upon the
+status quo should provide all the options that traditional toolchains do,
+including exposing any underlying graphics or compute APIs.
 
 Although this means these solutions are limited in the abstractions that they
 can provide, there are some ``easy wins'' to be made. This is demonstrated by
