@@ -468,7 +468,7 @@ tools which could be used to catch all errors of this nature at compile-time.
 We instead hope to demonstrate some ideas which could be used to catch various
 kinds of errors, by demonstrating implementations of two prototype systems
 which have been designed to capture a small subset of them. Although limited,
-both projects came to a total of over 14,000 lines of code, not including
+both projects came to a total of over 13,000 lines of code, not including
 whitespace, comments, or any example programs that we to test these two
 systems.
 
@@ -1355,7 +1355,7 @@ application itself is running. This metadata can be used to ensure that the
 shaders which are being written, are consistent with what the CPU expects when
 making API calls to load it into the GPU.
 
-\section{Annotation System}
+\section{AnnoCheck}
 
 \label{sec:design_annotation_processor}
 
@@ -1374,7 +1374,7 @@ system.
 
 % \subsection{Referring to function names using strings} TODO(Content):
 
-\section{Languages}
+\section{CUG}
 
 \label{sec:design_languages}
 
@@ -1398,6 +1398,34 @@ paper. They are very much toy languages.
 \label{sec:language_syntax}
 
 TODO(Content!):
+
+Although not directly-relevant to the problem at-hand, the language has the
+following features which distinguish it from C:
+
+\begin{itemize}
+
+    \item Instead of declaring variables by writing \texttt{type\_name
+    variable\_name = expression}, the user writes \texttt{var variable\_name :
+    type\_name = expression}.
+
+    \item Type inference is supported with the syntax \texttt{var variable\_name
+    := expression}.
+
+    \item Immutable values can be declared with \texttt{let value\_name :
+    type\_name = expression}.
+
+    \item Strings and arrays both explicitly store there own length values.
+
+    \item Forward declarations are not needed, the CUG compiler can lookahead for
+    function and structure definitions. Futhermore, it can detect if there are
+    cycles within structs automatically.
+
+    \item Pointers in the host language can be nullable or non-nullable.
+    Assigning \texttt{null} explicitly to non-nullable pointers is illegal, and
+    assigning from nullable to non-nullable pointers must either be guarded or
+    use an explicit cast.
+
+\end{itemize}
 
 \subsection{C-interoperability}
 
@@ -1472,7 +1500,7 @@ represented within the language.}
 Listing \ref{lst:lang_c_interop} demonstrates an example of the features used
 to interact with C.
 
-\subsection{Shader Language}
+\subsection{CUG-G}
 
 The shader language is based on the host language, but differs with both
 restrictions and enhancements, reflecting the capabilities of GPUs.
@@ -1492,7 +1520,7 @@ vector datatypes.
 
 % TODO(Content): Add more detail once shader language is well defined
 
-\subsection{Cross-Language type system}
+\subsection{CUG-min and the cross-dialect type system}
 
 A big benefit of these pair of languages is that they have a cross-language
 type-system. This different significantly from many GPU programming models,
@@ -1511,38 +1539,6 @@ code, the CUG compiler can emit errors if those modules do not conform to the
 restricted subset of features which are available in both the host and shader
 languages.
 
-%TODO(Content): Add more details and examples once these mechanisms are well defined.
-
-\subsection{Other Features}
-
-Although not directly-relevant to the problem at-hand, the language has the
-following features which distinguish it from C:
-
-\begin{itemize}
-
-    \item Instead of declaring variables by writing \texttt{type\_name
-    variable\_name = expression}, the user writes \texttt{var variable\_name :
-    type\_name = expression}.
-
-    \item Type inference is supported with the syntax \texttt{var variable\_name
-    := expression}.
-
-    \item Immutable values can be declared with \texttt{let value\_name :
-    type\_name = expression}.
-
-    \item Strings and arrays both explicitly store there own length values.
-
-    \item Forward declarations are not needed, the CUG compiler can lookahead for
-    function and structure definitions. Futhermore, it can detect if there are
-    cycles within structs automatically.
-
-    \item Pointers in the host language can be nullable or non-nullable.
-    Assigning \texttt{null} explicitly to non-nullable pointers is illegal, and
-    assigning from nullable to non-nullable pointers must either be guarded or
-    use an explicit cast.
-
-\end{itemize}
-
 \chapter{Implementation}
 
 % This chapter may be called something else\ldots but in general
@@ -1551,14 +1547,15 @@ following features which distinguish it from C:
 
 The source code for the project is publicly available and open-source
 \cite{ProjectSource}. The implementation is formed of two distinct components,
-the C-annotation pre-processor and the custom-languages compiler. Although both
-are written in C++, Python is also used as a build-system to enable simple
-cross-platform builds. The project was developed and tested on both Ubuntu
-16.04 and Windows 10 operating systems.
+AnnoCheck and the CUG compiler. Although both are written in C++, Python is
+also used as a build-system to enable simple cross-platform builds. The project
+was developed and tested on both Ubuntu 16.04 and Windows 10 operating systems.
+The combined source-code for both projects comes to around 13,000 lines of
+code. 12,000 of which are for the CUG compiler alone.
 
-\section{Pre-processor}
+\section{AnnoCheck}
 
-The pre-processor takes the form of a commandline program, that can operate
+AnnoCheck takes the form of a commandline program, that can operate
 in two modes:
 
 \begin{itemize}
@@ -1598,9 +1595,9 @@ The annotated GLSL code is checked using a similar strategy.
 
 % TODO(Content): flesh this out more
 
-\section{Compiler}
+\section{The CUG compiler}
 
-The compiler, the CUG compiler, is a much more complex endeavor than AnnoCheck,
+The CUG compiler is a much more complex endeavor than AnnoCheck,
 and consists of a single program which is able to compile code written in three
 languages: CUG-C, CUG-G, and the subset of the two. Input for the CUG compiler
 is achieved in a similar manner to the input into AnnoCheck.
@@ -1712,6 +1709,7 @@ languages.
 
 TODO(Content!):
 
+
 % \subsubsection{Issue 3: Texture Business}
 
 % TODO(Helpful):
@@ -1719,6 +1717,14 @@ TODO(Content!):
 % \subsubsection{Issue 4: Uninitialised Data}
 
 % TODO(Helpful):
+
+\section{Performance}
+
+%TODO(Content!):
+
+\section{Conclusion}
+
+%TODO(Content!):
 
 \chapter{Related Work and Discussion}
 
@@ -1833,7 +1839,7 @@ on compute.
 
 % TODO(Helpful): Vulkan Validation Layers
 
-\chapter{Conclusion, Further Work and the Future of Heterogeneous Programming}
+\chapter{Conclusion and Further Work}
 
 \label{chp:conclusion_and_further_work}
 
