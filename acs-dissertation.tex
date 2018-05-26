@@ -601,7 +601,7 @@ annotations can be kept for most use-cases.
 
 \subsection{CUG}
 
-CUG consists of two \textit{seperate} but \textit{semantically related}
+CUG consists of two \textit{separate} but \textit{semantically related}
 languages called \textit{CUG-C} and \textit{CUG-G}, each designed to target
 different architectures. However, due to them being semantically related, we
 refer to them as \textbf{dialects}. The first dialect, \textit{CUG-C}, is
@@ -701,74 +701,22 @@ that are when programming using graphics APIs.
 
 \label{chp:technical_background}
 
-% A more extensive coverage of what's required to understand your
-% work. In general you should assume the reader has a good undergraduate
-% degree in computer science, but is not necessarily an expert in
-% the particular area you've been working on. Hence this chapter
-% may need to summarize some ``text book'' material.
-
-% This is not something you'd normally require in an academic paper,
-% and it may not be appropriate for your particular circumstances.
-% Indeed, in some cases it's possible to cover all of the ``background''
-% material either in the introduction or at appropriate places in
-% the rest of the dissertation.
-
-% This chapter covers relevant (and typically, recent) research
-% which you build upon (or improve upon). There are two complementary
-% goals for this chapter:
-% \begin{enumerate}
-%   \item to show that you know and understand the state of the art; and
-%   \item to put your work in context
-% \end{enumerate}
-
-% Ideally you can tackle both together by providing a critique of
-% related work, and describing what is insufficient (and how you do
-% better!)
-
-% The related work chapter should usually come either near the front or
-% near the back of the dissertation. The advantage of the former is that
-% you get to build the argument for why your work is important before
-% presenting your solution(s) in later chapters; the advantage of the
-% latter is that don't have to forward reference to your solution too
-% much. The correct choice will depend on what you're writing up, and
-% your own personal preference.
-
-We provide extensive coverage of the relevant history of graphics hardware and
-how it developed over time to become useful in many fields beyond real-time
-rendering in video games. Following that, a breakdown of graphics APIs is
-provided, to give both the context for the problem this paper aims to tackle
-and the underlying technology the solutions depend upon. Then, the difficulties
-and issues with programming for GPUs are summarised from the contents of this
-chapter with a brief explanation of which ones the solutions presented in this
-paper aim to tackle and which ones they do not. The chapter finishes of with an
-overview of related research in this area, demonstrating both where they
-succeed and how they fail to tackle the specific problems that are solved here.
+We summarise the relevant history of graphics hardware and how it developed
+over time to become useful in many fields beyond real-time rendering in video
+games. Following that, a breakdown of graphics APIs is provided, to give both
+the context for the problem this paper aims to tackle and the underlying
+technology the solutions depend upon. We explain how the complexities of
+competing programming models for GPU programming, and therefore the lack of an
+``hourglass'' ecosystem, has limited the development of GPU-targeted languages.
+Finally, the difficulties and issues with programming for GPUs are summarised
+from the contents of this chapter.
 
 % TODO(Citation): Why low level details are important (eg unified memory versus seperate
 % memory)
 % https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
 % https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
 
-% \section{The GPU}
-
-% \label{sec:gpu_hardware}
-
-% TODO(Content!):
-
-% \begin{center}
-% \begin{tabular}{||c||c|c|c||}
-% \hline
-%         & Number of Cores  & FLOPS                                         & Type of parallelism \\
-% \hline
-% \hline
-% CPU     & 1 - O(10)        & Up to 1 Teraflop \cite{IntelTeraFlop}         & TODO                \\
-% \hline
-% GPU     & O(10) - O(10000) & Up to 100 Teraflops \cite{NVIDIA100TeraFlops} & TODO                \\
-% \hline
-% \end{tabular}
-% \end{center}
-
-% Can be worth being wary of GPU vs CPU performance based on performance alone.
+% TODO(Citation): Can be worth being wary of GPU vs CPU performance based on performance alone.
 % http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
 
 
@@ -778,17 +726,16 @@ succeed and how they fail to tackle the specific problems that are solved here.
 
 Graphics Processing Units (GPUs) were originally fixed-function hardware
 accelerators for 3D rendering aimed at hobbyist gamers who desired hardware to
-play games with the most complex graphics possible. They really took off after
-GLQuake demonstrated the improvements dedicated 3D graphics hardware could
-achieve relative to CPUs \cite{GLQuake}. Since then, due to rapid developments
-and competition, the scope and capabilities of graphics cards has expanded such
-that they are the highly-parallel general computation machines we find them to
-be today. However, the developments GPUs experienced were not pre-planned, and
-despite their current general-purpose nature, the terminology surrounding
-graphics cards has its foundation in graphics. Furthermore, as the industry has
-been so volatile, standards around using GPUs and heterogeneous hardware are
-still solidifying, with many fragmented communities and confusion around the
-future roadmap of both graphics and compute APIs.
+play games with the most complex graphics possible \cite{GLQuake}. Due to rapid
+developments and competition, the scope and capabilities of graphics cards has
+expanded such that they are the highly-parallel general computation machines we
+find them to be today. However, the developments GPUs experienced were not
+pre-planned, and despite their current general-purpose nature, the terminology
+surrounding graphics cards has its foundation in graphics, and is disconnected
+from programming language norms. Furthermore, standards around using GPUs and
+heterogeneous hardware are still solidifying, with many fragmented communities
+and confusion around the future roadmap of both graphics and compute APIs
+\cite{TODO}.
 
 This section summarises relevant milestones related to the history of
 heterogeneous computing in order to help the reader understand why the field is
@@ -812,6 +759,8 @@ relevant background needed to understand the projects themselves.
 % time to be introduced into hardware.
 % }
 % \end{table}
+
+%TODO(Content!):Reorganise and shrink
 
 \begin{itemize}
 
@@ -989,6 +938,21 @@ beyond those we aim to tackle is given in Appendix \ref{app:other_API_issues}.
 % depending on the domain a particular applications was being designed for.
 % Therefore there has been movement towards developing low-level APIs which will
 % eventually be capable of filling both roles. Vulkan is one such API.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{unity_shader_madness}
+\caption{TODO(Content!) \cite{UnityShaderPipeline}}.
+\label{fig:unity_shader_madness}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{unity_shader_sanity}
+\caption{TODO(Content!) \cite{UnityShaderPipeline}}.
+\label{fig:unity_shader_sanity}
+\end{figure}
+
 
 A compute or graphics API typically consists of two components: the API itself
 and a ``shader''/``kernel'' language that is used to write programs that run on
