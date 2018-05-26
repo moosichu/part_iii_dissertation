@@ -25,18 +25,19 @@ architectures. However, currently these languages are either domain-specific or
 do not provide programmers the control necessary to achieve the performance
 levels that traditional workflows can provide.
 
-This paper explores and discusses the implementation of two systems for
-cross-module type checking between languages. These systems each target
-components of heterogeneous computing systems without sacrificing the
-performance modern systems provide. Although the ideas are applicable to
-general heterogeneous systems, the focus for this paper is on type checking
-between languages which target GPUs and CPUs.
+This paper explores and discusses the implementation of two approaches for
+cross-module type checking between languages, \textbf{AnnoCheck} and
+\textbf{CUG}. Each approach targets components of heterogeneous computing
+systems without sacrificing the performance modern systems provide. Although
+the ideas are applicable to general heterogeneous systems, the focus for this
+paper is on type checking between languages which target GPUs and CPUs.
 
-The first system for cross-module checking is a front-end pre-processor for the
-C and GLSL programming languages to ensure the compile-time type-safety of the
-data transferred between them. The second system is a pair of distinct
-programming languages with compatible type systems. Both of these approaches
-have their own pros and cons, with the goal of improving the user experience of
+\textit{AnnoCheck} is a system for cross-module checking is a front-end
+pre-processor for the C and GLSL programming languages to ensure the
+compile-time type-safety of the data transferred between them. Due to
+limitations with this approach, we developed \textit{CUG}, a single programming
+language with two distinct \textit{dialects}. Both of these approaches have
+their own pros and cons, with the goal of improving the user experience of
 programming for heterogeneous architectures relative to the status quo, whilst
 still offering the level of control that traditional workflows provide. This is
 done so that runtime performance is not compromised at all.
