@@ -6,7 +6,7 @@ PS2PDF=ps2pdf
 
 all: acs-dissertation.pdf
 
-acs-dissertation.pdf: references.bib acs-dissertation.tex titlepage.tex declaration.tex abstract.tex
+acs-dissertation.pdf: references.bib acs-dissertation.tex titlepage.tex declaration.tex abstract.tex acknowledgements.tex
 	$(PDFLATEX) acs-dissertation
 	$(BIBTEX) acs-dissertation
 	$(PDFLATEX) acs-dissertation
@@ -21,7 +21,7 @@ acs-dissertation.ps: acs-dissertation.dvi
 	$(DVIPS) -Pdownload35 -ta4 acs-dissertation.dvi
 
 #acs-dissertation.dvi: acs-dissertation.tex dissertation.bib
-acs-dissertation.dvi: acs-dissertation.tex titlepage.tex declaration.tex abstract.tex
+acs-dissertation.dvi: acs-dissertation.tex titlepage.tex declaration.tex abstract.tex acknowledgements.tex
 	$(LATEX) acs-dissertation
 	$(BIBTEX) acs-dissertation
 	$(LATEX) acs-dissertation
