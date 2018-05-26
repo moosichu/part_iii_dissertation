@@ -1397,35 +1397,175 @@ paper. They are very much toy languages.
 
 \label{sec:language_syntax}
 
-TODO(Content!):
+This section gives a brief overview of CUG's syntax. Listing
+\ref{lst:cug_min_syntax} gives some examples of CUG-min; the syntax and
+features that CUG-C and CUG-G share. Listings \ref{lst:cug_c_syntax} and
+\ref{lst:cug_g_syntax} similarly provide examples of CUG-C and CUG-G
+respectively.
 
-Although not directly-relevant to the problem at-hand, the language has the
-following features which distinguish it from C:
+\begin{lstfloat}
+\begin{center} CUG-min Syntax \end{center}
+\begin{lstlisting}[language=C]
+// Import external module
+@add module
+// 3 being assigned to a newly-declared 32-bit signed integer
+var a_variable : s32 = 3;
+// 5 being assigned to the existing variable
+a_variable = 5;
+// 5 being assigned to a 64-bit unsigned constant
+let a_constant : u64 = 5;
+// type inference, b_constant has type u64 as well
+let b_constant := a_constant;
+// compile error: constants are immutable!
+/* a_constant = 10; */
+// A native string datatype
+let a_string : string = "Hello, I am a string";
+// A struct type-definition
+struct A_Struct {
+    member_1 : u32;
+}
+// Declaring a struct variable, members *must* be named
+var a_struct_variable : A_Struct = { member_1 = 10 }
+// A function definition
+let a_fun(a : A_Struct) => A_Struct {
+    // arguments are pass-by-value
+    return a;
+}
+// Function call
+let a_struct_constant := a_fun
+    // Parameters *must* be named when calling a function
+    a = a_struct_variable
+);
+// An enum definition
+enum An_Enum {
+    A = 0;
+    B;    // = 1
+    C;    // = 2
+    D = -1;
+    E;    // = 0
+}
+// An enum variable
+var a_enum_var := An_Enum.A;
+// An if-statement and while loop
+if a_enum_var == An_Enum.E { // Will be true
+    while a_variable < 10 {
+        a_variable = a_variable + 1;
+    }
+}
+\end{lstlisting}
+\caption{TODO(Content!)}
+\label{lst:cug_min_syntax}
+\end{lstfloat}
 
-\begin{itemize}
+\begin{lstfloat}
+\begin{center} CUG-C Syntax\end{center}
+\begin{lstlisting}[language=C]
+// Embed arbitrary C code within the program! Mitigates CUG-C limitations.
+@c_environment {
+    #include <stdio.h>
 
-    \item Instead of declaring variables by writing \texttt{type\_name
-    variable\_name = expression}, the user writes \texttt{var variable\_name :
-    type\_name = expression}.
+    void print_ln(char const * c_str) {
+        printf("%s\n", c_str);
+    }
+}
+// Declaring the existence of an external function, it lives in 'C' namespace
+@extern let print_ln(c_str: * const C::char)
+// Declaring the existence of an external opaque datatype!
+@extern opaque_type FILE;
+// Declaring the existence of external opaque values
+@extern opaque_value SEEK_END: C::int;
+@extern opaque_value SEEK_SET: C::int;
+@extern let fopen(
+    filename: * const C::char,
+    mode    : * const C::char
+) => ? C::FILE
+// Defining a native-wrapper that takes in-language strings
+let print_ln(str: string) {
+    // Use external functions/values/types with `C::`
+    C::print_ln(str=to_c_string(str=str))
+}
+// This function is the entry-point, akin to 'main' in C.
+let start() => s32 {
+    print_ln(str="A string"); // Will be printed by printf!
+    let a_constant : s32 = 10;
+    // a nullable pointer with constant view of target
+    let a_nullable_pointer : ? const s32 = null;
+    a_nullable_pointer = &a_constant; // address-of, like C
+    // 'malloc' operator only available in CUG-C
+    let non_nullable_pointer : * s32 = malloc(s32);
+    // non_nullable_pointer gets 'freed' at end of current scope
+    defer free(non_nullable_pointer);
+    // error, as non_nullable_pointer can't have null assigned
+    /* non_nullable_pointer = null; */
+    // error, as a_nullable_pointer has constant view of target,
+    /* non_nullable_pointer = a_nullable_pointer */
+    if a_nullable_pointer != null {
+        // OK, '!' makes a nullable pointer non-nullable
+        *non_nullable_pointer = *!a_nullable_pointer;
+    }
+    return 0;
+}
+\end{lstlisting}
+\caption{TODO(Content!)}
+\label{lst:cug_c_syntax}
+\end{lstfloat}
 
-    \item Type inference is supported with the syntax \texttt{var variable\_name
-    := expression}.
+\begin{lstfloat}
+\begin{center} CUG-G Syntax\end{center}
+\begin{lstlisting}[language=C]
+// Embed arbitrary GLSL code within the program! Mitigates CUG-G limitations.
+@glsl_environment {
+    #version 450
+    layout(local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
 
-    \item Immutable values can be declared with \texttt{let value\_name :
-    type\_name = expression}.
+    // std430 is related to the packing rules
+    layout(set=0, binding = 0, std430) buffer _9
+    {
+        vec3 values[16384];
+    } input_buffer;
 
-    \item Strings and arrays both explicitly store there own length values.
+    layout(set=0, binding = 1, std430) buffer _10
+    {
+        vec3 values[16384];
+    } output_buffer;
+}
+let main()
+{
+    // Vec3 is available in CUG-min, making struct-sharing easier
+    input : vec3 = input_buffer.values[gl_GlobalInvocationID.x];
+    // CUG-G has shader functions (`normalize`), CUG-C does not
+    // SEE: https://www.khronos.org/registry/OpenGL-Refpages/gl4/index.php
+    output_buffer.values[gl_GlobalInvocationID.x] = normalize(input);
+}
+\end{lstlisting}
+\caption{TODO(Content!)}
+\label{lst:cug_g_syntax}
+\end{lstfloat}
 
-    \item Forward declarations are not needed, the CUG compiler can lookahead for
-    function and structure definitions. Futhermore, it can detect if there are
-    cycles within structs automatically.
+% TODO(Content!): Give influences, overall design, etc.
 
-    \item Pointers in the host language can be nullable or non-nullable.
-    Assigning \texttt{null} explicitly to non-nullable pointers is illegal, and
-    assigning from nullable to non-nullable pointers must either be guarded or
-    use an explicit cast.
+The semantics of CUG is heavily inspired by C and GLSL, and this is done for
+two reasons: firstly, we compile CUG-C and CUG-G to C and GLSL respectively and
+having similar semantics helps with this, secondly, our goal it to demonstrate
+how graphics programming can be made less error-prone without sacrificing any
+of the control existing low-level toolchains provide, and this was the simplest
+way to do that. Even compiling this bare-minimum was a lot of work: we had to
+support all of the language features necessary to interface with the Vulkan
+API. Due to this, we limited the scope of which 'modern' language features
+would be provided.
 
-\end{itemize}
+However, the syntax has been influenced by Swift, and one key feature we do
+provide is the distinction. \textit{nullable}
+
+
+Design decisions made which are not directly related to the problem this paper
+tackles are given in Appendix \ref{app:cug_design_decisions}.
+
+\subsubsection{Limitations}
+
+\label{subsec:limitations}
+
+TODO(Content!)
 
 \subsection{C-interoperability}
 
@@ -1552,6 +1692,8 @@ also used as a build-system to enable simple cross-platform builds. The project
 was developed and tested on both Ubuntu 16.04 and Windows 10 operating systems.
 The combined source-code for both projects comes to around 13,000 lines of
 code. 12,000 of which are for the CUG compiler alone.
+
+%TODO: Furthermore, the design of CUG necessitated comprehensive semantic analysis,
 
 \section{AnnoCheck}
 
@@ -2157,6 +2299,12 @@ push themselves.}
 \chapter{Other CUG Examples}
 
 \label{app:other_cug_examples}
+
+TODO(Content!)
+
+\chapter{CUG design decisions}
+
+\label{app:cug_design_decisions}
 
 TODO(Content!)
 
