@@ -75,7 +75,7 @@
     \put(0,0){\includegraphics[width=\unitlength,page=9]{pipeline_cug_future.pdf}}%
     \put(0.74240412,0.97472675){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add module}\end{tabular}}}}%
     \put(0.21832418,0.97831804){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add module}\end{tabular}}}}%
-    \put(0.48933593,0.79905506){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add_meta main}\end{tabular}}}}%
+    \put(0.48933593,0.79905506){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add\_meta main}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=10]{pipeline_cug_future.pdf}}%
   \end{picture}%
 \endgroup%

@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="190.88138mm"
-   height="172.84837mm"
-   viewBox="0 0 190.88138 172.84837"
+   width="214.11191mm"
+   height="212.30746mm"
+   viewBox="0 0 214.11191 212.30746"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (unknown)"
@@ -269,8 +269,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="223.01262"
-     inkscape:cy="570.11715"
+     inkscape:cx="81.061449"
+     inkscape:cy="490.02273"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -300,7 +300,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-4.0967203,-16.66964)">
+     transform="translate(10.203699,22.814432)">
     <rect
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.55668235;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4518"
@@ -369,14 +369,14 @@
        y="99.535782" />
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:7.05555556px;line-height:125%;font-family:'Computer Modern Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'Computer Modern Roman, ';font-stretch:normal;font-variant:normal;"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:125%;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="34.962803"
        y="113.94614"
        id="text4534-62-2"><tspan
          sodipodi:role="line"
          x="34.962803"
          y="113.94614"
-         style="font-size:7.05555556px;stroke-width:0.26458332px;-inkscape-font-specification:'Computer Modern Roman, ';font-family:'Computer Modern Roman';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';stroke-width:0.26458332px"
          id="tspan4623">shader.out.glsl</tspan></text>
     <rect
        style="opacity:1;vector-effect:none;fill:none;fill-opacity:1;stroke:#000000;stroke-width:0.55668235;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
@@ -437,45 +437,45 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:7.05555556px;line-height:125%;font-family:'Computer Modern Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'Computer Modern Roman, ';font-stretch:normal;font-variant:normal;"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:125%;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="177.79999"
        y="142.21877"
        id="text8718"><tspan
          sodipodi:role="line"
          x="177.79999"
          y="142.21877"
-         style="font-size:7.05555556px;stroke-width:0.26458332px;-inkscape-font-specification:'Computer Modern Roman, ';font-family:'Computer Modern Roman';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';stroke-width:0.26458332px"
          id="tspan8738">Execute</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:7.05555556px;line-height:100%;font-family:'Computer Modern Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'Computer Modern Roman, ';font-stretch:normal;font-variant:normal;"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:100%;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="110.35812"
        y="140.60826"
        id="text8718-8"><tspan
          sodipodi:role="line"
          x="110.35812"
          y="140.60826"
-         style="font-size:7.05555556px;line-height:100%;stroke-width:0.26458332px;-inkscape-font-specification:'Computer Modern Roman, ';font-family:'Computer Modern Roman';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:100%;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';stroke-width:0.26458332px"
          id="tspan13383">Load at runtime</tspan><tspan
          sodipodi:role="line"
          x="110.35812"
-         y="149.4277"
-         style="font-size:7.05555556px;line-height:100%;stroke-width:0.26458332px;-inkscape-font-specification:'Computer Modern Roman, ';font-family:'Computer Modern Roman';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;"
+         y="147.66382"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:100%;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';stroke-width:0.26458332px"
          id="tspan13387">using Vulkan API</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-weight:normal;font-size:7.05555556px;line-height:125%;font-family:'Computer Modern Roman';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;-inkscape-font-specification:'Computer Modern Roman, ';font-stretch:normal;font-variant:normal;"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:125%;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        x="157.98312"
        y="189.39313"
        id="text8718-9"><tspan
          sodipodi:role="line"
          x="157.98312"
          y="189.39313"
-         style="font-size:7.05555556px;stroke-width:0.26458332px;-inkscape-font-specification:'Computer Modern Roman, ';font-family:'Computer Modern Roman';font-weight:normal;font-style:normal;font-stretch:normal;font-variant:normal;"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';stroke-width:0.26458332px"
          id="tspan9450">Terminate</tspan></text>
     <path
        style="fill:#0a0000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow2Mend-0)"
-       d="m 33.32789,82.819826 0,15.156844"
+       d="M 33.32789,82.819826 V 97.97667"
        id="path4679-1-3"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -487,13 +487,13 @@
        sodipodi:nodetypes="cc" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-       d="m 33.94993,29.378812 25.135414,0"
+       d="M 33.94993,29.378812 H 59.085344"
        id="path6971-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
     <path
        style="fill:#0a0000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow1Mend-7)"
-       d="m 158.80335,0.040406 0,50.611007"
+       d="M 158.80335,0.040406 V 50.651413"
        id="path4679-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -543,7 +543,7 @@
          id="tspan16443">Verify</tspan><tspan
          sodipodi:role="line"
          x="10.318734"
-         y="36.209034"
+         y="36.20903"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:100%;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';stroke-width:0.26458332px"
          id="tspan19023">annotations</tspan></text>
     <text
@@ -590,7 +590,7 @@
          id="tspan13912"
          x="167.08005"
          y="73.469292"
-         style="stroke-width:0.26458332px"></tspan></text>
+         style="stroke-width:0.26458332px" /></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:7.05555534px;line-height:125%;font-family:'Computer Modern Roman';-inkscape-font-specification:'Computer Modern Roman, ';text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -609,7 +609,7 @@
          id="tspan14459">Annotations</tspan></text>
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#Arrow1Mstart-9)"
-       d="m 66.465397,6.6909295 91.810413,0"
+       d="M 66.465397,6.6909295 H 158.27581"
        id="path6971-9-9"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
@@ -633,7 +633,7 @@
          id="tspan4557-7-6">annotations.meta</tspan></text>
     <path
        style="fill:#0a0000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#Arrow2Mend-8)"
-       d="m 33.720447,14.496173 0,44.26101"
+       d="m 33.720447,14.496173 v 44.26101"
        id="path4679-1-6"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />

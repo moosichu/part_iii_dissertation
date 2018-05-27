@@ -81,7 +81,7 @@
     \put(0,0){\includegraphics[width=\unitlength,page=11]{pipeline_cug.pdf}}%
     \put(0.74240408,1.23726576){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add module}\end{tabular}}}}%
     \put(0.21832418,1.24085705){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add module}\end{tabular}}}}%
-    \put(0.48933591,1.06159408){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add_meta main}\end{tabular}}}}%
+    \put(0.48933591,1.06159408){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add\_meta main}\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=12]{pipeline_cug.pdf}}%
   \end{picture}%
 \endgroup%
