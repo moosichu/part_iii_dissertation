@@ -1414,7 +1414,7 @@ functions\footnote{such as normalize,reflect,sin etc.} \cite{GLSLBuiltIn}.
 However, unlike C and GLSL, where code (such as struct definitions) can be
 shared \textit{syntactically}, CUG supports the \textit{semantic} sharing of
 code through a common dialect of CUG-C and CUG-G: CUG-min, the subset of the
-two. We elaborate on this in Section \ref{subsec:code_sharing}.
+two.
 
 \subsection{Syntax}
 
@@ -1612,8 +1612,8 @@ way to do that. Even compiling this bare-minimum was a lot of work: we had to
 support all of the language features necessary to interface with the Vulkan
 API. Due to this, we limited the scope of which 'modern' language features
 would be provided and how much our semantics differed from C and GLSL. For
-examples, we did not concern ourselves with proving our type-system was sound
-or that CUG provided an safety guarantees. CUG is a proof-of-concept language
+example, we did not concern ourselves with proving our type-system was sound or
+that CUG provided any safety guarantees. CUG is a proof-of-concept language
 built from the ground-up and should be treated as such. Section
 \ref{subsec:limitations} enumerates the limitations of the language.
 
@@ -1622,9 +1622,9 @@ built from the ground-up and should be treated as such. Section
 \label{subsec:limitations}
 
 Being a single language with two dialects, the CUG compiler was a hefty
-undertaking with over \compilerloccount lines of code. Although CUG-C and
-CUG-G share a front-end, their backends of the compiler differ so therefore
-we limited the scope of the dialects in the following ways:
+undertaking with over \compilerloccount lines of code. However, to prevent
+feature-creep and project-bloat, we limited the scope of the dialects in the
+following ways:
 
 \begin{itemize}
 
@@ -1649,30 +1649,31 @@ we limited the scope of the dialects in the following ways:
     \item CUG does not support type-casting, however, we can define external C
     functions which convert from one type to another can call those.
 
+    \item CUG-G does not support the programming of graphics shaders, only
+    simple compute shaders. This is reflected in the chosen benchmark.
+
+    \item CUG does not have native floating-point number support.
+
 \end{itemize}
 
-\subsection{Code Sharing}
+% \subsection{Code Sharing}
 
-\label{subsec:code_sharing}
+% \label{subsec:code_sharing}
 
-%TODO(Rewrite)
+% %TODO(Rewrite)
 
-A big benefit of CUG is the cross-language type-system, and the reason we
-developed it after creating AnnoCheck. This different significantly from many
-GPU programming models, where the host language and the shader language differ
-significantly. Although when using C or C++, existing shader languages are
-syntactically similar enough to them for some code such as data structures to
-be shared. However, even sharing code like this is limited, as C has a fairly
-limited type system. Furthermore, there are no mechanisms for expressing within
-files that they are intended to be used for both shader and host code.
+% The benefit CUG provides over AnnoCheck is the cross-language type-system. This
+% differs significantly from many GPU programming models, such as using C and
+% GLSL, where the host and shader language are distinct entities. Although
+% limited code-sharing is possible due to their syntactic similarities.
 
-We there improve over the status quo in one significant way, by allowing files
-to be explicitly marked as a shared module for both our host and shader
-languages. Therefore, the CUG compiler can compile files marked in this way
-whilst being aware of this fact, meaning that when shared modules are included
-by any code, the CUG compiler can emit errors if those modules do not conform
-to the restricted subset of features which are available in both the host and
-shader languages.
+% CUG differs from this by allowing \textit{semantic} code sharing between the
+% host and shader dialects, CUG-C and CUG-G. by allowing files to be explicitly
+% marked as a shared module for both our host and shader languages. Therefore,
+% the CUG compiler can compile files marked in this way whilst being aware of
+% this fact, meaning that when shared modules are included by any code, the CUG
+% compiler can emit errors if those modules do not conform to the restricted
+% subset of features which are available in both the host and shader languages.
 
 \subsection{C-interoperability}
 
@@ -1766,46 +1767,6 @@ vector datatypes.
 
 
 % TODO(Content): Add more detail once shader language is well defined
-
-\section{Toolchain Comparison}
-
-\label{sec:toolchain_comparison}
-
-We round of the chapter with the following figures, which demonstrate the
-differences between the different approaches to graphics programming, and how
-our methods compare.
-
-\begin{figure}[h]
-\centering
-\def\svgwidth{0.8\linewidth}
-\input{images/pipeline_basic.pdf_tex}
-\caption{Compiling a basic struct example.}
-\label{fig:pipeline_basic}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\def\svgwidth{0.8\linewidth}
-\input{images/pipeline_annocheck.pdf_tex}
-\caption{Compiling a basic struct example.}
-\label{fig:pipeline_anno_check}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\def\svgwidth{0.8\linewidth}
-\input{images/pipeline_cug.pdf_tex}
-\caption{Compiling a basic struct example.}
-\label{fig:pipeline_cug}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\def\svgwidth{0.8\linewidth}
-\input{images/pipeline_cug_future.pdf_tex}
-\caption{Compiling a basic struct example.}
-\label{fig:pipeline_cug_future}
-\end{figure}
 
 %TODO(Content!)
 
@@ -1929,6 +1890,10 @@ and a GLSL backend when compiling the shader language. These are handled by
 directly translating given quadruples to source code for the target languages.
 The reason for targetting these as backends is given in Section TODO(Helpful).
 
+\subsection{Testing}
+
+TODO.
+
 % \subsection{Interfacing with existing languages}
 
 % TODO(Helpful): reference usage of FNV hash for symbol table. \cite{FNVHash}.
@@ -1940,12 +1905,83 @@ The reason for targetting these as backends is given in Section TODO(Helpful).
 % some kind of evaluation, and it's often useful to separate
 % this out into its own chapter.
 
-In this chapter, we analyse how the two systems help prevent errors of the kind
-described, which will be shown through different code snippets. Due to the
-complexity of using graphics APIs, these snippets are incomplete. For example,
-the host code which makes the appropriate API calls to run a simple compute
-shader that copies items from one file to another is over 750 lines long
-\cite{TODO}. The source for all of these examples will be referenced.
+This chapter evaluates how AnnoCheck and CUG compare with the traditional
+unchecked C and GLSL toolchain. We do this using a sample program, comparing
+aspects such as toolchain complexity, which errors AnnoCheck and CUG prevent,
+in addition to how the resulting code performs. Due to the complexity of using
+the Vulkan API, we will present small samples of this program. The full version
+can be found on the project GitHub repository \cite{ProjectSource}. For
+example, the C code which makes the appropriate API calls to run a simple
+compute shader that copies items from one file to another is over 750 lines
+long. The example is adapted from an open-source sample program
+\cite{VulkanComputeExampleSource}.
+
+\section{The Sample Program}
+
+The sample program is a simple compute shader. CPU fills an array with 16384
+values which are of the type \texttt{Fish}. \texttt{Fish} is a struct
+whose definition is given in Listing \ref{lst:struct_fish}.
+
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+struct Fish{
+    int num_eyes;
+    int num_fins;
+}
+\end{lstlisting}
+\label{lst:struct_fish}
+\caption{The \texttt{struct} definition for the \texttt{Fish} type.}
+\end{lstfloat}
+
+All the values in the array are then assigned a random integer value using the
+C library's \texttt{rand()} function \cite{RandRef}. After the array has been
+initialised in this way, its contents are then transferred to a buffer on the
+GPU. The CPU then invokes a simple compute shader which copies all of its data
+across to another buffer. Both buffers are loaded into arrays on the CPU, which
+subsequently confirms that they have matching contents.
+
+Although this example is simple, it serves two purposes: Firstly, to
+demonstrate how both CUG and AnnoCheck can catch errors which could easily be
+made in even a simple program. Secondly, to show the benefits that CUG can
+provide over AnnoCheck.
+
+\section{Toolchain Comparison}
+
+\label{sec:toolchain_comparison}
+
+TODO(Content!).
+
+\begin{figure}[h]
+\centering
+\def\svgwidth{0.8\linewidth}
+\input{images/pipeline_basic.pdf_tex}
+\caption{Compiling a basic struct example.}
+\label{fig:pipeline_basic}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\def\svgwidth{0.8\linewidth}
+\input{images/pipeline_annocheck.pdf_tex}
+\caption{Compiling a basic struct example.}
+\label{fig:pipeline_anno_check}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\def\svgwidth{0.8\linewidth}
+\input{images/pipeline_cug.pdf_tex}
+\caption{Compiling a basic struct example.}
+\label{fig:pipeline_cug}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\def\svgwidth{0.8\linewidth}
+\input{images/pipeline_cug_future.pdf_tex}
+\caption{Compiling a basic struct example.}
+\label{fig:pipeline_cug_future}
+\end{figure}
 
 
 % \section{Performance}
@@ -1959,6 +1995,10 @@ shader that copies items from one file to another is over 750 lines long
 % as} performant as C - the CUG compiler may not optimise as well as it should.
 
 % TODO(Content!):
+
+\section{Shader Comparison}
+
+TODO(Content!).
 
 \section{Error-Prevention}
 
