@@ -1,6 +1,6 @@
 %% Creator: Inkscape inkscape 0.92.3, www.inkscape.org
 %% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
-%% Accompanies image file 'pipeline_basic.pdf' (pdf, eps, ps)
+%% Accompanies image file 'pipeline_annocheck.pdf' (pdf, eps, ps)
 %%
 %% To include the image in your LaTeX document, write
 %%   \input{<filename>.pdf_tex}
@@ -53,26 +53,32 @@
   \begin{picture}(1,0.90552769)%
     \lineheight{1}%
     \setlength\tabcolsep{0pt}%
-    \put(0,0){\includegraphics[width=\unitlength,page=1]{pipeline_basic.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{pipeline_annocheck.pdf}}%
     \put(0.44981662,0.83134798){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}struct.h\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=2]{pipeline_basic.pdf}}%
-    \put(0.81317642,0.64818293){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}main.c\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=3]{pipeline_basic.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{pipeline_annocheck.pdf}}%
+    \put(0.81317642,0.64818293){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}main.out.c\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{pipeline_annocheck.pdf}}%
     \put(0.15338626,0.60818362){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}shader.glsl\\\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=4]{pipeline_basic.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{pipeline_annocheck.pdf}}%
     \put(0.16170295,0.39591016){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}shader.out.glsl\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=5]{pipeline_basic.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{pipeline_annocheck.pdf}}%
     \put(0.1697164,0.18601283){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}shader.spv\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=6]{pipeline_basic.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{pipeline_annocheck.pdf}}%
     \put(0.80921602,0.38204913){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}out.exe\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=7]{pipeline_basic.pdf}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{pipeline_annocheck.pdf}}%
     \put(0.91000636,0.24779394){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Execute\end{tabular}}}}%
     \put(0.55668816,0.25623114){\color[rgb]{0,0,0}\makebox(0,0)[t]{\smash{\begin{tabular}[t]{c}Load at runtime\\using Vulkan API\end{tabular}}}}%
     \put(0.80618867,0.00065426){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Terminate\end{tabular}}}}%
-    \put(0,0){\includegraphics[width=\unitlength,page=8]{pipeline_basic.pdf}}%
-    \put(0.75628868,0.85865878){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{\#include}\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{pipeline_annocheck.pdf}}%
+    \put(0.6620342,0.86143103){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{\#include}\end{tabular}}}}%
     \put(0.694733,0.54714595){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Compile\\using Clang\end{tabular}}}}%
-    \put(0.2793245,0.74402277){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Insert using\\custom program\end{tabular}}}}%
+    \put(0.03259623,0.84936744){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Verify\\annotations\end{tabular}}}}%
     \put(0.35154331,0.30890483){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Compile using Glslang\\\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{pipeline_annocheck.pdf}}%
+    \put(0.81048057,1.03542711){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}main.c\end{tabular}}}}%
+    \put(0.93757294,0.95684815){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Process\\Annotations\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{pipeline_annocheck.pdf}}%
+    \put(0.16170289,0.95877165){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}annotations.meta\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{pipeline_annocheck.pdf}}%
   \end{picture}%
 \endgroup%

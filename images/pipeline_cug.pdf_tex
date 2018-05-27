@@ -1,0 +1,87 @@
+%% Creator: Inkscape inkscape 0.92.3, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'pipeline_cug.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{531.34229765bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,1.27487151)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{pipeline_cug.pdf}}%
+    \put(0.45806112,1.1993322){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}module.cug\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{pipeline_cug.pdf}}%
+    \put(0.82808081,0.65993001){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}main.out.c\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{pipeline_cug.pdf}}%
+    \put(0.16466673,0.40303342){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}shader.out.glsl\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{pipeline_cug.pdf}}%
+    \put(0.17282705,0.18928897){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}shader.spv\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{pipeline_cug.pdf}}%
+    \put(0.82404782,0.38891834){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}out.exe\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{pipeline_cug.pdf}}%
+    \put(0.9266855,0.25220243){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Execute\end{tabular}}}}%
+    \put(0.56689147,0.26079427){\color[rgb]{0,0,0}\makebox(0,0)[t]{\smash{\begin{tabular}[t]{c}Load at runtime\\using Vulkan API\end{tabular}}}}%
+    \put(0.82096498,0.00053302){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Terminate\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{pipeline_cug.pdf}}%
+    \put(0.70746648,0.55704115){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Compile\\using Clang\end{tabular}}}}%
+    \put(0.07695076,0.69541961){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Compile\end{tabular}}}}%
+    \put(0.35798659,0.31443341){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Compile using Glslang\\\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{pipeline_cug.pdf}}%
+    \put(0.82533555,1.05427184){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}main.cugc\end{tabular}}}}%
+    \put(0.91523476,0.87121172){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Compile\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{pipeline_cug.pdf}}%
+    \put(0.16466667,0.97621139){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}shader.cugg\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{pipeline_cug.pdf}}%
+    \put(0.49080537,0.84113241){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}main.cugm\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{pipeline_cug.pdf}}%
+    \put(0.74240408,1.23726576){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add module}\end{tabular}}}}%
+    \put(0.21832418,1.24085705){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add module}\end{tabular}}}}%
+    \put(0.48933591,1.06159408){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{@add_meta main}\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=12]{pipeline_cug.pdf}}%
+  \end{picture}%
+\endgroup%
