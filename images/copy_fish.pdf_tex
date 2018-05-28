@@ -1,0 +1,79 @@
+%% Creator: Inkscape inkscape 0.92.3, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'copy_fish.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{1996.70769639bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.08976364)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{copy_fish.pdf}}%
+    \put(0.04381931,0.06891069){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Start Program\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{copy_fish.pdf}}%
+    \put(-0.27074954,-0.05824128){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.19073169\unitlength}\centering \end{minipage}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{copy_fish.pdf}}%
+    \put(0.16324853,0.07623361){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Create \texttt{Fish} array\\with 16384 elements\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{copy_fish.pdf}}%
+    \put(0.28202102,0.07640939){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Copy Array\\Onto GPU buffer\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{copy_fish.pdf}}%
+    \put(0.2804274,0.02010171){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Accept\\Array on bus\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{copy_fish.pdf}}%
+    \put(0.40054614,0.07587819){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Load Shader\\Program from File\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{copy_fish.pdf}}%
+    \put(0.51978521,0.07587819){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Copy Shader\\Program to GPU\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{copy_fish.pdf}}%
+    \put(0.63480731,0.07640939){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Invoke Shader\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{copy_fish.pdf}}%
+    \put(0.74622264,0.0761646){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Wait for shader\\to complete\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{copy_fish.pdf}}%
+    \put(0.85791319,0.07640939){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Copy Results\\Back from GPU\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{copy_fish.pdf}}%
+    \put(0.95671723,0.06889703){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Validate Results\end{tabular}}}}%
+  \end{picture}%
+\endgroup%

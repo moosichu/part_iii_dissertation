@@ -1583,6 +1583,8 @@ in the following ways:
     commands, such as importing files, generating shader interfaces, and
     declaring the existence of external symbols.
 
+    \item Explicit parameter naming in initialisations TODO(Content!).
+
     \item C and GLSL code can be embedded in CUG-C and CUG-G respectively by
     wrapping it in \texttt{@c\_environment} or \texttt{@glsl\_environment}
     blocks. Similarly, symbols imported from those languages are accessed using
@@ -1906,21 +1908,24 @@ TODO.
 % this out into its own chapter.
 
 This chapter evaluates how AnnoCheck and CUG compare with the traditional
-unchecked C and GLSL toolchain. We do this using a sample program, comparing
-aspects such as toolchain complexity, which errors AnnoCheck and CUG prevent,
-in addition to how the resulting code performs. Due to the complexity of using
-the Vulkan API, we will present small samples of this program. The full version
-can be found on the project GitHub repository \cite{ProjectSource}. For
-example, the C code which makes the appropriate API calls to run a simple
-compute shader that copies items from one file to another is over 750 lines
-long. The example is adapted from an open-source sample program
-\cite{VulkanComputeExampleSource}.
+unchecked C and GLSL toolchain. We do this using a sample program called
+\textit{FishCopy}, comparing aspects such as toolchain complexity, code
+samples, which errors AnnoCheck and CUG prevent, in addition to analysing how
+the resulting code performs. Due to the complexity of using the Vulkan API, we
+will present small samples of this program. The full version of
+\textit{FishCopy} can be found on the project GitHub repository
+\cite{ProjectSource}. For example, the C code which makes the appropriate API
+calls to run a simple compute shader that copies items from one file to another
+is over 750 lines long. The example is adapted from an open-source sample
+program \cite{VulkanComputeExampleSource}.
 
-\section{The Sample Program}
+\section{Fishcopy}
 
-The sample program is a simple compute shader. CPU fills an array with 16384
-values which are of the type \texttt{Fish}. \texttt{Fish} is a struct
-whose definition is given in Listing \ref{lst:struct_fish}.
+\textit{Fishcopy} consists of a CPU program which performs the necessary work
+to invoke a simple compute shader. CPU fills an array with 16384\footnote{This
+value was arbitrarily chosen but is a power-of-two, $2^{13}$} values which are
+of the type \texttt{Fish}. \texttt{Fish} is a struct whose definition is given
+in Listing \ref{lst:struct_fish}.
 
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
@@ -1932,6 +1937,15 @@ struct Fish{
 \label{lst:struct_fish}
 \caption{The \texttt{struct} definition for the \texttt{Fish} type.}
 \end{lstfloat}
+
+% \begin{figure}[h]
+% \centering
+% \def\svgwidth{0.8\linewidth}
+% \input{images/copy_fish.pdf_tex}
+% \caption{FishCopy TODO(Content!).}
+% \label{fig:copy_fish}
+% \end{figure}
+% TODO(Content!) Workout why this won't compile.
 
 All the values in the array are then assigned a random integer value using the
 C library's \texttt{rand()} function \cite{RandRef}. After the array has been
@@ -1949,13 +1963,15 @@ provide over AnnoCheck.
 
 \label{sec:toolchain_comparison}
 
-TODO(Content!).
+Figures \ref{fig:pipeline_basic}, \ref{fig:pipeline_anno_check},
+\ref{fig:pipeline_cug} and \ref{fig:pipeline_cug_future} compare the build
+process for different graphics toolchains.
 
 \begin{figure}[h]
 \centering
 \def\svgwidth{0.8\linewidth}
 \input{images/pipeline_basic.pdf_tex}
-\caption{Compiling a basic struct example.}
+\caption{Compiling a basic struct example. TODO(Content!)}
 \label{fig:pipeline_basic}
 \end{figure}
 
@@ -1963,7 +1979,7 @@ TODO(Content!).
 \centering
 \def\svgwidth{0.8\linewidth}
 \input{images/pipeline_annocheck.pdf_tex}
-\caption{Compiling a basic struct example.}
+\caption{Compiling a basic struct example. TODO(Content!)}
 \label{fig:pipeline_anno_check}
 \end{figure}
 
@@ -1971,7 +1987,7 @@ TODO(Content!).
 \centering
 \def\svgwidth{0.8\linewidth}
 \input{images/pipeline_cug.pdf_tex}
-\caption{Compiling a basic struct example.}
+\caption{Compiling a basic struct example. TODO(Content!)}
 \label{fig:pipeline_cug}
 \end{figure}
 
@@ -1979,7 +1995,7 @@ TODO(Content!).
 \centering
 \def\svgwidth{0.8\linewidth}
 \input{images/pipeline_cug_future.pdf_tex}
-\caption{Compiling a basic struct example.}
+\caption{Compiling a basic struct example. TODO(Content!)}
 \label{fig:pipeline_cug_future}
 \end{figure}
 
