@@ -1924,8 +1924,8 @@ program \cite{VulkanComputeExampleSource}.
 \textit{Fishcopy} consists of a CPU program which performs the necessary work
 to invoke a simple compute shader. CPU fills an array with 16384\footnote{This
 value was arbitrarily chosen but is a power-of-two, $2^{13}$} values which are
-of the type \texttt{Fish}. \texttt{Fish} is a struct whose definition is given
-in Listing \ref{lst:struct_fish}.
+of the type \texttt{Fish}. \texttt{Fish} is a simple struct whose definition is
+given in Listing \ref{lst:struct_fish}.
 
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
@@ -1954,10 +1954,15 @@ GPU. The CPU then invokes a simple compute shader which copies all of its data
 across to another buffer. Both buffers are loaded into arrays on the CPU, which
 subsequently confirms that they have matching contents.
 
-Although this example is simple, it serves two purposes: Firstly, to
-demonstrate how both CUG and AnnoCheck can catch errors which could easily be
-made in even a simple program. Secondly, to show the benefits that CUG can
-provide over AnnoCheck.
+Although Fishcopy is simple, it serves two purposes: Firstly, to demonstrate
+how both CUG and AnnoCheck can catch errors which could easily be made in even
+a simple program. Secondly, to show the benefits that CUG can provide over
+AnnoCheck.
+
+\section{Shader Comparison}
+
+TODO(Content!).
+
 
 \section{Toolchain Comparison}
 
@@ -1965,7 +1970,8 @@ provide over AnnoCheck.
 
 Figures \ref{fig:pipeline_basic}, \ref{fig:pipeline_anno_check},
 \ref{fig:pipeline_cug} and \ref{fig:pipeline_cug_future} compare the build
-process for different graphics toolchains.
+process of FishCopy for different graphics toolchains. We managed the build
+process for all these configurations using a simple Python script.
 
 \begin{figure}[h]
 \centering
@@ -1975,6 +1981,19 @@ process for different graphics toolchains.
 \label{fig:pipeline_basic}
 \end{figure}
 
+Figure \ref{fig:pipeline_basic} shows how the raw C and GLSL versions of
+Fishcopy are compiled and executed. In this instance, the \texttt{Fish} struct
+is defined in a file called struct.h, which is included in the main program
+using C's \texttt{\#include} directive. Although the struct definition is
+syntactically valid GLSL as-is, it needs to be manually inserted into the
+shader as GLSL does not have a method for including code from other files
+\cite{TODO}. This naturally increases the complexity of the "traditional"
+toolchain. We compile main.c to an executable using clang, and we compile the
+shader to SPIR-V using the Khronos Group's GLSL compiler, glslang \cite{TODO}.
+
+When the executable runs, it performs all the AI calls necessary to load the
+compiled SPIR-V shader and execute it on the GPU.
+
 \begin{figure}[h]
 \centering
 \def\svgwidth{0.8\linewidth}
@@ -1983,6 +2002,22 @@ process for different graphics toolchains.
 \label{fig:pipeline_anno_check}
 \end{figure}
 
+Figure \ref{fig:pipeline_anno_check} demonstrates the AnnoCheck version of this
+toolchain. As can be seen, there is an extra level of complexity here compared
+with the C and GLSL version. The process derived from that for raw C and GLSL,
+but with a couple of minor differences. Firstly, AnnoCheck processes the
+annotations in main.c in order to generate a metadata file,
+\textit{annotations.meta}, that is used to verify the code in the shader. The
+second difference is that AnnoCheck is able to perform the same file-inclusion
+capabilities for the shader that previously had to be done manually, and whilst
+doing so it verifies the shader and, only if the annotations within it are
+consistent with main.c, it generates the GLSL shader file.
+
+From this point on, the build process is identical to raw C and GLSL, with the
+generated C and GLSL files matching the raw C and GLSL files identically -- the
+annotations are simply stripped-out by AnnoCheck after the annotated input
+files have been verified.
+
 \begin{figure}[h]
 \centering
 \def\svgwidth{0.8\linewidth}
@@ -1990,6 +2025,11 @@ process for different graphics toolchains.
 \caption{Compiling a basic struct example. TODO(Content!)}
 \label{fig:pipeline_cug}
 \end{figure}
+
+Figure \ref{fig:pipeline_cug} demonstrates the CUG pipeline we implemented.
+Compared with the simple syntactic sharing of the Fish definition.
+
+TODO(Content!).
 
 \begin{figure}[h]
 \centering
@@ -2011,10 +2051,6 @@ process for different graphics toolchains.
 % as} performant as C - the CUG compiler may not optimise as well as it should.
 
 % TODO(Content!):
-
-\section{Shader Comparison}
-
-TODO(Content!).
 
 \section{Error-Prevention}
 
