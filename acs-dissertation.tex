@@ -730,7 +730,7 @@ relevant background needed to understand the projects themselves.
 % }
 % \end{table}
 
-%TODO(Rewrite):Reorganise and shrink
+%TODO(Rewrite):Reorganise and shrink Look at Alan Mycroft feedback.
 
 \begin{itemize}
 
@@ -871,22 +871,25 @@ others \cite{VulkanPortabilityInitiative}
 % can also be shown in conclusion.
 
 Due to the complex history of GPUs and their APIs as described in Section
-\ref{sec:history_gpu}, the APIs used to interact with GPUs naturally issues as
-a result of being developed over the course of many years instead of being
-designed from the ground-up. However, this situation has recently improved with
-the creation of the Vulkan graphics and compute API. This is a very low-level
-API that has been designed from the bottom-up to reflect the way modern GPUs
-\textit{actually} operate \cite{Vulkan}. This contrasts with graphics APIs like
-OpenGL, which reflect how GPUs \textit{historically} operated \cite{TODO}.
-Therefore, this section is not going to enumerate all of the issues graphics
-APIs have, but instead will briefly describe the workflow and toolchains of
-using a graphics or compute API, and then enumerate the challenges our systems
-aim to ease.
+\ref{sec:history_gpu}, the APIs used to interact with GPUs naturally evolved
+issues as a result of being developed over the course of many years instead of
+being designed from the ground-up. However, this situation has recently
+improved with the creation of the Vulkan API. This is a very low-level API that
+has been designed from the bottom-up to reflect the way modern GPUs operate
+\cite{Vulkan}. This contrasts with graphics APIs like OpenGL, which reflect how
+GPUs \textit{historically} operated \cite{TODO}. Therefore, this section does
+not enumerate all of the issues graphics APIs have, but instead will briefly
+describe the workflow and toolchains of using a GPU API, and then enumerate the
+challenges our systems aim to ease.
 
-A comprehensive overview of the challenges graphics and compute API present
-beyond those we aim to tackle is given in Appendix \ref{app:other_API_issues}.
+A comprehensive overview of the challenges GPU APIs present are given in
+Appendix \ref{app:other_API_issues}.
 
-\subsection{An overview of a typical graphics or compute API}
+\subsection{An overview of a typical GPU API}
+
+\label{sec:graphics_api_overview}
+
+%TODO: Rewrite and massively shorten!
 
 % A graphics API is what programmers use in order to make a GPU render the
 % graphics they desire, usually outputting the results to a display. Popular
@@ -928,32 +931,33 @@ intermediate representation for shader languages \cite{UnityShaderPipeline}.}
 \end{figure}
 
 
-A compute or graphics API typically consists of two components: the API itself
-and a ``shader''/``shader'' language that is used to write programs that run on
-the GPU itself. The API will typically come in the form of a C library, with
+A GPU API typically consists of two components: the API itself and a
+``shader''/``shader'' language that is used to write programs that run on the
+GPU itself. The API will typically come in the form of a C library, with
 functions that the user can call in order to direct an abstracted model of the
 GPU to perform specific operations. Some of those API calls enable the user to
 load their shaders onto the GPU, transfer data to the GPU, and then execute the
 shaders on that data. Historically, most, if not all, shaders and shader
-language have been heavily based on the C-programming language. This has had a
-few benefits and drawbacks:
+language have been heavily based on the C-programming language. Furthermore,
+these languages have historically been compiled by the \textit{drivers} for
+GPUs \cite{TODO}. This has had a few benefits and drawbacks:
 
 Benefits include:
 
 \begin{itemize}
 
-    \item Writing shaders is relatively straightforward if you are familiar with
-    a C-like language.
+    \item Writing shaders (eg. in GLSL) is relatively straightforward if you
+    are familiar with a C-like language.
 
-    \item If C/C++ is the host language, data structures can be shared by
-    including the same header file in shaders and host code.
+    \item If C or a similar-enough language is the host language, some code can
+    be shared between shaders and host code.
 
     \item Having a standardised high-level language helps ensure that the same
     shaders will run on hardware from a variety of different vendors.
 
-    \item Since all of the languages are based on C, porting code from one
-    shader language to another can even be done by simply performing ``find and
-    replace'' operations \cite{PS4PortCrew}.
+    \item Since competing languages (eg. GLSL/HLSL) are all based on C, porting
+    code from one shader language to another can even be done by simply
+    performing ``find and replace'' operations \cite{PS4PortCrew}.
 
 \end{itemize}
 
@@ -993,6 +997,9 @@ Drawbacks include:
     incompatible. This means that it has been difficult to develop shading
     languages with semantics and syntax similar to non-C-like languages
     \cite{TODO}.
+
+    \item TODO: GLSL can't use \#include, and ints could be defined differently
+    anyway.
 
 \end{itemize}
 
@@ -1162,108 +1169,42 @@ For example, misnaming the shader in Vulkan, causes a
 The annotation system and the new languages both aim to catch these errors at
 compile-time using different mechanisms.
 
-% \subsubsection{Issue 3: Texture Business}
-
-% Another issue is that of
-
-% \begin{figure}[h]
-% \centering
-% \includegraphics[width=0.8\linewidth]{texture_copy_issues}
-% \caption{An error caused by incompatible texture definitions.}
-% \label{fig:texture_copy_issues}
-% \end{figure}
-
-% Figure \ref{fig:texture_copy_issues} demonstrates the issue.
-
-
-% \subsubsection{Issue 4: Uninitialised Data}
-
-% TODO(Helpful): write it out
-
-% \begin{lstfloat}
-% \begin{lstlisting}[language=C]
-% const float fixedDeltaTime;
-% const int currentFrame;
-% const float particleSpeed;
-% float2 getPosition(int startingFrame, float2 velocity, float2 origin) {
-%     float t = (fixedDeltaTime * (float)(currentFrame - startingFrame));
-%     return origin + (t * particleSpeed * velocity);
-% }
-
-% const int horiRes;
-% const int vertRes;
-% const float planeWidth;
-% const float planeHeight;
-% StructuredBuffer<WaveParticle> waveParticleBuffer;
-% RWTexture2D<float4> amplitudeTexture;
-
-% ///
-% /// Splat the wave particles to the splatTexture
-% ///
-% #pragma shader SplatParticles
-% [numthreads(THREAD_GROUPS_X, 1, 1)]
-% void DrawParticles(uint3 id : SV_DispatchThreadID)
-% {
-%     WaveParticle particle = waveParticleBuffer[id.x];
-%     float2 waveParticlePosition = getPosition(
-%         particle.startingFrame, particle.velocity, particle.origin
-%     );
-%     int xPos = (int)round((waveParticlePosition.x / planeWidth) * horiRes);
-%     int yPos = (int)round((waveParticlePosition.y / planeHeight) * vertRes);
-%     amplitudeTexture[int2(xPos, yPos)] +=
-%         float4(0.0, particle.amplitude, 0.0, 0.0);
-% }
-% \end{lstlisting}
-% \label{lst:draw_particles}
-% \caption{An example of an HLSL computer shader that takes a particle stored in
-% in a buffer and copies its amplitude to a specific location on a texture.}
-% \end{lstfloat}
-
 \chapter{Design}
 
-The project is composed of two systems. The first is AnnoCheck, a
-pre-processing system for C and GLSL that ensures the enforcement of interfaces
-between the two languages. The second, the CUG compiler, is a compiler for
-CUG-C and CUG-G, a set of two novel toy languages which natively support
-such enforcement. How these are used is described in Section
+We discuss the design of AnnoCheck, a novel pre-processing system for C and
+GLSL that ensures the enforcement of interfaces between the two languages.
+However, limitations in AnnoCheck lead us onto CUG, a novel prototype language
+which natively supports the enforcement of CPU-GPU interfaces through the use
+of two distinct dialects: CUG-C and CUG-G. We describe their use in Section
 \ref{sec:solutions_introduction}
 
 \section{Design Goals}
 
-The ultimate design goal of the cross-module type checking systems is to make
-programming for GPUs less frustrating and error prone by catching errors which
-can commonly occur. However, unlike other systems which do this, we cannot have
-\textit{any} compromises to runtime performance relative to existing industry
-standards such as GLSL and OpenGL. This includes not limiting the possible
-programs programmers can make.
+As we explained in Section \ref{sec:TODO}, the ultimate design goal of
+AnnoCheck and CUG is to make programming for GPUs less frustrating and error
+prone by catching errors. However, we specifically want to balance the following
+concerns:
 
-% Naturally there are pros and cons to this approach.
+\begin{itemize}
 
-There are other concerns beyond performance that need to be taken into account
-which inform the design of the system. For example, a commonly used feature is
-the ability to \textit{swap} shaders with identical interfaces in-and-out at
-runtime. Therefore this needs to be supported by the system as well.
+    \item Unlike other systems which do this, we cannot have \textit{any}
+    compromises to the control that existing industry standards such as GLSL
+    and OpenGL provide, as many programmers still choose to use them for this
+    reason (Section \ref{sec:TODO}).
 
-% \begin{itemize}
+    \item The design AnnoCheck and CUG cannot be restrictive, that is, they
+    should not restrict the set of possible programs that can be made relative
+    raw C and GLSL.
 
-%     \item Having a non-intrusive system
+    \item Present workflows need to be accounted for. For example, a commonly
+    used feature is the ability to \textit{swap} shaders with identical
+    interfaces in-and-out at runtime.
 
-%     \item supporting simple workflows, but without sacrificing control
+\end{itemize}
 
-%     \item Allow different shaders to be type-checked at compile-time but
-%     swapped in-and-out at run-time.
+\section{Choice of Backend}
 
-%     \item Allow custom wrappers to exist.
-
-%     \item Generalise to different APIs.
-
-% \end{itemize}
-
-\section{Workflow}
-
-One of the important parts of the system is the implementation of the workflow.
-
-\subsection{Targeting Vulkan}
+%TODO(Rewrite): make sure it better explains why the backend was chosen.
 
 We decided to target the Vulkan graphics and compute API in the implementation
 of our systems \cite{Vulkan}. Done for the following reasons:
@@ -1286,11 +1227,12 @@ of our systems \cite{Vulkan}. Done for the following reasons:
 
 \end{itemize}
 
-\subsection{Build Strategy}
+\section{Build Strategy}
 
-Due to the fact that they aim to solve similar problems, both AnnoCheck and
-the CUG compiler have a similar build strategy in order to ensure that they work
-with typical shader workflows and toolchains.
+Due to the fact that they aim to solve similar problems, both AnnoCheck and the
+CUG compiler have a similar build strategy in order to ensure that they work
+with typical shader workflows and toolchains. We compare these strategies in
+Section \ref{sec:sec:toolchain_comparison}.
 
 One of the reasons it is hard to check the consistency between shaders and host
 code is the fact that shaders are loaded onto the GPU by the CPU at run-time
