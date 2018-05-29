@@ -2105,9 +2105,13 @@ VkPipelineShaderStageCreateInfo shader_stage_create_info = {
 \end{lstfloat}
 
 Listing \ref{lst:invoke_main_c} demonstrates the C implementation of creating a
-\texttt{VkPipelineShaderStageCreateInfo} data structure instance. The relevant
-part of identifying \texttt{main} using a string, similar to the example shown
-in Listing \ref{lst:annotation_example_output}.
+\texttt{VkPipelineShaderStageCreateInfo} data structure instance. This
+structure is what is used by the Vulkan API to identify \texttt{main}, using a
+string. This is similar to the example shown in Listing
+\ref{lst:annotation_example_output}.
+
+%TODO(Content!) On Ubuntu desktop renaming "main" causes a runtime crash, with
+% no helpful error info.
 
 %TODO(Content!) cosnt qualifier in GLSL must be in specific order.
 
@@ -2133,6 +2137,8 @@ VkPipelineShaderStageCreateInfo shader_stage_create_info = @create_verification(
 \caption{TODO(Content!).}
 \label{lst:invoke_main_anno}
 \end{lstfloat}
+
+TODO(Content!)
 
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
