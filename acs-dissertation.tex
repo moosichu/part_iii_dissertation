@@ -1963,6 +1963,8 @@ AnnoCheck.
 
 \section{Shader Comparison}
 
+\label{sec:shader_comparison}
+
 TODO(Content!).
 
 
@@ -2063,42 +2065,113 @@ the overall toolchain complexity, even when compared with raw C and GLSL, by
 providing standardised methods for semantically sharing code between host and
 shader code (in this case, CUG-C and CUG-G).
 
-
-
-
-% \section{Performance}
-
-% Ideally, there shouldn't be any performance overhead in either of the
-% solutions. For AnnoCheck, that's fairly straight-forward to
-% establish, as it is essentially syntactic sugar that sits on-top-of C and GLSL.
-
-% However, although the custom language has semantics very similar to C and GLSL,
-% and in theory identical programs in both environments should be \textit{just
-% as} performant as C - the CUG compiler may not optimise as well as it should.
-
-% TODO(Content!):
-
 \section{Error-Prevention}
 
 In this section we analyse each of the errors shown in Section
 \ref{sec:issues_summary}, demonstrating how both the annotation system and
 custom heterogeneous languages prevent the programmer from making them.
 
-\subsection{The Errors}
-
-\subsubsection{Issue 1: Redefining Datastructures}
-
-This is an issue solved by the new set of custom languages.
-
-TODO(Content!):
-
-\subsubsection{Issue 2: Referring to function names using strings}
+\subsection{Resolving Identifiers}
 
 This is an issue solved by both the annotation system and the new set of custom
-languages.
+languages. As we discuss in Section \ref{sec:issues_summary}, host code often
+has to refer to identifiers which are mentioned in shaders through the use of
+strings. However, this is problematic, for two reasons: Firstly, the
+identifiers are not resolved until runtime, when API calls are made by the CPU
+that refer to identifiers within a shader that has been loaded onto the GPU.
+Secondly, it makes refactoring tools harder to implement, as there is no
+logical connection between strings in a host language and identifiers within a
+shader that can be statically determined.
 
-TODO(Content!):
+This is the primary issue that AnnoCheck aims to resolve, and one of the
+features that CUG handles within its cross-dialect type system. Section
+\ref{sec:shader_comparison} compares the raw GLSL shader, the annotated GLSL
+shader, and the CUG-G shader. Listings \ref{lst:invoke_main_c},
+\ref{lst:invoke_main_anno} and \ref{lst:invoke_main_cugc} show how each of
+these systems invoke the \texttt{main} function within the shader.
 
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+VkComputePipelineCreateInfo compute_pipeline_create_info = {
+    .sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+    .pNext = 0,
+    .flags = 0,
+    .stage = {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        .pNext = 0,
+        .flags = 0,
+        .stage = VK_SHADER_STAGE_COMPUTE_BIT,
+        .module = shader_module,
+        .pName = "main",
+        .pSpecializationInfo = 0
+    },
+    .layout = pipeline_layout,
+    .basePipelineHandle = 0,
+    .basePipelineIndex = 0
+};
+\end{lstlisting}
+\label{lst:invoke_main_c}
+\caption{TODO(Content!).}
+\end{lstfloat}
+
+%TODO(Content!) cosnt qualifier in GLSL must be in specific order.
+
+%TODO(Content!) In GLSL, an int is specified as a 32-bit two's complement
+% integer. Int in C isn't guarenteed to be that.
+
+
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+VkComputePipelineCreateInfo compute_pipeline_create_info = {
+    .sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+    .pNext = 0,
+    .flags = 0,
+    .stage = @create_verification(
+        struct: VkComputePipelineCreateInfo,
+        name: "test_shader",
+        info: {
+            .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+            .pNext = 0,
+            .flags = 0,
+            .stage = VK_SHADER_STAGE_COMPUTE_BIT,
+            .module = shader_module,
+            .pName = "main",
+            .pSpecializationInfo = 0
+    }),
+    .layout = pipeline_layout,
+    .basePipelineHandle = 0,
+    .basePipelineIndex = 0
+};
+\end{lstlisting}
+\label{lst:invoke_main_anno}
+\caption{TODO(Content!).}
+\end{lstfloat}
+
+\begin{lstfloat}
+\begin{lstlisting}[language=C]
+let shader_name : ShaderName = @verified_shader_function(main);
+let compute_pipeline_create_info : C::VkComputePipelineCreateInfo = {
+    sType               = VkStructureType.VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
+    pNext               = null,
+    flags               = VkPipelineCreateFlags.none,
+    stage = {
+        sType               = VkStructureType.VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+        pNext               = null,
+        flags               = VkPipelineShaderStageCreateFlags.none,
+        stage               = VkShaderStageFlagBits.VK_SHADER_STAGE_COMPUTE_BIT,
+        module              = shader_module,
+        // Below is type-checked thanks to @verified_shader_function
+        pName               = shader_name, // entry point of the function
+        pSpecializationInfo = null
+    },
+    layout              = pipeline_layout,
+    basePipelineHandle  = C::ZERO_VK_PIPELINE,
+    basePipelineIndex   = 0
+};
+\end{lstlisting}
+\label{lst:invoke_main_cugc}
+\caption{TODO(Content!).}
+\end{lstfloat}
 
 % \subsubsection{Issue 3: Texture Business}
 
