@@ -9,3 +9,10 @@ TODO(Image!)   - an important image to add!
 TODO(Error!)   - an important error to fix
 \cite{TODO} - Missing citation
 \ref{sec:TODO} - Missing back/forwards reference
+
+TODO(ContentApp) - Appendix Content
+
+%TODO(Content!) cosnt qualifier in GLSL must be in specific order.
+
+%TODO(Content!) In GLSL, an int is specified as a 32-bit two's complement
+% integer. Int in C isn't guarenteed to be that.
