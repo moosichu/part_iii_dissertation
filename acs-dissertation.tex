@@ -1841,7 +1841,71 @@ the input into AnnoCheck, with the compilation of CUG-C generating a metadata
 output file which needs to be fed as input when analysing CUG-G programs. An
 example of this is given in Section \ref{sec:toolchain_comparison}.
 
+\subsection{Compiler Pipeline}
+
+\label{sec:compiler_pipeline}
+
+\begin{figure}[h]
+\centering
+\def\svgwidth{\linewidth}
+\scriptsize{\input{images/cug_compiler_pipeline.pdf_tex}}
+\caption{Compiling a basic struct example. TODO(Content!)}
+\label{fig:cug_compiler_pipeline}
+\end{figure}
+%TODO: nive tge furst arriw up top to possibly allow larger text.
+%TODO(Content!): Fix the typo in 'Generate output' (C in both!)
+
+Figure \ref{fig:cug_compiler_pipeline} shows the CUG compiler, with the
+stages handled in the following ways:
+
+\begin{itemize}
+
+    \item \textbf{Set Internal Dialect State}: Depending on whether a CUG-C,
+    CUG-G or CUG-min file is being processed, set the internal compiler state
+    associated with that file to the appropriate value (Section
+    \ref{sec:internal_state_machine}).
+
+    \item \textbf{Tokenise Input}: Perform lexical analysis and tokenise the
+    input file. Invalid tokens can result in compilation errors here which are
+    reported back to the user. The set of valid tokens depends on dialect state
+    associated with a given file. (eg. CUG-C does not support
+    \texttt{@glsl\_environment} tokens).
+
+    \item \textbf{Parse Input}: Parse input and generate abstract syntax tree
+    of the language. We implemented this using a custom recursive descent
+    parser. The dialect state has little affect on parsing as syntax-tree
+    generation should be consistent between all the dialects.
+
+    \item \textbf{Parse Imported Modules and Metadata}: Recursively perform the
+    ``parse input'' step on imported modules, and metadata that may be imported
+    by CUG-G code.
+
+    \item \textbf{Semantically Analyse Imported Modules and Metadata:} Perform
+    semantic analysis of imported modules and metadata.
+
+    \item \textbf{Semantic Analyse}: Resolve types and identifiers on the
+    program. This step is where most dialect state-specific work is done. Other
+    properties are checked-for as well, such as the presence of cycles in
+    struct definitions.
+
+    \item \textbf{Generate IR (Intermediate Representation)}: Generate a
+    lower-level intermediate representation of the code. This is done in order
+    to simplify the process of outputting to C. Our IR consists of a three
+    address code system, with quadruples used as the datastructure to represent
+    them \cite{TODO}. All frontends share the same IR, however, certain
+    quadruples can only be generated for certain backends (eg. pointers and
+    malloc are only available in CUG-C). All name-mangling is performed here,
+    and all the modules are rolled into a single data structure which contains
+    all the IR needed for the final output.
+
+    \item \textbf{Generate Final Output:} Depending on the internal state
+    associated with the root file, generate the final C or GLSL output.
+
+\end{itemize}
+
 \subsection{The Internal State Machine}
+
+\label{sec:internal_state_machine}
 
 In order to ensure that CUG-C and CUG-G can share code semantically, code
 written in these dialects share the same compiler. This ensures that there are
@@ -1891,53 +1955,47 @@ a state machine for the following three reasons:
 
 \end{itemize}
 
-\subsection{Compiler Pipeline}
+This state is preserved throughout the entire compilation pipeline (Section
+\ref{sec:compiler_pipeline}), affecting each of the compilation stages in
+different ways. Including code from other source-files (which we call module
+imports) is affected by the state machine:
 
-\begin{figure}[h]
-\centering
-\def\svgwidth{\linewidth}
-\scriptsize{\input{images/cug_compiler_pipeline.pdf_tex}}
-\caption{Compiling a basic struct example. TODO(Content!)}
-\label{fig:cug_compiler_pipeline}
-\end{figure}
-%TODO: nive tge furst arriw up top to possibly allow larger text.
+\begin{itemize}
 
-Figure \ref{fig:cug_compiler_pipeline} shows the full CUG compiler pipeline.
-TODO(Content!).
+    \item CUG-C files can include both CUG-C and CUG-min files.
 
-\subsection{Semantic Analysis}
+    \item CUG-G files can include CUG-G files, CUG-min files and generated
+    CUG-C metadata (which is generated when a CUG-C file is compiled, and is
+    used to validate the interface of a CUG-G file).
 
-Semantic analysis is fairly straightforward. It's done by recursing on the AST,
-and regardless of the language being compiled, the same semantic analysis
-algorithm is performed. However, in order to handle different types which may
-be available in the different languages, the symbol tables have different types
-inserted into them when initialised. Additionally, externally declared types,
-constants and functions are added to the \texttt{C} namespace for host code and
-to the \texttt{GLSL} namespace for shader code.
+    \item CUG-min files can only include other CUG-min files.
 
-\subsection{Intermediate Representation}
+\end{itemize}
 
-After parsing, an intermediate representation (IR) is generated from the AST.
-This IR takes the form of a three-address code, stored in a quadruple format.
-Both backends share the same IR, however, some opcodes are only permissable for
-certain target backends. Examples of this include the \texttt{MALLOC\_OP}
-instruction, which is only present for the CPU backend. Name mangling is
-performed at this stage of the compilation, however, uses of functions and
-types in the reserved C and GLSL namespaces for host and shader code
-respectively are left untouched.
+%TODO: mention benefit somewhere about CUG-C being able to use GLSL shaders and
+% CUG-G being callable from C.
 
-\subsection{Backends}
-
-\label{sec:backends}
-
-There are two different backends, a C backend when compiling the host language
-and a GLSL backend when compiling the shader language. These are handled by
-directly translating given quadruples to source code for the target languages.
-The reason for targetting these as backends is given in Section TODO(Helpful).
+These relationships determine which state transitions are valid, and also are
+the mechanism through-which code is shared between CUG-C and CUG-G.
 
 \subsection{Testing}
 
-TODO.
+Whilst features in the CUG language were being incrementally developed, it was
+important to ensure that existing features where behaving as expected as soon
+as possible -- therefore we could ensure that none of the features ever
+'regressed'. However, using CUG to test itself would not have been ideal, as
+errors within the language could lead to vacuously true results.
+
+To solve this problem, we took advantage of the fact that our CUG-C input was
+compiled to C, by using a C++ testing framework to call-into CUG-C functions
+and test that the results returned matched what was expected. This feature
+proved invaluable, and caught many errors. The biggest difficulty was
+working-around the name-mangling the CUG compiler performed, but fortunately it
+was predictable and consistent.
+
+This process formed the foundation for an automatic regression-testing system,
+which we ran automatically on every commit to the main repository
+\cite{ProjectSource}.
 
 % \subsection{Interfacing with existing languages}
 
