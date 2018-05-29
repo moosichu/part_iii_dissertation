@@ -1,0 +1,84 @@
+%% Creator: Inkscape inkscape 0.92.3, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'cug_compiler_pipeline.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%%
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{1030.02924882bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.40996355)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{cug_compiler_pipeline.pdf}}%
+    \put(0.14780416,0.27521717){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Set Internal\\Dialect State\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{cug_compiler_pipeline.pdf}}%
+    \put(-0.69353315,0.01417087){\color[rgb]{0,0,0}\makebox(0,0)[lt]{\begin{minipage}{0.36973265\unitlength}\centering \end{minipage}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{cug_compiler_pipeline.pdf}}%
+    \put(0.37801043,0.26499676){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Tokenise Input\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{cug_compiler_pipeline.pdf}}%
+    \put(0.60777092,0.26396703){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Parse Input\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{cug_compiler_pipeline.pdf}}%
+    \put(0.87532165,0.27561719){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Parse Imported\\Modules and Metadata\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{cug_compiler_pipeline.pdf}}%
+    \put(0.87257317,0.1688829){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Semantically Analyse\\Imported Modules\\and Metadata\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{cug_compiler_pipeline.pdf}}%
+    \put(0.60797958,0.16549593){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Semantically\\Analyse\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{cug_compiler_pipeline.pdf}}%
+    \put(0.38032914,0.15286403){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Generate IR\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{cug_compiler_pipeline.pdf}}%
+    \put(0.15099855,0.16451422){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Generate C\\Output\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{cug_compiler_pipeline.pdf}}%
+    \put(0.37793473,0.05548256){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Generate C\\Output\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{cug_compiler_pipeline.pdf}}%
+    \put(0.37981579,0.37340999){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Report Errors\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=12]{cug_compiler_pipeline.pdf}}%
+    \put(0.83665975,0.37390902){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Report Errors\end{tabular}}}}%
+    \put(0.60848754,0.37103534){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Report Errors\end{tabular}}}}%
+    \put(0.61093798,0.0462484){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Report Errors\end{tabular}}}}%
+    \put(0.88471662,0.02877313){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Report Errors\end{tabular}}}}%
+  \end{picture}%
+\endgroup%

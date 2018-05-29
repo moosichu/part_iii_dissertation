@@ -1788,6 +1788,8 @@ of code. \compilerloccount of which are for the CUG compiler alone.
 
 \section{AnnoCheck}
 
+\label{sec:anno_check_implemenation}
+
 AnnoCheck takes the form of a commandline program, that can operate
 in two modes:
 
@@ -1812,13 +1814,14 @@ in two modes:
 
 \end{itemize}
 
-Although the pre-processor seems simple, the intention is for it to be used as
-a command-line program that can be used by more comprehensive build systems.
+Although AnnoCheck seems simple, the intention is for it to be used as a
+command-line program that can be used inside a more comprehensive build
+systems. We describe such a toolchain in Section \ref{sec:toolchain_comparison}.
 
-AnnoCheck works by looking for ``\texttt{@}'' directives within C or GLSL code.
-When such a directive is found, it tokenises and parses the relevant sections
-of the provided input using a recursive descent parser, creating an abstract
-syntax tree.
+AnnoCheck works by looking for custom ``\texttt{@}'' directives within C or
+GLSL code. When such a directive is found, it tokenises and parses the relevant
+sections of the provided input using a recursive descent parser, creating an
+abstract syntax tree.
 
 For annotated C code, the AST is semantically analysed, with a special
 dataformat to store metadata which can be used to ensure that GLSL annotations
@@ -1826,41 +1829,81 @@ which are checked later are consistent with the annotated C.
 
 The annotated GLSL code is checked using a similar strategy.
 
-% TODO(Content): flesh this out more
+% TODO(Content!): flesh this out more
 
 \section{CUG Compiler Implementation}
 
-The CUG compiler is a much more complex endeavor than AnnoCheck,
-and consists of a single program which is able to compile code written in three
-languages: CUG-C, CUG-G, and the subset of the two. Input for the CUG compiler
-is achieved in a similar manner to the input into AnnoCheck.
+The CUG compiler is a much more complex endeavor than AnnoCheck, coming in at
+\compilerloccount lines of code. CUG is a single program which is able to
+compile code written in three dialects of CUG: CUG-C, CUG-G, and the subset of
+the two, CUG-min. Input for the CUG compiler is achieved in a similar manner to
+the input into AnnoCheck, with the compilation of CUG-C generating a metadata
+output file which needs to be fed as input when analysing CUG-G programs. An
+example of this is given in Section \ref{sec:toolchain_comparison}.
 
-\subsection{Parsing multiple languages}
+\subsection{The Internal State Machine}
 
-The reason the different languages share the same compiler program is to allow
-for the easy sharing of code and to ensure consistency between the two.
-However, by sharing the same compiler, can needs to be taken to ensure that the
-compiler handles code intended for a particular backend in the desired manner.
+In order to ensure that CUG-C and CUG-G can share code semantically, code
+written in these dialects share the same compiler. This ensures that there are
+not any unexpected differences in how the programs are parsed, especially when
+sharing modules between the two dialects. This differs massively from C and
+GLSL, which do have peculiar differences which means that sharing code can
+result in unexpected behaviour (Section \ref{sec:issues_summary}).
 
-This is achieved through the use of an internal state machine within the
-recursive descent parser , where during parsing of a given input, the CUG compiler
-can be in three possible states for parsing:
+We achieve this through the use of an internal state machine within the
+compiler, where each module is associated with one of the following states:
 
 \begin{itemize}
 
-    \item \textbf{\texttt{HOST}:} When in the \texttt{HOST} state, the CUG compiler
-    ensures that it only compiles code that conforms to the host language. It
-    fails, with a compilation error, if code does not conform.
+    \item \textbf{\texttt{HOST}:} When in the \texttt{HOST} state, the CUG
+    compiler ensures that it only compiles code that conforms to the CUG-C
+    dialect.
 
     \item \textbf{\texttt{SHADER}:} When in the \texttt{SHADER} state,
-    similarly, only shader language conforming code is parsed.
+    similarly, only CUG-G code can be compiled.
 
     \item \textbf{\texttt{SHARED}:} When in the \texttt{SHARED} state, only
-    code which is of the valid subset of the host and shader languages is
-    parsed. Source files indicate themselves as shared through an
-    \texttt{@shared} directive as the first token of the source file.
+    CUG-min is parsed.
 
 \end{itemize}
+
+Originally we were going to have two modes of operation, similar to AnnoCheck
+(Section \ref{sec:anno_check_implementation}). However, this was replaced by
+a state machine for the following three reasons:
+
+\begin{itemize}
+
+    \item The CUG compiler can transition from the CUG-C or CUG-G state to the
+    CUG-min state, when either include a CUG-min module.
+
+    \item Although the CUG-G dialect can only be compiled to compute shaders,
+    an industrial compiler like this would need to be extended to supported
+    other shader types such as fragment, pixel and geometric shaders. These all
+    have subtle differences in permitted operations and behaviour -- extending
+    the state machine so that these could be handled would be trivial.
+
+    \item As we discuss in Chapter \ref{chp:related_work}, there has been some
+    movement towards ensuring ``single-source'' (where shaders are embedded
+    within a C++ program) programs and ``multi-source'' (what we are doing)
+    programs use similar semantics, so that code from communites which use each
+    can be shared. Theoretically, we could extend the CUG compiler to allows
+    programmers to embed CUG-G programs within CUG-C ones.
+
+\end{itemize}
+
+\subsection{Compiler Pipeline}
+
+\begin{figure}[h]
+\centering
+\def\svgwidth{\linewidth}
+\scriptsize{\input{images/cug_compiler_pipeline.pdf_tex}}
+\caption{Compiling a basic struct example. TODO(Content!)}
+\label{fig:cug_compiler_pipeline}
+\end{figure}
+%TODO: nive tge furst arriw up top to possibly allow larger text.
+
+Figure \ref{fig:cug_compiler_pipeline} shows the full CUG compiler pipeline.
+TODO(Content!).
 
 \subsection{Semantic Analysis}
 
