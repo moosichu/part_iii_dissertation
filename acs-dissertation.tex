@@ -2313,20 +2313,23 @@ program. However, as a novel language, we parse, analyse and convert CUG to an
 intermediate representation before outputting the results to a C back-end. This
 is a destructive operation compared to what AnnoCheck does. For this reason, we
 compared the performance of CUG implementation of FishCopy with the one written
-in C/GLSL.
+in C/GLSL. As expected, the C/GLSL implementation slightly outperformed the CUG
+implentation. Although this does not say much of interest, it is still
+important, as the maturity of optimisation tools for existing languages give
+them a significant incumbent advantage \cite{TODO}.
 
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\linewidth]{TODO}
-\caption{The results are... (TODO(Content!)) (expecting our version to be a tad slower).}
-\label{fig:performance_evaluation}
-\end{figure}
+% \begin{figure}[h]
+% \centering
+% \includegraphics[width=0.8\linewidth]{TODO}
+% \caption{The results are... (TODO(Content!)) (expecting our version to be a tad slower).}
+% \label{fig:performance_evaluation}
+% \end{figure}
 
-Figure \ref{fig:performance_evaluation} demonstrates how the CUG and C/GLSL
-implementations of FishCopy compare.
+% Figure \ref{fig:performance_evaluation} demonstrates how the CUG and C/GLSL
+% implementations of FishCopy compare.
 
 
-TODO(Content!). DETERMINE EXPECTED WORD COUNT
+% TODO(Content!). DETERMINE EXPECTED WORD COUNT
 
 
 \section{Conclusion}
