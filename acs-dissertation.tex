@@ -89,11 +89,11 @@
 
 \label{sec:TODO}
 
-We outline the problem, why it is important and why it has not yet been solved.
-We then provide a brief description of the two solutions presented in this
-paper. \textbf{AnnoCheck} is a cross-module annotation checker for the C and
-GLSL programming languages that can be used to catch common errors when using
-them to control the GPU. \textbf{CUG}\footnote{This is short for
+We provide the motivation for \textit{AnnoCheck} and \textit{CUG}: outlining
+the problem they solve, why it is important and why it has not yet been solved.
+\textbf{AnnoCheck} is a cross-module annotation checker for the C and GLSL
+programming languages that can be used to catch common errors when using them
+to control the GPU. \textbf{CUG}\footnote{This is short for
 \textit{CPU-Union-GPU}, similar logic applies to the naming of the dialects.}
 takes this approach to the next level, being a programming language with two
 \textit{dialects} which are each designed to target a different backend. The
@@ -104,92 +104,66 @@ targetting the GPU is called \textbf{CUG-G}.
 
 %TODO: look to delete this maybe?
 
-Useful terms and domain-specific jargon are briefly explained below. Although
-the concepts here are explored in depth in Chapter
-\ref{chp:technical_background}, this serves as a quick reference. Finally, the
-end of this section quickly clarifies common points of confusion.
+Useful terms and domain-specific jargon are briefly explained below, and are
+elaborated on in Chapter \ref{chp:technical_background}.
 
 \begin{itemize}
 
-    \item \textbf{GPU:} This is a \textit{Graphical Processing Unit}, and is a
-    piece of hardware that performs computations using a massively parallel
-    architecture. GPUs are always controlled by the CPU through an API, which
-    the CPU uses to manage GPU resources and load code onto the GPU. The RAM a
-    GPU directly accesses is called VRAM. Although computing architectures do
-    exist where the CPU and GPU share access to a single pool of memory, in
-    most architectures data must be explicitly transferred from the CPU's RAM
-    to the GPU's VRAM through a bus.
+    \item \textbf{GPU (Graphical Processing Unit)}: A piece of hardware
+    that performs computations using a massively parallel SIMT and SIMD
+    architecture \cite{TODO}. The RAM a GPU directly accesses is called
+    \textit{VRAM}. In most architectures data must be explicitly transferred
+    from the CPU's RAM to the GPU's VRAM through a bus\footnote{In some
+    architectures, the GPU and CPU share access to a single pool of
+    memory\cite{TODO}}.
 
-    \item \textbf{Shader/Kernel:} A \textit{shader} is \textit{any} computer
-    program written for the GPU. These are named \textit{shaders} because they
-    were originally used for shading computer graphics images, but the term now
-    applies to all GPU programs including those which are not related to
-    graphics at all\footnote{The original specification for the first OpenGL
-    shading language discusses how this decision was made \cite{GLSL_1_10}.} A
-    \textit{kernel} is a name used for a computer program that runs on any
-    non-CPU \textit{accelerator}, and is a term that is widely used for general
-    purpose heterogeneous computing. We will use the term \textit{shader}
-    within this dissertation, as both of these refer to the same concept, with
-    the term differing depending on the domain.
+    \item \textbf{Shader:} A \textit{shader} is \textit{any} computer
+    program written for the GPU. They were originally used for shading computer
+    graphics images, but the term now applies to all GPU programs\footnote{The
+    original specification for the first OpenGL shading language discusses how
+    this decision was made \cite{GLSL_1_10}.}
 
     \item \textbf{Shading language:} These are programming languages that are
     used to write shaders. These are usually distinct languages from those used
-    to write programs for the CPU. In the world of high performance computing
-    these can also be called \textbf{kernel languages}.
+    to write programs for the CPU.
 
     \item \textbf{Host language/code:} Programming languages and the resulting
-    code which is written for and runs on the CPU. \textbf{Host} will also be
-    used as a synonym for the CPU.
+    code which targets the CPU. \textit{Host} will also be used as a synonym
+    for the CPU.
 
-    \item \textbf{3D graphics library:} These are libraries for the CPU,
-    commonly written in C. They provide helpful functions for graphics
-    programmers and additionally provide appropriate APIs for interfacing with
-    the GPU in order to render 3D graphics. This includes function and API
-    calls to load and run shaders on the GPU, which are implemented by the
-    drivers for GPUs.
+    \item \textbf{3D graphics library:} These are libraries which provide
+    appropriate APIs for interfacing with GPUs through the host, in order to
+    render 3D graphics. This includes function and API calls to load and run
+    shaders on the GPU, which are implemented by the drivers for GPUs. Popular
+    3D graphics libraries include \textit{OpenGL} by the \textit{Khronos Group}
+    and \textit{Direct3D} by Microsoft \cite{OpenGL} \cite{Direct3D}.
+    \textit{Vulkan} is low-level 3D graphics (and computation) library that is
+    the successor to OpenGL \cite{Vulkan}.
 
-    \item \textbf{Compute platform:} These are libraries and ecosystems similar
-    to 3D graphics libraries. Although they serve the same purpose as graphics
-    libraries of allowing programmers to interface with and load programs onto
-    the GPU, they are designed with a focus on general purpose GPU
-    computations. Additionally, some compute platforms are designed for
-    hardware beyond GPUs.
+    % \item \textbf{Compute platform:} These are libraries and ecosystems similar
+    % to 3D graphics libraries. Although they serve the same purpose as graphics
+    % libraries of allowing programmers to interface with and load programs onto
+    % the GPU, they are designed with a focus on general purpose GPU
+    % computations. Additionally, some compute platforms are designed for
+    % hardware beyond GPUs.
 
-    \item \textbf{OpenGL/Direct3D:} These are 3D graphics libraries. The first
-    is an open standard maintained by the \textit{Khronos Group}, and the
-    latter is Microsoft's proprietary 3D graphics API supported by Windows
-    platforms \cite{OpenGL} \cite{Direct3D}.
+    \item \textbf{GLSL/HLSL:} GLSL is the shading language OpenGL uses whilst
+    HLSL is the equivalent found in Direct3D. GPU vendors are often responsible
+    for writing drivers which compile source-code down to GPU machine-code at
+    run-time. % \footnote{TODO(Content): Exceptions!}.
 
-    \item \textbf{GLSL/HLSL:} These are \textit{shading languages}. GLSL is the
-    language OpenGL uses whilst HLSL is the equivalent found in Direct3D.
-    Traditionally, these languages are packaged as source-code with software
-    that has been written to use them (such as a game). GPU vendors are
-    responsible for writing drivers which compile source-code down to GPU
-    machine-code at run-time.
+    % \item \textbf{OpenCL/CUDA:} These are \textit{compute platforms}. OpenCL is
+    % an open standard for the ``parallel programming of heterogeneous systems'',
+    % whilst CUDA is a similar, proprietary system that is only compatible with
+    % NVIDIA GPUs \cite{OpenCL} \cite{CUDA}. \textit{OpenCL C} and \textit{CUDA}
+    % are also the names of the shader languages these platforms use.
 
-    \item \textbf{OpenCL/CUDA:} These are \textit{compute platforms}. OpenCL is
-    an open standard for the ``parallel programming of heterogeneous systems'',
-    whilst CUDA is a similar, proprietary system that is only compatible with
-    NVIDIA GPUs \cite{OpenCL} \cite{CUDA}. \textbf{OpenCL C} and \textbf{CUDA}
-    are the names of the shader languages these platforms use.
-
-    \item \textbf{Vulkan:} This is 3D graphics library \textit{and} compute
-    platform that is a successor to both OpenGL and OpenCL \cite{Vulkan}. It
-    differs from OpenGL and OpenCL in creating a unified approach for
-    interacting with GPUs at a much lower level than those libraries. Although
-    it has seen uptake in the gaming industry, it has so far had little success
-    in fields where OpenCL or CUDA have traditionally been used \cite{TODO}
-    \cite{TODO}. \textbf{Metal} is a similar proprietary library by Apple
-    \cite{Metal}.
-
-    \item \textbf{SPIR-V}: This is an intermediate language that is supported
-    by OpenCL, OpenGL and Vulkan. The benefit of it is that graphics drivers
-    only have to support interpreting this language instead of parsing a
-    high-level language such as GLSL or OpenCL C. The Khronos Group hopes that
-    this will spur the development of many varieties of GPU-targeted languages,
-    similar to how there are many languages which compile to CPU machine-code
-    \cite{SPIRV}. \textbf{OpenCL C++} is such a language that has been
-    successfully developed as a result \cite{OpenCLCPPWhitePaper}.
+    \item \textbf{SPIR-V}: An intermediate language supported by OpenGL and
+    Vulkan. Graphics drivers only have to support interpreting this language
+    instead of parsing a high-level language such as GLSL. The Khronos Group
+    hopes that this will spur the development of many varieties of GPU-targeted
+    languages, similar to how there are many languages which compile to CPU
+    machine-code \cite{SPIRV}. %TODO(Rewrite)
 
     % \item \textbf{Framerate:} The rate at which a piece of software can render
     % a new frame in real-time. Higher is better.
@@ -201,19 +175,19 @@ end of this section quickly clarifies common points of confusion.
 \end{itemize}
 
 
-Because heterogeneous programming is such a young field there are points of
-confusion. For example, many papers creating custom interfaces or languages
-claim to create ``OpenCL Code'' in their backend \cite{JITGPU} \cite{Lime2012}.
-However, \textit{there is no such thing}. OpenCL is an API, and has
-traditionally defined a C-like language called \textit{OpenCL C} as the
-standard for writing compute kernels. Host code can then load it onto
-heterogeneous devices using the OpenCL API. Many papers will output code in
-this language for GPUs as a backend, as traditionally this has been the only
-option available (aside from proprietary backends such as CUDA for NVIDIA
-GPUs). In a recent development, SPIR-V can now be targeted as a back-end by
-compilers instead of \textit{OpenCL C}. However, SPIR-V has yet to be targeted
-by many new front-ends apart from \textit{OpenCL C++}
-\cite{OpenCLCPPWhitePaper}.
+% Because heterogeneous programming is such a young field there are points of
+% confusion. For example, many papers creating custom interfaces or languages
+% claim to create ``OpenCL Code'' in their backend \cite{JITGPU} \cite{Lime2012}.
+% However, \textit{there is no such thing}. OpenCL is an API, and has
+% traditionally defined a C-like language called \textit{OpenCL C} as the
+% standard for writing compute kernels. Host code can then load it onto
+% heterogeneous devices using the OpenCL API. Many papers will output code in
+% this language for GPUs as a backend, as traditionally this has been the only
+% option available (aside from proprietary backends such as CUDA for NVIDIA
+% GPUs). In a recent development, SPIR-V can now be targeted as a back-end by
+% compilers instead of \textit{OpenCL C}. However, SPIR-V has yet to be targeted
+% by many new front-ends apart from \textit{OpenCL C++}
+% \cite{OpenCLCPPWhitePaper}.
 
 \section{Motivation}
 
@@ -236,29 +210,28 @@ floating-point computing power relative to CPUs due to their highly parallel
 nature \cite{CPUGPUOverTime}. This has led to a growth in the use of GPUs for
 general purpose computations (known as GPGPU). Whilst GPUs were originally
 designed for rendering game graphics using a fixed-function pipeline, changes
-in their design over time have made them increasingly programmable. These
-design changes were driven by the desire of game developers to have
-increasingly realistic, complex and diverse graphics in their games.
-Furthermore, this has allowed GPUs to be used in a broadening domain of
-applications, including machine learning, scientific computing, and bitcoin
-mining \cite{GPUCrypto} \cite{GPUScientificComputing} \cite{GPUAI}. Section
-\ref{sec:history_gpu} provides more details on this.
+in their design have now made them increasingly programmable. This was driven
+by the desire of game developers to have increasingly realistic, complex and
+diverse graphics in their games. Furthermore, this has allowed GPUs to be used
+in a broadening domain of applications, including machine learning, scientific
+computing, and bitcoin mining \cite{GPUCrypto} \cite{GPUScientificComputing}
+\cite{GPUAI}. Section \ref{sec:history_gpu} provides more details on this.
 
 %TODO(Image!): Add an image of how a GPU works/how it compares with a CPU.
 
-However despite this growth, the traditional toolchains used to program GPUs
-still suffer from many of the problems they did when originally used by
-graphics programmers in the early-to-mid 2000s:
+Despite this growth, the traditional toolchains used to program GPUs still
+suffer from many of the problems they did when originally used by graphics
+programmers in the early-to-mid 2000s:
 
 \begin{itemize}
 
-    \item Unless using a host language with C-like syntax, the layout of data
-    structures must be defined separately in both shaders and the host
-    language, with erroneous behaviour if they differ (Section \ref{sec:TODO}).
+    \item Unless using a language with C-like syntax, the layout of data
+    structures must be defined separately in GPU and CPU programs, with
+    erroneous behaviour if they differ (Section \ref{sec:TODO}).
 
-    \item Shader functions are identified by the CPU using strings, with no
-    compile-time mechanisms available to ensure that they are correct (Section
-    \ref{sec:TODO}).
+    \item Functions in GPU programs are identified by the CPU using strings,
+    with no compile-time mechanisms available to ensure that they are correct
+    (Section \ref{sec:TODO}).
 
     % \item TODO(Content) find more errors which are not addressed by this paper
     % (such as texture mis-match).
@@ -268,10 +241,10 @@ graphics programmers in the early-to-mid 2000s:
 A large root-cause of these problems is the fact that regardless of the API
 used, the programs written for GPUs (known as \textit{shaders}) have to be
 developed in a separate environment using high-level languages based on C
-(Section \ref{sec:TODO}) \cite{TripThroughGraphicsPipeline1}. Therefore
-although data is shared between the CPU and GPU via a bus, the programmer has
-to manually ensure that the data structures used to encode that data is
-consistent between the programs written for the GPU and CPU.
+(Section \ref{sec:TODO}) \cite{TripThroughGraphicsPipeline1}. Although data is
+shared between the CPU and GPU via a bus, the programmer has to manually ensure
+that the data structures used to encode that data is consistent between the
+programs written for the GPU and CPU.
 
 \begin{lstfloat}
 \begin{center} C$^\sharp$ \end{center}
@@ -299,31 +272,28 @@ struct WaveParticle {
 \end{lstlisting}
 \caption{The same data structure defined separately in C$^\sharp$ and HLSL
 \cite{WaveParticlesGPU}. It is worth noting that this is much less of an issue
-when using C as a host language. This is because most shading languages are
-syntactically based on C, so they are able to share header files.}
+when using C as a host language. Most shading languages are
+syntactically based on C, so they are able to share code.}
 \label{lst:c_sharp_hlsl_struct_comparison}
 \end{lstfloat}
 
 Listing \ref{lst:c_sharp_hlsl_struct_comparison} demonstrates a simple example
-of this kind of issue, extracted from a simple GPU-accelerated water-wave
-simulator \cite{WaveParticlesGPU}. In this example, units of distortion on the
-surface of a liquid are represented using a data structure known as a
-\textit{Wave Particle} \cite{WaveParticlesOriginalPaper}. In the simulator, the
-CPU simulates an in-world physics-system calculates how these particles are
-generated. This particle data is then transferred to the GPU which simulates
-\textit{their} behaviour and then uses them in in rendering the surface of a
-liquid as shown in Figure \ref{fig:waveparticles_example}. In this case,
-C$^\sharp$ was the language used to write code for the CPU, and HLSL was the
-language used to write shaders for the GPU\footnote{This is a common language
-combination for scripting and writing shaders for the popular Unity game
-engine\cite{UnityScripting} \cite{UnityShaders}.}. Therefore, even though both
-languages share the same data structure, it has to separately be defined in
-both languages. If these definitions do not agree with each other, there are no
-in-built mechanisms to catch the errors this causes, at run-time or otherwise.
-The outcome of such a is simply undefined runtime behaviour. Section
-\ref{sec:api_challanges} fleshes out how in detail how the APIs used to write
-programs for GPUs work, and demonstrates other examples of how errors such as
-these can occur.
+of this kind of issue, extracted from a GPU-accelerated water-wave simulator
+\cite{WaveParticlesGPU}. Units of distortion on the surface of a liquid are
+represented using a data structure known as a \textit{Wave Particle}
+\cite{WaveParticlesOriginalPaper}. The CPU simulates an in-world physics-system
+which calculates how these particles are generated. This particle data is then
+transferred to the GPU which simulates their behaviour and uses them in
+rendering the surface of a liquid as shown in Figure
+\ref{fig:waveparticles_example}. In this system, C$^\sharp$ is the host (CPU)
+language, and HLSL is the shader language that targeted the GPU\footnote{This
+is a common language combination for scripting and writing shaders for the
+popular Unity game engine\cite{UnityScripting} \cite{UnityShaders}.}. Even
+though both languages share the same data structure, it has to separately be
+defined in both languages. If these definitions do not agree with each other,
+there are no in-built mechanisms to catch the errors this causes, resulting in
+incorrect run-time behaviour. Section \ref{sec:api_challanges} elaborates how
+further errors can occur.
 
 
 % TODO(Helpful): workout if this section is relevant.
@@ -350,72 +320,67 @@ these can occur.
 \begin{figure}[h]
 \centering
 \includegraphics[width=0.8\linewidth]{waveparticles_example}
-\caption{The output of wave particles system as demonstrated in the paper.}
+\caption{The output of wave particles system \cite{WaveParticlesGPU}.}
 \label{fig:waveparticles_example}
 \end{figure}
 
 There has been research into pushing forward the state-of-the-art in developing
-code for heterogeneous platforms in more programmer-friendly ways. However, as
-covered in Chapter \ref{chp:related_work}, much of the research has either been
-domain-specific or provided abstractions which have an unacceptable performance
-overhead for many use-cases involving GPUs. For example, a common approach is
-to design a unified language which can be compiled to a run-time that supports
-GPUs, as is the case with Lime \cite{Lime2010}. However, by hiding the details
-of the heterogeneous backends it targets, Lime has no facility for allowing the
-programmer to control how data is transferred between various components,
-something which is crucial in game development \cite{TODO}. Working with
-low-level toolchains is an odd mix of using an API and writing code in a
-GPU-specific language such as GLSL or HLSL -- research has primarily focused on
+code for GPUs in more programmer-friendly ways. However, as covered in Chapter
+\ref{chp:related_work}, much of the research has either been domain-specific or
+provided abstractions which have an unacceptable performance overhead for many
+use-cases \cite{TODO}. For example, a common approach is to design a unified
+language which can be compiled to a run-time that supports GPUs, as is the case
+with Lime and Halide \cite{Lime2010} \cite{Halide}. However, by hiding the
+details of the heterogeneous backends it targets, Lime has no facility for
+allowing the programmer to control how data is transferred between various
+components, something which is crucial in game development \cite{TODO}. Working
+with low-level toolchains is an odd mix of using an API and writing code in a
+GPU-specific language such as GLSL or HLSL. Research has primarily focused on
 hiding the API and simplifying GPU-specific elements by designing unified
-languages to abstract those details. We aim to demonstrate that alternative
-approaches which improve aspects of low-level toolchains do exist.
+languages to abstract those details. We demonstrate that alternative approaches
+which improve aspects of low-level toolchains exist.
 
 We provided the motivation for the solutions described in this paper, first by
-demonstrating the prevalence of GPUs and how important improvements to
-toolchains which target them could be. Secondly, we demonstrated the problems
-low-level toolchains face with a brief example showing how data structures must
-be defined separately in programming languages for the GPU and the CPU.
-Finally, we provided a brief explanation of why research has yet to tackle
-these problems.
+explaining the prevalence of GPUs and how important improvements to toolchains
+which target them could be. Secondly, we demonstrated the problems low-level
+toolchains face using a water simulator as brief example. Finally, we provided
+a brief explanation of why research has yet to tackle these problems.
 
 \section{The Solutions}
 
 \label{sec:solutions_introduction}
 
-We introduce AnnoCheck and CUG, explaining the approaches they take in solving
-problems described above. First we describe what the desired outcomes of those
-solutions should be and how they should improve over the status quo. We then
-introduce by the solutions themselves; firstly describing the annotation
-processor AnnoCheck and then explaining its limitations which led us to develop
+We introduce our two systems, AnnoCheck and CUG, which we present as solutions
+to the problems described above. First we describe what the desired outcomes of
+those solutions should be and how they should improve over the status quo. We
+then introduce the solutions themselves; firstly describing the annotation
+processor AnnoCheck, before explaining its limitations. This led us to develop
 CUG: a programming language with two distinct dialects.
 
 \subsection{Desired Outcome}
 
 As we describe in Chapter \ref{chp:related_work}, systems which aim to improve
 over low-level toolchains often sacrifice some control that those traditional
-workflows provide: whether its memory management, scheduling, or which backend
-sections of code eventually compile down to. This has two benefits: improving
-the user-experience by abstracting-away low-level details, and providing an
-optimising compiler the control necessary to optimise scheduling. The issue
-with this approach is the fact that precise control is still important in many
-domains where GPUs are used -- to the point where programmers still choose to
-make the trade-off of working directly with APIs like OpenGL or Vulkan instead
-of choosing the usability that abstractions could otherwise provide
+workflows provide: whether its memory management, scheduling, or which hardware
+sections of code eventually target. This has two benefits: improving the
+user-experience by abstracting-away low-level details, and providing an
+optimising compiler with the control necessary to optimise scheduling. The
+issue with this approach is the fact that precise control is still important in
+many domains where GPUs are used -- to the point where programmers still choose
+to make the trade-off of working directly with APIs like OpenGL or Vulkan
 \cite{TODO}. Therefore, solutions which aim to build and improve upon the
-status quo should provide all the options that traditional toolchains do,
-including exposing any underlying graphics or compute APIs.
+status quo should provide all the options that traditional toolchains offer,
+including exposing any underlying GPU APIs.
 
 Although this means these solutions are limited in the abstractions that they
 can provide, there are some ``easy wins'' to be made. This is demonstrated by
 the example problem shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
-and elaborated on in Section \ref{sec:api_challanges}. Bugs may easily be
-introduced due to errors in using the API; these can prevented by compile-time
-checks. That is, instead of trying to unify code that is written for the CPU
-and GPU under a single language or system which is designed to generate API
-calls for the programmer, we can use compile-time type checking
-\textit{between} CPU and GPU languages and compile-time checks on the API calls
-that the programmer has written \textit{themselves} in order to have the
-compiler catch errors which would otherwise be left undetected.
+and elaborated on in Section \ref{sec:api_challanges}. Some bugs introduced due
+to errors in using a GPU API can prevented by compile-time checks. That is,
+instead of trying to unify code that is written for the CPU and GPU under a
+single language or system which is designed to generate API calls for the
+programmer, we can use compile-time checking \textit{between} CPU and GPU
+languages in order to catch errors which would otherwise be left undetected.
 
 In conclusion, any solution that aims to improve upon current programming
 models should deliver the benefits described above without sacrificing anything
@@ -961,12 +926,12 @@ intermediate representation for shader languages \cite{UnityShaderPipeline}.}
 
 
 A compute or graphics API typically consists of two components: the API itself
-and a ``shader''/``kernel'' language that is used to write programs that run on
+and a ``shader''/``shader'' language that is used to write programs that run on
 the GPU itself. The API will typically come in the form of a C library, with
 functions that the user can call in order to direct an abstracted model of the
 GPU to perform specific operations. Some of those API calls enable the user to
 load their shaders onto the GPU, transfer data to the GPU, and then execute the
-shaders on that data. Historically, most, if not all, shaders and kernel
+shaders on that data. Historically, most, if not all, shaders and shader
 language have been heavily based on the C-programming language. This has had a
 few benefits and drawbacks:
 
@@ -1065,7 +1030,7 @@ code, and migrating between these systems is now possible without having to
 re-write all of the code that has been written for heterogeneous hardware.
 
 Furthermore, this intermediate language is used by OpenGL, OpenCL and Vulkan,
-meaning new shader/kernel languages can target a single back-end and be
+meaning new shader/shader languages can target a single back-end and be
 compatible with many APIs. Furthermore, the Vulkan portability initiative
 allows developers to run Vulkan on-top-of different APIs on platforms which may
 not natively support Vulkan itself \cite{TODO}. This will hopefully result in
@@ -1163,7 +1128,7 @@ in Unity using a shader language based on C$^\sharp$ instead of one based on C.
 The reason this has not been previously possible, is because of TODO(Content): find
 other sections explaining why and reference them.
 
-\subsubsection{Issue 2: Refering to kernel/shader names using strings}
+\subsubsection{Issue 2: Refering to shader/shader names using strings}
 
 This issue is demonstrated in Listing \ref{lst:annotation_example_output}.
 
@@ -1173,18 +1138,18 @@ file. Then, depending on the API, the shader may need to be compiled into an
 intermediary format in order to run on the GPU. Then, when the application is
 running, it performs three important steps. First, it passes a pointer to the
 the shader data to the API, so that it can handle loading the code onto the
-GPU. Second, it identifies which kernel (essentially a function) within that
-code should be run. Third, it then makes an API call to run that kernel.
+GPU. Second, it identifies which shader (essentially a function) within that
+code should be run. Third, it then makes an API call to run that shader.
 
-However, this has an issue, and that is that the kernel is identified by a
+However, this has an issue, and that is that the shader is identified by a
 string, as shown in Listing \ref{lst:annotation_example_output}, and there are
 no compile-time checks between the shader and the host code in order to make
-sure that the host code identifies a kernel that actually exists. As there is
+sure that the host code identifies a shader that actually exists. As there is
 no direct link between the string that the host code uses to identify the
-kernel and the name of the kernel itself, refactoring and renaming kernels can
+shader and the name of the shader itself, refactoring and renaming kernels can
 be tricky.
 
-For example, misnaming the kernel in Vulkan, causes a
+For example, misnaming the shader in Vulkan, causes a
 \texttt{VK\_ERROR\_INVALID\_SHADER\_NV} error at runtime.
 
 % https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html
@@ -1232,7 +1197,7 @@ compile-time using different mechanisms.
 % ///
 % /// Splat the wave particles to the splatTexture
 % ///
-% #pragma kernel SplatParticles
+% #pragma shader SplatParticles
 % [numthreads(THREAD_GROUPS_X, 1, 1)]
 % void DrawParticles(uint3 id : SV_DispatchThreadID)
 % {
@@ -2453,7 +2418,7 @@ API boundaries \cite{OpenCL22Release}.
 
 SYCL is a framework by the Khronos Group built on top of OpenCL that abstracts
 away the API calls to enable ``single-source'' C++ development which
-automatically generates host and kernel code from a single C++ source file
+automatically generates host and shader code from a single C++ source file
 \cite{OpenCL22Release} \cite{SYCL}. SYCL has seen uptake in terms of multiple
 implementations \cite{ComputeCPP} \cite{triSYCL}, and has been adopted as a
 backend for various machine learning frameworks such as TensorFlow and Eigen
