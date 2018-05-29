@@ -2122,17 +2122,18 @@ string. This is similar to the example shown in Listing
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
 VkPipelineShaderStageCreateInfo shader_stage_create_info = @create_verification(
-    struct: VkComputePipelineCreateInfo,
-    name: "test_shader",
-    info: {
-        .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-        .pNext = 0,
-        .flags = 0,
-        .stage = VK_SHADER_STAGE_COMPUTE_BIT,
-        .module = shader_module,
-        .pName = "main",
-        .pSpecializationInfo = 0
-});
+  struct: VkComputePipelineCreateInfo,
+  name: "test_shader",
+  info: {
+    .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+    .pNext = 0,
+    .flags = 0,
+    .stage = VK_SHADER_STAGE_COMPUTE_BIT,
+    .module = shader_module,
+    .pName = "main",
+    .pSpecializationInfo = 0
+  }
+);
 \end{lstlisting}
 \caption{TODO(Content!).}
 \label{lst:invoke_main_anno}
@@ -2143,15 +2144,16 @@ TODO(Content!)
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
 let shader_name : ShaderName = @verified_shader_function(main);
-let compute_pipeline_create_info : C::VkPipelineShaderStageCreateInfo = {
-    sType               = VkStructureType.VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
-    pNext               = null,
-    flags               = VkPipelineShaderStageCreateFlags.none,
-    stage               = VkShaderStageFlagBits.VK_SHADER_STAGE_COMPUTE_BIT,
-    module              = shader_module,
-    // Below is type-checked thanks to @verified_shader_function
-    pName               = shader_name, // entry point of the function
-    pSpecializationInfo = null
+let compute_pipeline_create_info :
+ C::VkPipelineShaderStageCreateInfo = {
+  sType               = VkStructureType.VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
+  pNext               = null,
+  flags               = VkPipelineShaderStageCreateFlags.none,
+  stage               = VkShaderStageFlagBits.VK_SHADER_STAGE_COMPUTE_BIT,
+  module              = shader_module,
+  // Below is type-checked thanks to @verified_shader_function
+  pName               = shader_name, // entry point of the function
+  pSpecializationInfo = null
 };
 \end{lstlisting}
 \caption{TODO(Content!).}
@@ -2168,7 +2170,51 @@ let compute_pipeline_create_info : C::VkPipelineShaderStageCreateInfo = {
 
 \section{Performance}
 
-%TODO(Content!):
+One of the key goals of both AnnoCheck and CUG is to not compromise on the
+low-level control raw graphics APIs provide. However, this does not guarantee
+that a program written using this APIs directly is going to out-perform one
+which is built on an abstraction layer (Chapter \ref{chp:related_work}).
+
+However, the performance of any AnnoCheck or CUG program, should match the
+equivalent C and GLSL versions. In this section, we analyse the performance of
+FishCopy across all three of its implementations.
+
+\section{AnnoCheck versus raw C/GLSL}
+
+One of the tradeoffs that AnnoCheck makes is that it is an annotation system
+that \textit{enhances} C and GLSL. We designed it so that simply removing the
+annotations from any program which uses AnnoCheck results in plain and valid C
+and GLSL. This means, that the set of AnnoCheck-enabled programs is a superset
+of valid C and GLSL programs. Although this comes with a few tradeoffs (Chapter
+\ref{chp:related_work}), a benefit is that after AnnoCheck processes a program,
+the resulting program is identical to what would be written in C or GLSL.
+
+For this reason, a performance evaluation of an AnnoCheck program and comparing
+it with any C or GLSL counterpart is meaningless.
+
+\section{CUG versus raw C/GLSL}
+
+CUG shares many of its semantics with C and GLSL, which in theory should mean
+that any CUG program should have identical performance to an equivalent C/GLSL
+program. However, as a novel language, we parse, analyse and convert CUG to an
+intermediate representation before outputting the results to a C back-end. This
+is a destructive operation compared to what AnnoCheck does. For this reason, we
+compared the performance of CUG implementation of FishCopy with the one written
+in C/GLSL.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{TODO}
+\caption{The results are... (TODO(Content!)) (expecting our version to be a tad slower).}
+\label{fig:performance_evaluation}
+\end{figure}
+
+Figure \ref{fig:performance_evaluation} demonstrates how the CUG and C/GLSL
+implementations of FishCopy compare.
+
+
+%TODO(Content!).
+
 
 \section{Conclusion}
 
