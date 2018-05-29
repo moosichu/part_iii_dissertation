@@ -458,15 +458,17 @@ read the code \cite{DesignatedInitC}.}
 \begin{lstlisting}[language=C]
 VkComputePipelineCreateInfo compute_pipeline_create_info = {
     .sType = VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO,
-    // The @create_verification command is processed by AnnoCheck and converted
-    // into C.
+    // The @create_verification command is processed by
+    // AnnoCheck and converted into C.
     .stage = @create_verification(
         struct: VkComputePipelineCreateInfo,
-        name: "test_shader",
+        // "verification_1" is the name of the annotation
+        name: "verification_1",
         data: {
             .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
             .stage = VK_SHADER_STAGE_COMPUTE_BIT,
             .module = shader_module,
+            // the struct references the main function below
             .pName = "main"
         }
     ),
@@ -480,25 +482,26 @@ vkCreateComputePipelines(
 \end{lstlisting}
 \begin{center} Annotated GLSL \end{center}
 \begin{lstlisting}[language=C]
-@verify(from: "test_shader", function:
+// The shader is verified against "verification_1"
+@verify(from: "verification_1", function:
 void main() {
     output_buffer.values[gl_GlobalInvocationID.x] = input_buffer.values[gl_GlobalInvocationID.x];
 })
 \end{lstlisting}
 \caption{Annotated C and GLSL that can be processed by AnnoCheck, the output
-that AnnoCheck produces for these snippets (without annotations) is shown in
+that AnnoCheck produces for these snippets is shown in
 Listing \ref{lst:annotation_example_output}. The full example can be found on
 the project GitHub repository \cite{ProjectSource}.}
 \label{lst:annotation_example_input}
 \end{lstfloat}
 
-Listing \ref{lst:annotation_example_input} shows an example of an API call that
-can result in an error that could be checked-for at compile-time. In this case
-the running of a shader named \texttt{main}. Here, the host code makes the
-\texttt{vkCreateComputePipelines} API call in order to create a compute
-pipeline\footnote{This is just an API call that needs to be made in order to
-run a computer shader on the GPU \cite{TODO}.} \cite{vkCreateComputePipelines}.
-An instance of the \texttt{VkComputePipelineCreateInfo} struct containing a
+As we will describe, Listing \ref{lst:annotation_example_input} shows an
+example of an API call that can result in an error that could be checked-for at
+compile-time. Here, the host code makes the \texttt{vkCreateComputePipelines}
+API call in order to create a compute pipeline\footnote{This is just an API
+call that needs to be made in order to run a non-graphics (compute) shader on
+the GPU \cite{TODO}.} \cite{vkCreateComputePipelines}. An instance of the
+\texttt{VkComputePipelineCreateInfo} struct containing a
 \texttt{VkPipelineShaderStageCreateInfo} struct is passed to that API call,
 which ultimately specifies which function in the shader to use within the
 compute pipeline \cite{VkComputePipelineCreateInfo}
@@ -506,9 +509,9 @@ compute pipeline \cite{VkComputePipelineCreateInfo}
 creation of the \texttt{VkPipelineShaderStageCreateInfo} structure on the host
 and the \texttt{main} function within the shader using the
 \texttt{@create\_verification} and \texttt{@verify} commands respectively. The
-annotation itself is given a name, \texttt{"test\_shader"} which both the host
-code and shader reference. AnnoCheck takes annotated code as input and produces
-the output seen in Listing \ref{lst:annotation_example_output}.
+annotation itself is given a name, \texttt{"verification\_1"} which the
+annotated C and GLSL reference. AnnoCheck takes annotated code as input and
+produces the output seen in Listing \ref{lst:annotation_example_output}.
 
 \begin{lstfloat}
 \begin{center} Output C \end{center}
@@ -552,19 +555,19 @@ The important key feature this example provides is the compile-time checking of
 the function name -- ensuring that \texttt{main} cannot be renamed in the host
 or shader without being consistently renamed in the other. If we were to ensure
 such an error was introduced in raw C and GLSL, the resulting behaviour would
-be a runtime error. However, not all inconsistencies which can be checked like
+be a runtime crash. However, not all inconsistencies which can be checked like
 this result in runtime errors, others can simply result in incorrect or
 undefined runtime results (Appendix \ref{app:other_API_issues}).
 
-Listing \ref{lst:annotation_example_input} demonstrates how annotations can be
-used to prevent programmers from compiling code where the names of shaders
-differ between C and GLSL, preventing the runtime error that would cause. The
+Listing \ref{lst:annotation_example_input} demonstrates how annotations can
+prevent programmers from compiling code where the names of shaders differ
+between C and GLSL, informing them of the runtime error that would cause. The
 flexibility of AnnoCheck is that the programmer can remove the annotations if
-they desire, especially if they are using complex runtime features. However,
-AnnoCheck can still be used to help ensure that an initial implementation is
-correct. Furthermore, Section \ref{sec:design_annotation_processor} covers
-design decisions that were made with typical shader workflows in mind such that
-annotations can be kept for most use-cases.
+they desire, especially when using complex runtime features. However, AnnoCheck
+can still help ensure that an initial implementation is correct. Furthermore,
+Section \ref{sec:design_annotation_processor} covers design decisions that were
+made with typical shader workflows in mind such that annotations can be kept
+for most use-cases.
 
 \subsection{CUG}
 
