@@ -398,21 +398,22 @@ raw API calls for graphics programming. We chose to target the Vulkan API to
 demonstrate that these ideas can work at the very lowest-level. However, the
 ideas are also applicable to other APIs such as OpenGL, OpenCL or Direct3D.
 
-We first developed \textit{AnnoCheck}, a pre-processor for C and GLSL called
-AnnoCheck that operates on annotated sections of code. The goal here was to
-demonstrate how an existing pair of languages with similar type systems could
-be extended in order to have error-checking on raw API calls. Furthermore, as C
-and GLSL are a common language pairing for graphics programming, a lot of
-existing code could stand to benefit from these techniques \cite{TODO}. We
-chose C and GLSL as they share enough similar \textit{syntactic} properties to
-already allow the programmer to share some code between them (such as struct
-definitions). However, although this approach has the benefit of being able to
+We first developed \textit{AnnoCheck}, a pre-processor for C and GLSL that
+operates on annotated sections of code. The goal here was to demonstrate how an
+existing pair of languages with similar type systems could be extended in order
+to have error-checking on raw API calls. Furthermore, as C and GLSL are a
+common language pairing for graphics programming, a lot of existing code could
+stand to benefit from these techniques \cite{TODO}. We chose C and GLSL as they
+share enough similar \textit{syntactic} properties to already allow the
+programmer to share some code between them (such as struct definitions).
+However, although this approach has the benefit of being able to
 \textit{plug-in} to existing C and GLSL code, it does have some limitations.
-Firstly, the sharing of code is limited to a syntactic happenstance which falls
-apart as soon as languages are used without this feature. Secondly, C's type
-system does have limitations compared with many modern languages, and we could
-think of many opportunities is sharing code \textit{semantically} instead of
-just \textit{syntactically}.
+Firstly, the sharing of code is limited to a syntactic happenstance without
+guarantees, which could result in errors (Section \ref{sec:TODO}). Secondly,
+C's type system has limitations compared with many modern languages. As we
+discuss in Chapter \ref{chp:conclusion_and_further_work}, there are many
+opportunities presented by sharing code \textit{semantically} instead of just
+\textit{syntactically}.
 
 % TODO(Image!): include diagram of all the wokflows?
 
@@ -420,15 +421,15 @@ This led us to develop the \textit{CUG} compiler, which can compile two
 language \textit{dialects} called CUG-C and CUG-G. We had two goals with this.
 The first was to demonstrate the power that the semantic sharing of code could
 provide in solving the problems we describe in Section
-\ref{sec:sec:api_challanges}, especially as these two dialects share the same
-compiler. The second was to show how existing high-level languages could be
-extended with a shader-language. This would be suitable for a language such as
-C$^\sharp$, which has a strong type system, but is compromised and arguably
-\textit{less safe} than C when using shaders, as it cannot share any code with
-them as show in Listing \ref{lst:c_sharp_hlsl_struct_comparison}. Due to
-resource limitations, we designed CUG-C and CUG-G from scratch with the minimum
-subset of features required in order to demonstrate that this is possible,
-instead of extending an existing full-featured language such as $C^\sharp$.
+\ref{sec:api_challanges}, as these two dialects share the same compiler. The
+second was to show how existing high-level languages could be extended with a
+shader-language. This would be suitable for a language such as C$^\sharp$,
+which has a strong type system, but is compromised and arguably \textit{less
+safe} than C when using shaders, as it cannot share any code with them as shown
+in Listing \ref{lst:c_sharp_hlsl_struct_comparison}. Due to resource
+limitations, we designed CUG-C and CUG-G from scratch with the minimum subset
+of features required in order to demonstrate that this is possible, instead of
+extending an existing full-featured language such as $C^\sharp$.
 
 One thing to note is that our goal was not to write a comprehensive set of
 tools which could be used to catch all errors of this nature at compile-time.
@@ -444,11 +445,10 @@ systems.
 AnnoCheck is a command-line program that takes annotated code written in C and
 annotated code written in GLSL as input. An example annotation and the code
 that is generated is shown in Listings \ref{lst:annotation_example_input} and
-\ref{lst:annotation_example_output}. It is worth noting that these are small
-snippets from a larger program 700-line program that simply transfers two
-arrays to the GPU, using a shader to copy the values from one array to the
-other. It was adapted from an example program written by Neil Henning
-\cite{VulkanComputeExampleSource} \cite{VulkanComputeExampleBlog}.
+\ref{lst:annotation_example_output}. These are small snippets of the larger
+program used in our Evaluation (Chapter \ref{chp:evluation}), adapted from an
+example program written by Neil Henning \cite{VulkanComputeExampleSource}
+\cite{VulkanComputeExampleBlog}.
 
 \begin{lstfloat}
 \begin{center}
