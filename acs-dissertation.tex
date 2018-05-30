@@ -978,15 +978,15 @@ Drawbacks include:
     \item High-level language specifications can be ambiguous, which means
     drivers can implement the same standard in incompatible ways \cite{TODO}.
 
-    \item Unlike popular CPU compilers such as clang and gcc, the compilers
-    that drivers use are not-only proprietary but developed by much smaller
-    teams. This can lead to bugs where even fuzzing programs with changes which
-    should result in identical outcomes results in breaking the output
-    \cite{GLFuzz}. %TODO(Helpful): maybe include an image of this
+    \item The \textit{driver} for a piece of hardware must include an entire
+    compiler for a high-level language.
 
-    \item Applications must be distributed with the high-level source-code to
-    these shaders, meaning the shaders themselves must be tokenised, parsed,
-    type-checked, compiled and optimised at run-time \cite{TODO}.
+    \item GPU drivers are proprietary, and can have bugs where semantically
+    equivalent programs have different outputs (Figure \ref{fig:glfuzz})
+    \cite{GLFuzz}.
+
+    \item Shaders themselves must be tokenised, parsed, type-checked, compiled
+    and optimised at run-time \cite{TODO}.
 
     \item If the host-language has enough syntactic differences from the shader
     language, data-structures must be defined in both languages (Listing
@@ -995,104 +995,131 @@ Drawbacks include:
     run-time.
 
     \item The C type system is limited compared with more modern programming
-    languages. So even when using C and a C-based shader language, many things
-    remain unchecked (Section \ref{sec:issues_summary}).
+    languages. Furthermore, C and shading languages do have subtle differences.
+    For example the \textbf{\texttt{int}} keyword in GLSL specifically defines
+    a 32-bit two's complement integer, compared with C, where an \texttt{int}
+    must have at least 16 bits and can use various encodings \cite{TODO}.
+    Therefore code sharing does not provide guarantees.
 
-    \item As the drivers have their own optimisation systems, code does need to
-    be tuned in non-portable ways for specific hardware if you want to maximise
-    performance \cite{TODO}.
+    \item The CPU still has to refer to many identifiers within a shader using
+    strings at runtime. Therefore renaming identifiers in shaders requires
+    programmers to manually identify strings which refer to them within their
+    application.
 
-    \item Cross-compiling is difficult, as optimisation can depend on specific
-    tweaks and implementations of the same shading language can be
-    incompatible. This means that it has been difficult to develop shading
-    languages with semantics and syntax similar to non-C-like languages
-    \cite{TODO}.
+    % \item As the drivers have their own optimisation systems, code does need to
+    % be tuned in non-portable ways for specific hardware if you want to maximise
+    % performance \cite{TODO}.
 
-    \item TODO: GLSL can't use \#include, and ints could be defined differently
-    anyway.
+    % \item Cross-compiling is difficult, as optimisation can depend on specific
+    % tweaks and implementations of the same shading language can be
+    % incompatible. This means that it has been difficult to develop shading
+    % languages with semantics and syntax similar to non-C-like languages
+    % \cite{TODO}.
+
+    % \item TODO: GLSL can't use \#include, and ints could be defined differently
+    % anyway.
 
 \end{itemize}
 
-These problems still exist, however, the keys to potentially solving many of
-them are appearing. The first step towards this is the creation of the SPIR-V
-intermediate language \cite{SPIRV}. This is a language that has been designed
-to better represent the low-level instructions GPUs actually use. Therefore,
-drivers need to simply translate these instructions, as opposed to compiling a
-high-level language. The goal here is to reduce the number of implementation
-bugs that have previously occurred \cite{TODO}. Additionally, reference
-language \textit{specifications} can be replaced by a reference language
-\textit{compiler}, which can be open-source and therefore receive input from
-many more individuals. Additionally, the same front-end is now used regardless
-of which hardware code will eventually be compiled for, resulting in much more
-consistent behaviour. As the behaviour of the intermediate language itself is
-more consistent on different platforms configurations, it can be targetted by
-different languages with more stability. An optimiser of the intermediate
-language itself can also be shared.
+\begin{figure}[h]
+\begin{center}
+GLFuzz Bug
+\end{center}
+\centering
+\includegraphics[width=0.8\linewidth]{glfuzz}
+\caption{An automated testing framework (GLFuzz) found many bugs in graphics drivers,
+which resulted in errors like these. Here, a simple shader was broken by
+injecting dead flow-control \cite{GLFuzz}.}
+\label{fig:glfuzz}
+\end{figure}
 
-The reference compiler has also enabled the creation of more-complex shading
-languages, such as the creation of \textit{OpenCL C++}, which would have been
-much harder to create if each hardware vendor had to write their own compilers
-for this language within their drivers. This is a shader language based on C++
-that allows programmers to use many of C++'s features. Therefore more code can
-be shared between the host and shader, in addition to the advanced type
-checking features C++ provides over C.
+% These problems still exist, however, the keys to potentially solving many of
+% them are appearing. The first step towards this is the creation of the SPIR-V
+% intermediate language \cite{SPIRV}. This is a language that has been designed
+% to better represent the low-level instructions GPUs actually use. Therefore,
+% drivers need to simply translate these instructions, as opposed to compiling a
+% high-level language. The goal here is to reduce the number of implementation
+% bugs that have previously occurred \cite{TODO}. Additionally, reference
+% language \textit{specifications} can be replaced by a reference language
+% \textit{compiler}, which can be open-source and therefore receive input from
+% many more individuals. Additionally, the same front-end is now used regardless
+% of which hardware code will eventually be compiled for, resulting in much more
+% consistent behaviour. As the behaviour of the intermediate language itself is
+% more consistent on different platforms configurations, it can be targetted by
+% different languages with more stability. An optimiser of the intermediate
+% language itself can also be shared.
 
-Additionally, the same compiler can be shared by the \textit{shader language},
-OpenCL C++, and the ``single-source'' heterogeneous computing system known as
-SYCL. SYCL is a way of writing code for heterogeneous hardware within C++, such
-that the compiler then automatically generates the necessary API calls to run
-that code on heterogeneous hardware. This abstracts many aspects of
-heterogeneous computing in order to make programming for GPUs easier, however
-programmers do sacrifice the control they would otherwise have if they wanted
-to achieve optimal performance. However, by having SYCL and OpenCL C++ share
-the same compiler, the SYCL and OpenCL communities can much more easily share
-code, and migrating between these systems is now possible without having to
-re-write all of the code that has been written for heterogeneous hardware.
+% The reference compiler has also enabled the creation of more-complex shading
+% languages, such as the creation of \textit{OpenCL C++}, which would have been
+% much harder to create if each hardware vendor had to write their own compilers
+% for this language within their drivers. This is a shader language based on C++
+% that allows programmers to use many of C++'s features. Therefore more code can
+% be shared between the host and shader, in addition to the advanced type
+% checking features C++ provides over C.
 
-Furthermore, this intermediate language is used by OpenGL, OpenCL and Vulkan,
-meaning new shader/shader languages can target a single back-end and be
-compatible with many APIs. Furthermore, the Vulkan portability initiative
-allows developers to run Vulkan on-top-of different APIs on platforms which may
-not natively support Vulkan itself \cite{TODO}. This will hopefully result in
-an ecosystem which much more closely resembles the ``hourglass model'' that
-CPUs enjoy today.
+As we discuss in Section (\ref{sec:sec:history_gpu}), high-level shading
+languages such as GLSL are being phased-out in favour of lower-level
+\textit{intermediate languages} such as SPIR-V, which is based on LLVM IR
+\cite{TODO}. Therefore, modern toolchains allow the programmer to pre-compile
+GLSL to SPIR-V. We discuss the developments this has enabled in Chapter
+\ref{chp:related_work}.
+
+% Additionally, the same compiler can be shared by the \textit{shader language},
+% OpenCL C++, and the ``single-source'' heterogeneous computing system known as
+% SYCL. SYCL is a way of writing code for heterogeneous hardware within C++, such
+% that the compiler then automatically generates the necessary API calls to run
+% that code on heterogeneous hardware. This abstracts many aspects of
+% heterogeneous computing in order to make programming for GPUs easier, however
+% programmers do sacrifice the control they would otherwise have if they wanted
+% to achieve optimal performance. However, by having SYCL and OpenCL C++ share
+% the same compiler, the SYCL and OpenCL communities can much more easily share
+% code, and migrating between these systems is now possible without having to
+% re-write all of the code that has been written for heterogeneous hardware.
+
+% Furthermore, this intermediate language is used by OpenGL, OpenCL and Vulkan,
+% meaning new shader/shader languages can target a single back-end and be
+% compatible with many APIs. Furthermore, the Vulkan portability initiative
+% allows developers to run Vulkan on-top-of different APIs on platforms which may
+% not natively support Vulkan itself \cite{TODO}. This will hopefully result in
+% an ecosystem which much more closely resembles the ``hourglass model'' that
+% CPUs enjoy today.
 %TODO(Helpful) cite unity presentation slide.
 
-Cross-compiling between different intermediate languages for different APIs is
-easier than doing the same for high-level languages \cite{TODO}.
+% Cross-compiling between different intermediate languages for different APIs is
+% easier than doing the same for high-level languages \cite{TODO}.
 
-Part of this project aims to capitalise on this recent development in GPU
-computing, with the demonstration of a custom language for the CPU (CUG-C)
-which has a shading-language counterpart (CUG-G). This demonstration is with
-multiple goals in mind:
+Even with this development, GLSL is still the language of choice for graphics
+APIs which use SPIR-V, leaving many presented problems unsolved. Section
+\ref{sec:issues_summary} enumerates the issues which AnnoCheck and CUG each
+tackle.
 
-\begin{itemize}
+% \begin{itemize}
 
-    \item To demonstrate the possibilities that SPIR-V presents in allowing any
-    high-level language to have its own shading language. This means that the
-    issue demonstrated in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
-    need no-longer exist.
+%     \item To demonstrate the possibilities that SPIR-V presents in allowing any
+%     high-level language to have its own shading language. This means that the
+%     issue demonstrated in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
+%     need no-longer exist.
 
-    \item To demonstrate how a language which is designed with GPUs as a
-    first-class citizen can have a type-system which results in less
-    error-prone programming for the GPU. However, unlike many other
-    such-languages, explicit API calls can still be made, ensuring programmers
-    still have the control they need in order to optimise code how they would
-    like.
+%     \item To demonstrate how a language which is designed with GPUs as a
+%     first-class citizen can have a type-system which results in less
+%     error-prone programming for the GPU. However, unlike many other
+%     such-languages, explicit API calls can still be made, ensuring programmers
+%     still have the control they need in order to optimise code how they would
+%     like.
 
-\end{itemize}
+% \end{itemize}
 
-Although \textit{OpenCL C++} has demonstrated some of this, it does have a few
-limitations. The first is that fact that it is only compatible with OpenCL.
-Although the SPIR-V backend is shared by OpenGL, OpenCL and Vulkan, OpenCL is
-the only API which has enjoyed the creation of a high level shader language
-such as OpenCL C++. OpenGL and Vulkan still use GLSL, which is a C-like
-language with the limitations that incurs. This project aims to demonstrate how
-such a language can target graphics APIs as well. C++ does not treat GPUs as
-first-class citizens, therefore OpenCL C++ has to be designed with the existing
-capabilities of C++ in-mind. This project aims to demonstrate features that a
-language could provide if it is aware of the interactions between shader and
-host languages.
+% Although \textit{OpenCL C++} has demonstrated some of this, it does have a few
+% limitations. The first is that fact that it is only compatible with OpenCL.
+% Although the SPIR-V backend is shared by OpenGL, OpenCL and Vulkan, OpenCL is
+% the only API which has enjoyed the creation of a high level shader language
+% such as OpenCL C++. OpenGL and Vulkan still use GLSL, which is a C-like
+% language with the limitations that incurs. This project aims to demonstrate how
+% such a language can target graphics APIs as well. C++ does not treat GPUs as
+% first-class citizens, therefore OpenCL C++ has to be designed with the existing
+% capabilities of C++ in-mind. This project aims to demonstrate features that a
+% language could provide if it is aware of the interactions between shader and
+% host languages.
 
 \subsection{Issues Summary}
 
