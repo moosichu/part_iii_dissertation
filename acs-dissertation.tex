@@ -721,11 +721,10 @@ background needed to understand AnnoCheck and CUG.
     \cite{OpenGL_1_0}. The OpenGL specification is now controlled by the
     \textbf{Khronos Group} \cite{OpenGL} \cite{OpenGLToKhronos}.
 
-    \item 1996 \textbf{Direct3D 2.0} released by Microsoft, so named, even
-    though was the \textit{first} version of Direct3D. Although at this point
-    API was designed as an abstraction for a software renderer
-    \cite{JohnCarmackPlanDirect3DvsOpenGl}, it eventually developed into an API
-    for interfacing with graphics cards.
+    \item 1996 \textbf{Direct3D 2.0} released by Microsoft. Although at this
+    point API was designed as an abstraction for a software renderer, it
+    eventually developed into an API for interfacing with graphics cards
+    \cite{JohnCarmackPlanDirect3DvsOpenGl}.
 
     % \item 1996 \textbf{3Dfx Voodoo1} graphics card released. Although not the
     % first graphics card, it dominated the consumer market and brought 3D
@@ -745,65 +744,61 @@ background needed to understand AnnoCheck and CUG.
 
     \item 2001 \textbf{GPGPU}, \textit{general purpose computations on GPUs},
     are demonstrated by Larson and McAllister. They perform fast matrix
-    multiplications by encoding the matrices as the inputs and outputs of the
-    graphics pipeline to offload calculations to the GPU. \cite{MatrixGPU}.
+    multiplications by encoding matrices as the inputs and outputs of the
+    graphics pipeline to offload calculations to the GPU \cite{MatrixGPU}.
     Subsequent papers then show how GPUs can outperform CPUs for many
     operations that are desirable in scientific computing \cite{CUDAtoOpenCL}
     \cite{Kruger03linearalgebra} \cite{LUGPU} \cite{SparsematrixGPU}.
 
-    \item 2003 \textbf{OpenGL ES}, \textit{OpenGL for embedded systems},
-    released by the Khronos Group \cite{OpenGLESRelease}. It is currently the
-    most widely deployed 3D graphics API in history, being popular on mobile
-    platforms such as Google's Android operating system \cite{OpenGLES}.
+    \item 2003 \textbf{OpenGL ES}, released by the Khronos Group for embedded
+    systems \cite{OpenGLESRelease}. It is currently the most widely deployed 3D
+    graphics API in history, being popular on mobile platforms such as Google's
+    Android operating system \cite{OpenGLES}.
 
-    \item 2004 \textbf{GLSL} (also known as OpenGL Shading Language or glslang)
-    introduced into the \textbf{OpenGL 2.0} specification. It was created to
-    tame the complexity and proliferation of custom OpenGL extensions with
-    assembly languages that customised parts of the fixed-function pipeline.
-    This formally replaced parts of the graphics pipeline with
-    user-programmable stages which were defined using a hardware-independent
-    high-level language. GLSL at this point was defined as \textit{two}
-    closely-related shading languages for different parts of the pipeline: the
-    vertex processor (for transforming vertices) and the fragment processor
-    (for operating on individual pixels in the final image). Finally, the
-    language was forward-looking in the supporting of a coherent set of
-    features, including some that hardware at the time did not
-    \cite{GLSL_1_10}. GPU vendors are responsible for including their own GLSL
-    compilers in their hardware drivers \cite{TODO}.
+    \item 2004 \textbf{GLSL (OpenGL Shading Language} introduced into the
+    \textbf{OpenGL 2.0} specification \cite{GLSL_1_10}. It was created to tame
+    the complexity and proliferation of custom OpenGL extensions with assembly
+    languages that customised parts of the fixed-function pipeline. This
+    formally replaced parts of the graphics pipeline with user-programmable
+    stages which were defined using a hardware-independent high-level language.
+    GLSL at this point was defined as \textit{two} closely-related shading
+    languages for different parts of the pipeline: the vertex processor (for
+    transforming vertices) and the fragment processor (for operating on
+    individual pixels in the final image). GPU vendors are responsible for
+    including their own GLSL compilers in their hardware drivers \cite{TODO}.
 
     \item 2005 \textbf{Unified Shader Architecture} introduced in ATI's
     \textbf{Xenos GPU}, released as part of the Xbox 360. The ``vertex'' and
     ``pixel'' segments of the GPU pipeline are unified into a single component
-    that can run either of these. This brought GPUs closer to being highly-parallel
-    general computation machines and away from being direct fixed-function
-    hardware implementations of the graphics pipeline represented by APIs such
-    as OpenGL \cite{XenosDemystified}. All GPUs would soon adopt this
+    that can run either of these. This brought GPUs away from being direct
+    fixed-function hardware implementations of the graphics pipeline
+    represented by OpenGL and closer to being general-purpose computation
+    machines \cite{XenosDemystified}. All GPUs would soon adopt this
     architecture \cite{HistoryOfTheGPU}.
 
     \item 2006 \textbf{CUDA} (Compute Unified Device Architecture) introduced
     by NVIDIA as a proprietary parallel computation platform and API. This
-    allowed programmers to exploit the \textbf{GPGPU} (General Purpose GPU)
-    capabilities of graphics hardware directly, without having to encode data
-    as the input and output of the OpenGL pipeline. This made GPU computing
-    more efficient and accessible \cite{AboutCUDA}. \textbf{OpenCL} is a
-    similar open platform created by Apple and now maintained by the Khronos
-    Group \cite{OpenCL}.
+    allowed programmers to exploit the GPGPU capabilities of graphics hardware
+    directly, without having to encode data as the input and output of the
+    OpenGL pipeline. This made GPU computing more efficient and accessible
+    \cite{AboutCUDA}. \textbf{OpenCL} is a similar open platform created by
+    Apple and now maintained by the Khronos Group \cite{OpenCL}.
 
     \item 2015 \textbf{SPIR-V} shading language released alongside
     \textbf{OpenCL 2.1} \cite{SPIRVLaunch}. Unlike the high-level
     \textit{OpenCL C} and \textit{GLSL} shading languages which drivers need to
     compile themselves, this is an intermediate language based on \textit{LLVM
-    IR} which compilers for any language can target. \cite{LLVMIR}
-    \cite{SPIRV}. SPIR-V support was then added to \textbf{OpenGL 4.6} and
-    supported by Vulkan at launch, unifying the shading languages of Khronos'
-    APIs \cite{SPIRVOpenGL}.
+    IR} which compilers for any language can target \cite{LLVMIR} \cite{SPIRV}.
+    SPIR-V support was then added to \textbf{OpenGL 4.6} and supported by
+    Vulkan at launch, unifying the shading languages of Khronos' APIs
+    \cite{SPIRVOpenGL}.
 
     \item 2016 \textbf{Vulkan} released by the Khronos Group. A low-level GPU
-    API that aims to better represent how modern graphics cards are designed,
-    this differs from OpenGL, whose abstraction of a traditional graphics
+    API that aims to better represent how modern graphics cards are designed.
+    This differs from OpenGL, whose abstraction of a traditional graphics
     pipeline no longer represents the unified nature of GPUs
     \cite{VulkanAnnouncement}. Unlike OpenGL and OpenGL ES, Vulkan is the same
-    on both desktop, mobile and embedded systems \cite{Vulkan}.
+    on desktop, mobile and embedded systems \cite{Vulkan}.
 
 \end{itemize}
 
@@ -827,25 +822,23 @@ intermediate representation for shader languages \cite{UnityShaderPipeline}.}
 
 The capabilities of GPUs and their related APIs have massively expanded since
 they were both introduced, allowing GPUs to be used in increasingly general
-domains, including scientific computing, crypto-currency mining, high-frequency
-trading, and artificial intelligence \cite{GPUCrypto}
-\cite{GPUScientificComputing} \cite{GPUTrading} \cite{GPUAI}. Unfortunately,
-there are many different APIs for different use-cases of the same hardware as a
-result of a complex history. Furthermore, many of these use-cases have
-widely-used proprietary alternatives such as CUDA, DirectX,
+domains (Section \ref{sec:motivation}). Unfortunately, as a result of a complex
+history, there are many different APIs for different use-cases of the same
+hardware (eg. OpenGL vs OpenCL). Furthermore, many of these use-cases have
+widely-used proprietary alternatives such as CUDA, Direct3D,
 Metal\footnote{Apple's proprietary API.} and even proprietary game console APIs
 \cite{CUDA} \cite{Metal} \cite{Direct3D} \cite{PS4PortCrew} (full comparison in
-Appendix \ref{sec:api_options}). As shown in Figure
-\ref{fig:unity_shader_madness}, which shows how the popular Unity game engine
-targets many platforms, this makes programming for GPUs in a portable manner
-extremely complex \cite{UnityShaderPipeline}.
+Appendix \ref{sec:api_options}). This makes programming for GPUs in a portable
+manner extremely complex. This is shown in Figure
+\ref{fig:unity_shader_madness}, which displays how the popular Unity game
+engine targets many platforms \cite{UnityShaderPipeline}.
 
 However, with the release of SPIR-V, aspects of the various Khronos Standards
 (OpenCL, OpenGL and Vulkan) are converging. Additionally, despite a foundation
 in graphics, the compute capabilities of Vulkan are expanding such that OpenCL
 could eventually be merged into the API \cite{VulkanOpenCLMerge}. Furthermore,
 the low-level nature of new graphics and compute APIs such a Vulkan, Metal and
-DirectX 12 have allowed portability initiatives to bring implementations of
+Direct3D 12 have allowed portability initiatives to bring implementations of
 those APIs as light shims above the others \cite{VulkanPortabilityInitiative}
 \cite{VulkanPortabilityInitiativeAnnouncement}. Figure
 \ref{fig:unity_shader_sanity} shows how the Unity game engine's toolchain could
@@ -863,17 +856,13 @@ spur the development of many new shading languages.
 % http://www.g-truc.net/doc/2015%20-%20EuroLLVM%20-%20SPIR-V.pdf
 % can also be shown in conclusion.
 
-Due to the complex history of GPUs and their APIs as described in Section
-\ref{sec:history_gpu}, the APIs used to interact with GPUs naturally evolved
-issues as a result of being developed over the course of many years instead of
-being designed from the ground-up. However, this situation has recently
-improved with the creation of the Vulkan API. This is a very low-level API that
-has been designed from the bottom-up to reflect the way modern GPUs operate
-\cite{Vulkan}. This contrasts with graphics APIs like OpenGL, which reflect how
-GPUs \textit{historically} operated \cite{TODO}. This section does not
-enumerate all of the issues graphics APIs have, but instead will briefly
-describe the workflow and toolchains of using a GPU API, and then enumerate the
-challenges our systems aim to ease.
+Due to the complex development history of GPU APIs such as OpenGL (Section
+\ref{sec:history_gpu}), they have naturally evolved various issues, mainly as
+they reflect how GPUs have \textit{historically} operated \cite{TODO}. However,
+this situation has recently improved with the creation of the Vulkan API. This
+section does not enumerate all of the issues graphics APIs have, but instead
+will briefly describe the workflow and toolchains of using a GPU API, and then
+enumerate the challenges our systems aim to ease.
 
 A comprehensive overview of the challenges GPU APIs present are given in
 Appendix \ref{app:other_API_issues}.
@@ -891,7 +880,7 @@ the GPU, transfer data to the GPU, and then execute the shaders on that data.
 
 For graphics operations, the full set of operations needed in order to render
 an image is called the \textit{graphics pipeline}
-\cite{TripThroughGraphicsPipeline1}. Although originally there were two stages,
+\cite{TripThroughGraphicsPipeline1}. Although there were originally two stages,
 modern graphics APIs now expose up to seven shading stages
 \cite{TripThroughGraphicsPipeline3}:
 
@@ -2463,7 +2452,7 @@ something that can target arbitrary backends \cite{HIP}.
 In addition to SYCL and OpenCL C++, there have been other attempts at bringing
 heterogeneous programming models natively to C++ through parallel programming
 standards. C++ AMP is a C++ library, programming model, and compiler developed
-by Microsoft that targets DirectX 11 \cite{CAMP}. However, it seems to have
+by Microsoft that targets Direct3D 11 \cite{CAMP}. However, it seems to have
 died \cite{CAMPFail1} \cite{CAMPFail2}. \textit{C++ extensions for parallelism}
 has brought such standards to the C++ standard template library
 \cite{CPPParallelism}. Finally, OpenMP is an API standard dedicated to
