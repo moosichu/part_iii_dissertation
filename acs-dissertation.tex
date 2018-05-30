@@ -396,7 +396,7 @@ boundaries in CPU-GPU systems. Both demonstrate a different approach in
 implementing compile-time cross-language checks and checking the validity of
 raw API calls for graphics programming. We chose to target the Vulkan API to
 demonstrate that these ideas can work at the very lowest-level. However, the
-ideas are also applicable to other APIs such as OpenGL, OpenCL or Direct3D.
+ideas are also applicable to other APIs such as OpenGL, or Direct3D.
 
 We first developed \textit{AnnoCheck}, a pre-processor for C and GLSL that
 operates on annotated sections of code. The goal here was to demonstrate how an
@@ -406,45 +406,44 @@ common language pairing for graphics programming, a lot of existing code could
 stand to benefit from these techniques \cite{TODO}. We chose C and GLSL as they
 share enough similar \textit{syntactic} properties to already allow the
 programmer to share some code between them (such as struct definitions).
-However, although this approach has the benefit of being able to
-\textit{plug-in} to existing C and GLSL code, it does have some limitations.
-Firstly, the sharing of code is limited to a syntactic happenstance without
-guarantees, which could result in errors (Section \ref{sec:TODO}). Secondly,
-C's type system has limitations compared with many modern languages. As we
-discuss in Chapter \ref{chp:conclusion_and_further_work}, there are many
-opportunities presented by sharing code \textit{semantically} instead of just
-\textit{syntactically}.
+Although this approach has the benefit of being able to \textit{plug-in} to
+existing C and GLSL code, it does have some limitations. Firstly, the sharing
+of code is limited to a syntactic happenstance without guarantees, which could
+result in errors (Section \ref{sec:api_challanges}). Secondly, C's type system
+has limitations compared with many modern languages. As we discuss in Chapter
+\ref{chp:conclusion_and_further_work}, there are many opportunities presented
+by sharing code \textit{semantically} instead of just \textit{syntactically}.
 
 % TODO(Image!): include diagram of all the wokflows?
 
 This led us to develop the \textit{CUG} compiler, which can compile two
-language \textit{dialects} called CUG-C and CUG-G. We had two goals with this.
-The first was to demonstrate the power that the semantic sharing of code could
-provide in solving the problems we describe in Section
-\ref{sec:api_challanges}, as these two dialects share the same compiler. The
-second was to show how existing high-level languages could be extended with a
-shader-language. This would be suitable for a language such as C$^\sharp$,
-which has a strong type system, but is compromised and arguably \textit{less
-safe} than C when using shaders, as it cannot share any code with them as shown
-in Listing \ref{lst:c_sharp_hlsl_struct_comparison}. Due to resource
-limitations, we designed CUG-C and CUG-G from scratch with the minimum subset
-of features required in order to demonstrate that this is possible, instead of
-extending an existing full-featured language such as $C^\sharp$.
+language \textit{dialects} called CUG-C and CUG-G. The first goal was to
+demonstrate the power that the semantic sharing of code could provide in
+solving the problems we describe in Section \ref{sec:api_challanges}, as these
+two dialects share the same compiler. The second goal was to show how existing
+high-level languages could be extended with a shader-language. This would be
+suitable for a language such as C$^\sharp$, which has a strong type system, but
+is compromised and arguably \textit{less safe} than C when using shaders, as it
+cannot share any code with them as shown in Listing
+\ref{lst:c_sharp_hlsl_struct_comparison}. Due to resource limitations, we
+designed CUG-C and CUG-G from scratch with the minimum subset of features
+required in order to demonstrate that this is possible, instead of extending an
+existing full-featured language such as $C^\sharp$.
 
 One thing to note is that our goal was not to write a comprehensive set of
 tools which could be used to catch all errors of this nature at compile-time.
-We instead hope to demonstrate some ideas which could be used to catch various
-kinds of errors, by demonstrating implementations of two prototype systems
-which have been designed to capture a small subset of them. Although limited,
-both projects came to a total of over 13,000 lines of code, not including
-whitespace, comments, or any example programs that we to test these two
+We instead hope to show some ideas which could be used to catch various kinds
+of errors, by demonstrating implementations of two prototype systems which have
+been designed to capture a small subset of them. Although limited, both
+projects came to a total of over 13,000 lines of code, not including
+whitespace, comments, or any example programs that we use to test these two
 systems.
 
 \subsection{AnnoCheck}
 
 AnnoCheck is a command-line program that takes annotated code written in C and
-annotated code written in GLSL as input. An example annotation and the code
-that is generated is shown in Listings \ref{lst:annotation_example_input} and
+GLSL as input. An example annotation and the code that is generated is shown in
+Listings \ref{lst:annotation_example_input} and
 \ref{lst:annotation_example_output}. These are small snippets of the larger
 program used in our Evaluation (Chapter \ref{chp:evluation}), adapted from an
 example program written by Neil Henning \cite{VulkanComputeExampleSource}
@@ -488,7 +487,7 @@ void main() {
     output_buffer.values[gl_GlobalInvocationID.x] = input_buffer.values[gl_GlobalInvocationID.x];
 })
 \end{lstlisting}
-\caption{Annotated C and GLSL that can be processed by AnnoCheck, the output
+\caption{Annotated C and GLSL that can be processed by AnnoCheck. The output
 that AnnoCheck produces for these snippets is shown in
 Listing \ref{lst:annotation_example_output}. The full example can be found on
 the project GitHub repository \cite{ProjectSource}.}
@@ -509,7 +508,7 @@ compute pipeline \cite{VkComputePipelineCreateInfo}
 creation of the \texttt{VkPipelineShaderStageCreateInfo} structure on the host
 and the \texttt{main} function within the shader using the
 \texttt{@create\_verification} and \texttt{@verify} commands respectively. The
-annotation itself is given a name, \texttt{"verification\_1"} which the
+annotation itself is given a name, \texttt{"verification\_1"}, which the
 annotated C and GLSL reference. AnnoCheck takes annotated code as input and
 produces the output seen in Listing \ref{lst:annotation_example_output}.
 
@@ -561,13 +560,13 @@ undefined runtime results (Appendix \ref{app:other_API_issues}).
 
 Listing \ref{lst:annotation_example_input} demonstrates how annotations can
 prevent programmers from compiling code where the names of shaders differ
-between C and GLSL, informing them of the runtime error that would cause. The
-flexibility of AnnoCheck is that the programmer can remove the annotations if
-they desire, especially when using complex runtime features. However, AnnoCheck
-can still help ensure that an initial implementation is correct. Furthermore,
-Section \ref{sec:design_annotation_processor} covers design decisions that were
-made with typical shader workflows in mind such that annotations can be kept
-for most use-cases.
+between C and GLSL, informing them of the runtime error that this would cause.
+The flexibility of AnnoCheck is that the programmer can remove the annotations
+if they desire, especially when using complex runtime features. However,
+AnnoCheck can still help ensure that an initial implementation is correct.
+Furthermore, Section \ref{sec:design_annotation_processor} covers design
+decisions that were made with typical shader workflows in mind such that
+annotations can be kept for most use-cases.
 
 \subsection{CUG}
 
@@ -636,8 +635,8 @@ the project GitHub repository \cite{ProjectSource}. The Syntax is given in
 \label{lst:language_example}
 \end{lstfloat}
 
-Listing \ref{lst:language_example} shows the snippet of code which perform the
-same functionality as the annotation example shown in Listing
+Listing \ref{lst:language_example} shows a snippet of code with the same
+functionality as the annotation example shown in Listing
 \ref{lst:annotation_example_input}. As can be seen, CUG-C has an in-built
 directive system similar to the annotation system we created for C and GLSL.
 This is used to tell the CUG compiler about the existence of a shader interface
@@ -645,27 +644,27 @@ with the name ``main''. The compiler can then check for conformance of that
 interface when compiling CUG-G. We are not advocating for any particular
 features of these dialects, but demonstrate some of the benefits a
 multi-dialect system can provide. We also explore the opportunities such a
-system presents Chapter \ref{chp:conclusion_and_further_work}.
+system presents in Chapter \ref{chp:conclusion_and_further_work}.
 
 The syntax, semantics and particular features of these languages are provided
 in-depth in Section \ref{sec:design_languages}. Due to the verbose nature of
-using graphics APIs, further CUG examples are given in Appendix
+using GPU APIs, further CUG examples are given in Appendix
 \ref{app:other_cug_examples}.
 
 \section{Summary}
 
-We have presented AnnoCheck and CUG, giving the motivation for why we created
-them. We have explained that despite the existence of many techniques which
-abstract-away graphics and compute APIs, therefore simplifying heterogeneous
-programming, traditional toolchains will still be used in many contexts for the
-forseeable future. However, this does not mean that those traditional
-toolchains cannot themselves be improved. Our first attempt, AnnoCheck, is
-designed to allow programmers to annotate C and GLSL code in order to provide
-limited cross-language checking. However, due to limitations with this
-approach, we developed CUG, a multi-dialect programming language that solves
-some of the problems we had with AnnoCheck. However, both systems have merits,
-and we demonstrated some examples where they can help prevent common errors
-that are when programming using graphics APIs.
+We have presented AnnoCheck and CUG, giving the motivation their creation. We
+have explained that despite the existence of many techniques which
+abstract-away GPU APIs, therefore simplifying heterogeneous programming,
+traditional toolchains will still be used in many contexts for the forseeable
+future. However, this does not mean that those traditional toolchains cannot
+themselves be improved. Our first attempt, AnnoCheck, is designed to allow
+programmers to annotate C and GLSL code in order to provide limited
+cross-language checking. However, due to limitations with this approach, we
+developed CUG, a multi-dialect programming language that solves some of the
+problems we had with AnnoCheck. However, both systems have merits, and we
+demonstrated some examples where they can help prevent common errors when using
+GPU APIs.
 
 \chapter{Technical Background}
 
