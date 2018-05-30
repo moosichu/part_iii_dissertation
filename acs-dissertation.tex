@@ -703,78 +703,56 @@ pre-planned, and despite their current general-purpose nature, the terminology
 surrounding graphics cards has its foundation in graphics, and is disconnected
 from programming language norms. Furthermore, standards around using GPUs and
 heterogeneous hardware are still solidifying, with many fragmented communities
-and confusion around the future roadmap of both graphics and compute APIs
-\cite{TODO}.
+and confusion around the future roadmap of GPU APIs \cite{TODO}.
 
 This section summarises relevant milestones related to the history of
 heterogeneous computing in order to help the reader understand why the field is
-in its present state. Furthermore, by giving context to development of the
-terms and technologies used by both of the systems we describe, it provides the
-relevant background needed to understand the projects themselves.
-
-% \caption{
-% Tabulated history of graphics APIs and graphics card development. Naturally
-% this tabled misses many details, especially related to the earlier years when
-% there were many hardware vendors, the graphics market was volatile, and there
-% were many, many competing graphics APIs each with their own extensions and
-% features. Futhermore, the introduction of certain features are really hard to
-% pin-down. For example, there is no set-date where GPUs went from being
-% fixed-function hardware to becoming programmable hardware. Changes such as
-% these happened gradually, with extra configurability being slowly introduced to
-% graphics hardware with extensions and additional API calls until shading
-% languages needed to be defined in order to program these configurations more
-% systematically. However, even these languages were limited in their
-% capabilities and support for advanced features like loops and flow-control took
-% time to be introduced into hardware.
-% }
-% \end{table}
-
-%TODO(Rewrite):Reorganise and shrink Look at Alan Mycroft feedback.
+is in a fragmented state that has hindered the development of new shading
+languages. Furthermore, by giving context to development of the terms and
+technologies used by both of the systems we describe, it provides the relevant
+background needed to understand AnnoCheck and CUG.
 
 \begin{itemize}
 
     \item 1992 \textbf{OpenGL 1.0} released by Silicon Graphics (SGI) as an API
-    for interacting with graphics hardware on 3D graphics workstations. OpenGL
-    was created from their proprietary ``IrisGL'' API in order to prevent
-    competitors creating their own proprietary graphics APIs and fragmenting
-    the market. The API allowed users to issue basic commands in order to
-    set-up 3D scenes, apply basic fixed-function lighting, and then render the
-    scenes \cite{OpenGL_1_0}. Control of the OpenGL specification eventually
-    transfers from SGI to various owners before landing in the hands of the
-    \textbf{Khronos Group} \cite{OpenGL}.
+    for interacting with graphics hardware on 3D graphics workstations. The
+    open standard, OpenGL, was created from their proprietary ``IrisGL'' API in
+    order to discourage competitors creating their own proprietary graphics
+    APIs and fragmenting the market. The API allowed users to issue basic
+    commands in order to set-up 3D scenes, apply basic fixed-function lighting,
+    and then render the scenes \cite{OpenGL_1_0}. The OpenGL specification is
+    now controlled by the \textbf{Khronos Group} \cite{OpenGL}
+    \cite{OpenGLToKhronos}.
 
-    \item 1996 \textbf{Direct3D 2.0} release by Microsoft, so named, because it
-    was the \textit{first} version of Direct3D. Although at this point API was
-    designed as an abstraction for a software renderer
+    \item 1996 \textbf{Direct3D 2.0} released by Microsoft, so named, even
+    though was the \textit{first} version of Direct3D. Although at this point
+    API was designed as an abstraction for a software renderer
     \cite{JohnCarmackPlanDirect3DvsOpenGl}, it eventually developed into an API
     for interfacing with graphics cards.
 
-    \item 1996 \textbf{3Dfx Voodoo1} graphics card released. Although not the
-    first graphics card, it dominated the consumer market and brought 3D
-    graphics rendering to the mainstream \cite{Voodoo1}.
+    % \item 1996 \textbf{3Dfx Voodoo1} graphics card released. Although not the
+    % first graphics card, it dominated the consumer market and brought 3D
+    % graphics rendering to the mainstream \cite{Voodoo1}.
 
     \item 1999 \textbf{NVIDIA GeForce 256} released; the first video card to be
-    called a \textbf{GPU}. It was the first consumer-PC graphics hardware to
-    accelerate ``transform and lighting'' operations, allowing them to be
+    marketed as a \textbf{GPU}. It was the first consumer-PC graphics hardware
+    to accelerate ``transform and lighting'' operations, allowing them to be
     offloaded from the CPU. The ``transform and lighting'' component of GPUs
     prefigured what would eventually run shaders \cite{GeForce256}.
 
-    \item 2000 \textbf{The Khronos Group} was founded to provide structure for
-    open standards in 3D graphics. Reflecting the increasing flexibility of
+    \item 2000 \textbf{The Khronos Group} was founded to provide a formal body
+    for open standards in 3D graphics. Reflecting the increasing flexibility of
     graphics cards over time, they have come to additionally provide standards
     in virtual and augmented reality, heterogeneous computing, computer vision,
-    parallel computing and neural networks \cite{KhronosGroupAbout}. In 2006
-    control of OpenGL was transferred to the Khronos Group
-    \cite{OpenGLToKhronos}.
+    parallel computing and neural networks \cite{KhronosGroupAbout}.
 
     \item 2001 \textbf{GPGPU}, \textit{general purpose computations on GPUs},
     are demonstrated by Larson and McAllister. They perform fast matrix
     multiplications by encoding the matrices as the inputs and outputs of the
-    graphics pipeline such that the graphics pipeline can then be configured to
-    perform the desired calculations \cite{MatrixGPU}. Subsequent papers then
-    show how GPUs can outperform CPUs for many operations that are desirable in
-    scientific computing \cite{CUDAtoOpenCL} \cite{Kruger03linearalgebra}
-    \cite{LUGPU} \cite{SparsematrixGPU}.
+    graphics pipeline to offload calculations to the GPU. \cite{MatrixGPU}.
+    Subsequent papers then show how GPUs can outperform CPUs for many
+    operations that are desirable in scientific computing \cite{CUDAtoOpenCL}
+    \cite{Kruger03linearalgebra} \cite{LUGPU} \cite{SparsematrixGPU}.
 
     \item 2003 \textbf{OpenGL ES}, \textit{OpenGL for embedded systems},
     released by the Khronos Group \cite{OpenGLESRelease}. It is currently the
@@ -787,13 +765,14 @@ relevant background needed to understand the projects themselves.
     assembly languages that customised parts of the fixed-function pipeline.
     This formally replaced parts of the graphics pipeline with
     user-programmable stages which were defined using a hardware-independent
-    high-level language (replacing proprietary assembler languages that
-    individual GPU manufacturers were introducing). GLSL at this point was
-    defined as \textit{two} closely-related shading languages for different
-    parts of the pipeline: the vertex processor (for modifying vertices) and
-    the fragment processor (for modifying the final image). Finally, the
-    language was forward-looking in supporting many features that hardware at
-    the time did not \cite{GLSL_1_10}.
+    high-level language. GLSL at this point was defined as \textit{two}
+    closely-related shading languages for different parts of the pipeline: the
+    vertex processor (for transforming vertices) and the fragment processor
+    (for operating on individual pixels in the final image). Finally, the
+    language was forward-looking in the supporting of a coherent set of
+    features, including some that hardware at the time did not
+    \cite{GLSL_1_10}. GPU vendors are responsible for including their own GLSL
+    compilers in their hardware drivers \cite{TODO}.
 
     \item 2005 \textbf{Unified Shader Architecture} introduced in ATI's
     \textbf{Xenos GPU}, released as part of the Xbox 360. The ``vertex'' and
@@ -805,19 +784,13 @@ relevant background needed to understand the projects themselves.
     architecture \cite{HistoryOfTheGPU}.
 
     \item 2006 \textbf{CUDA} (Compute Unified Device Architecture) introduced
-    by NVIDIA as a parallel computation platform and API. This allowed
-    programmers to exploit the \textbf{GPGPU} capabilities of graphics hardware
-    directly, without having to encode data as the input and output of the
-    OpenGL pipeline. This made GPU computing more efficient and accessible
-    \cite{AboutCUDA}.
-
-    \item 2008 \textbf{Open CL} platform developed and announced by Apple as a
-    potential open standard for GPGPU computing. Existing as a distinct entity
-    from OpenGL, it has its own shader language called \textbf{OpenCL C}. Apple
-    handed control of the OpenCL specification to the Khronos Group, with the
-    first implementation of the standard releasing alongside the Snow Leopard
-    OS X update in 2009 \cite{OpenCL}. OpenCL also added support other
-    heterogeneous architectures such as DSPs and FPGAs.
+    by NVIDIA as a proprietary parallel computation platform and API. This
+    allowed programmers to exploit the \textbf{GPGPU} (General Purpose GPU)
+    capabilities of graphics hardware directly, without having to encode data
+    as the input and output of the OpenGL pipeline. This made GPU computing
+    more efficient and accessible \cite{AboutCUDA}. \textbf{OpenCL} is a
+    similar open platform created by Apple and now maintained by the Khronos
+    Group \cite{OpenCL}.
 
     \item 2015 \textbf{SPIR-V} shading language released alongside
     \textbf{OpenCL 2.1} \cite{SPIRVLaunch}. Unlike the high-level
@@ -828,36 +801,60 @@ relevant background needed to understand the projects themselves.
     supported by Vulkan at launch, unifying the shading languages of Khronos'
     APIs \cite{SPIRVOpenGL}.
 
-    \item 2016 \textbf{Vulkan} released by the Khronos Group. A low level
-    graphics and compute API for graphics cards that aims to better represent
-    how modern graphics cards are designed, this differs from OpenGL, whose
-    abstraction of a traditional graphics pipeline no longer represents the
-    unified nature of GPUs \cite{VulkanAnnouncement}. Unlike OpenGL and OpenGL
-    ES, Vulkan is the same on both desktop, mobile and embedded systems
-    \cite{Vulkan}.
+    \item 2016 \textbf{Vulkan} released by the Khronos Group. A low-level GPU
+    API that aims to better represent how modern graphics cards are designed,
+    this differs from OpenGL, whose abstraction of a traditional graphics
+    pipeline no longer represents the unified nature of GPUs
+    \cite{VulkanAnnouncement}. Unlike OpenGL and OpenGL ES, Vulkan is the same
+    on both desktop, mobile and embedded systems \cite{Vulkan}.
 
 \end{itemize}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{unity_shader_madness}
+\caption{The current state of the Unity game engine shader pipeline
+\cite{UnityShaderPipeline}. The complexity comes from the fragmented nature
+of GPU APIs.}
+\label{fig:unity_shader_madness}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{unity_shader_sanity}
+\caption{This is what the Unity shader pipeline shown in Figure
+\ref{fig:unity_shader_madness} could look like if SPIR-V becomes the standard
+intermediate representation for shader languages \cite{UnityShaderPipeline}.}
+\label{fig:unity_shader_sanity}
+\end{figure}
 
 The capabilities of GPUs and their related APIs have massively expanded since
-they were both introduced. This has allowed GPUs to be used in increasingly
-general domains, including scientific computing, crypto-currency mining,
-high-frequency trading, and artificial intelligence \cite{GPUCrypto}
-\cite{GPUScientificComputing} \cite{GPUTrading} \cite{GPUAI}.This has even led
-to some hobbyists being priced out of the market \cite{GPUCrypto}
-\cite{BitcoinRuiningPricing}. However, there are many different standards and
-APIs for different use-cases of the same hardware as a result of a complex
-history. Furthermore, many of these use-cases have widely-used proprietary
-alternatives such as CUDA, DirectX, Metal and even proprietary game console
-APIs \cite{CUDA} \cite{Metal} \cite{Direct3D} \cite{PS4PortCrew}. However, with
-the release of SPIR-V, aspects of the various Khronos Standards are converging.
-Additionally, despite a foundation in graphics, the compute capabilities of
-Vulkan are expanding such that OpenCL could eventually be merged into the API
-\cite{VulkanOpenCLMerge}. Furthermore, the low-level nature of new graphics and
-compute APIs such a Vulkan, Metal and DirectX 12 have allowed portability
-initiatives to bring implementations of those APIs as light shims above the
-others \cite{VulkanPortabilityInitiative}
-\cite{VulkanPortabilityInitiativeAnnouncement}.
+they were both introduced, allowing GPUs to be used in increasingly general
+domains, including scientific computing, crypto-currency mining, high-frequency
+trading, and artificial intelligence \cite{GPUCrypto}
+\cite{GPUScientificComputing} \cite{GPUTrading} \cite{GPUAI}. Unfortunately,
+there are many different APIs for different use-cases of the same hardware as a
+result of a complex history. Furthermore, many of these use-cases have
+widely-used proprietary alternatives such as CUDA, DirectX,
+Metal\footnote{Apple's proprietary API.} and even proprietary game console APIs
+\cite{CUDA} \cite{Metal} \cite{Direct3D} \cite{PS4PortCrew} (full comparison in
+Appendix \ref{sec:api_options}). As shown in Figure
+\ref{fig:unity_shader_madness}, which shows how the popular Unity game engine
+targets many platforms, this makes programming for GPUs in a portable manner
+extremely complex \cite{UnityShaderPipeline}.
+
+However, with the release of SPIR-V, aspects of the various Khronos Standards
+(OpenCL, OpenGL and Vulkan) are converging. Additionally, despite a foundation
+in graphics, the compute capabilities of Vulkan are expanding such that OpenCL
+could eventually be merged into the API \cite{VulkanOpenCLMerge}. Furthermore,
+the low-level nature of new graphics and compute APIs such a Vulkan, Metal and
+DirectX 12 have allowed portability initiatives to bring implementations of
+those APIs as light shims above the others \cite{VulkanPortabilityInitiative}
+\cite{VulkanPortabilityInitiativeAnnouncement}. Figure
+\ref{fig:unity_shader_sanity} shows how the Unity game engine's toolchain could
+be simplified using SPIR-V as a backend \cite{UnityShaderPipeline}. This is
+much closer to the ``hourglass'' model that CPUs provide, and will hopefully
+spur the development of many new shading languages.
 
 \section{The Challenges with the APIs}
 
@@ -910,24 +907,6 @@ Appendix \ref{app:other_API_issues}.
 % depending on the domain a particular applications was being designed for.
 % Therefore there has been movement towards developing low-level APIs which will
 % eventually be capable of filling both roles. Vulkan is one such API.
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\linewidth]{unity_shader_madness}
-\caption{The current state of the Unity game engine shader pipeline
-\cite{UnityShaderPipeline}. The complexity comes from the fragmented nature
-of GPU APIs.}
-\label{fig:unity_shader_madness}
-\end{figure}
-
-\begin{figure}[h]
-\centering
-\includegraphics[width=0.8\linewidth]{unity_shader_sanity}
-\caption{This is what the Unity shader pipeline shown in Figure
-\ref{fig:unity_shader_madness} could look like if SPIR-V becomes the standard
-intermediate representation for shader languages \cite{UnityShaderPipeline}.}
-\label{fig:unity_shader_sanity}
-\end{figure}
 
 
 A GPU API typically consists of two components: the API itself and a
@@ -1201,31 +1180,6 @@ concerns:
 
 \end{itemize}
 
-\section{Choice of Backend}
-
-%TODO(Rewrite): make sure it better explains why the backend was chosen.
-
-We decided to target the Vulkan graphics and compute API in the implementation
-of our systems \cite{Vulkan}. Done for the following reasons:
-
-\begin{itemize}
-
-    \item Vulkan is a modern graphics API with runtime safety-features (such as
-    validation layers) that other APIs such as OpenGL lack \cite{TODO}. Our
-    goal was to demonstrate how even a modern graphics API could suffer from
-    the issues described in Section \ref{sec:api_challanges}, and how our
-    systems could introduce compile-time checks for these errors.
-
-    \item Vulkan is already being widely used in the gaming industry, so the
-    use-cases described here are applicable to a wide audience.
-    %TODO(Helpful) : phrase better).
-
-    \item Vulkan is a low-level API. One of the goals of our systems was to
-    demonstrate how they have no runtime overhead, this is done by allowing
-    users to make Vulkan API-calls directly.
-
-\end{itemize}
-
 \section{Build Strategy}
 
 Due to the fact that they aim to solve similar problems, both AnnoCheck and the
@@ -1257,12 +1211,13 @@ modified, that would massively impede productivity.
 
 Therefore we take a novel approach in type checking between CPU and GPU code.
 Firstly, shaders and host code are written in different files, using different
-languages in the traditional manner. However, the host code is analysed using a
-program which generates metadata at the compile-time of the host code. This
-approach does have limitations: it relies on the programmer to correctly
-mark-up their CPU code so that the errors can be checked-for. However, the
-benefit of this is that raw-and-unchecked API calls always exists as an option.
-This system does not impose any limitations on existing workflows.
+languages in the traditional manner. We target the Vulkan API (Section
+\ref{sec:backend_choice}). However, the host code is analysed using a program
+which generates metadata at the compile-time of the host code. This approach
+does have limitations: it relies on the programmer to correctly mark-up their
+CPU code so that the errors can be checked-for. However, the benefit of this is
+that raw-and-unchecked API calls always exists as an option. This system does
+not impose any limitations on existing workflows.
 
 This metadata can then be fed as input when the GPU code is compiled. Which can
 be at some arbitrary point after the CPU code is compiled, or even when the
@@ -1704,6 +1659,33 @@ The combined source-code for both projects comes to around \totalloccount lines
 of code. \compilerloccount of which are for the CUG compiler alone.
 
 %TODO: Furthermore, the design of CUG necessitated comprehensive semantic analysis,
+
+\section{Choice of Backend}
+
+\label{sec:backend_choice}
+
+%TODO(Rewrite): make sure it better explains why the backend was chosen.
+
+We decided to target the Vulkan graphics and compute API in the implementation
+of our systems \cite{Vulkan}. Done for the following reasons:
+
+\begin{itemize}
+
+    \item Vulkan is a modern graphics API with runtime safety-features (such as
+    validation layers) that other APIs such as OpenGL lack \cite{TODO}. Our
+    goal was to demonstrate how even a modern graphics API could suffer from
+    the issues described in Section \ref{sec:api_challanges}, and how our
+    systems could introduce compile-time checks for these errors.
+
+    \item Vulkan is already being widely used in the gaming industry, so the
+    use-cases described here are applicable to a wide audience.
+    %TODO(Helpful) : phrase better).
+
+    \item Vulkan is a low-level API. One of the goals of our systems was to
+    demonstrate how they have no runtime overhead, this is done by allowing
+    users to make Vulkan API-calls directly.
+
+\end{itemize}
 
 \section{AnnoCheck}
 
