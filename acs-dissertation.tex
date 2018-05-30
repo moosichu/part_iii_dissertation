@@ -90,10 +90,10 @@
 \label{sec:TODO}
 
 We provide the motivation for \textit{AnnoCheck} and \textit{CUG}: outlining
-the problem they solve, why it is important and why it has not yet been solved.
-\textbf{AnnoCheck} is a cross-module annotation checker for the C and GLSL
-programming languages that can be used to catch common errors when using them
-to control the GPU. \textbf{CUG}\footnote{This is short for
+the problem they solve, why this is important and why solutions have not yet
+been found. \textbf{AnnoCheck} is a cross-module annotation checker for the C
+and GLSL programming languages that can be used to catch common errors when
+using them to control the GPU. \textbf{CUG}\footnote{This is short for
 \textit{CPU-Union-GPU}, similar logic applies to the naming of the dialects.}
 takes this approach to the next level, being a programming language with two
 \textit{dialects} which are each designed to target a different backend. The
@@ -109,13 +109,12 @@ elaborated on in Chapter \ref{chp:technical_background}.
 
 \begin{itemize}
 
-    \item \textbf{GPU (Graphical Processing Unit)}: A piece of hardware
-    that performs computations using a massively parallel SIMT and SIMD
-    architecture \cite{TODO}. The RAM a GPU directly accesses is called
-    \textit{VRAM}. In most architectures data must be explicitly transferred
-    from the CPU's RAM to the GPU's VRAM through a bus\footnote{In some
-    architectures, the GPU and CPU share access to a single pool of
-    memory\cite{TODO}}.
+    \item \textbf{GPU (Graphical Processing Unit)}: A piece of hardware that
+    performs computations using a massively parallel SIMT and SIMD architecture
+    \cite{TODO}. The RAM directly accessed by a GPU is called \textit{VRAM}. In
+    most architectures data must be explicitly transferred from the CPU's RAM
+    to the GPU's VRAM through a bus\footnote{In some architectures, the GPU and
+    CPU share access to a single pool of memory\cite{TODO}}.
 
     \item \textbf{Shader:} A \textit{shader} is \textit{any} computer
     program written for the GPU. They were originally used for shading computer
@@ -363,9 +362,9 @@ CUG: a programming language with two distinct dialects.
 
 As we describe in Chapter \ref{chp:related_work}, systems which aim to improve
 over low-level toolchains often sacrifice some control that those traditional
-workflows provide: whether its memory management, scheduling, or which hardware
-sections of code eventually target. This has two benefits: improving the
-user-experience by abstracting-away low-level details, and providing an
+workflows provide: whether it be memory management, scheduling, or which
+hardware sections of code eventually target. This has two benefits: improving
+the user-experience by abstracting-away low-level details, and providing an
 optimising compiler with the control necessary to optimise scheduling. The
 issue with this approach is the fact that precise control is still important in
 many domains where GPUs are used -- to the point where programmers still choose
@@ -378,7 +377,7 @@ Although this means these solutions are limited in the abstractions that they
 can provide, there are some ``easy wins'' to be made. This is demonstrated by
 the example problem shown in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
 and elaborated on in Section \ref{sec:api_challanges}. Some bugs introduced due
-to errors in using a GPU API can prevented by compile-time checks. That is,
+to errors in using a GPU API can be prevented by compile-time checks. That is,
 instead of trying to unify code that is written for the CPU and GPU under a
 single language or system which is designed to generate API calls for the
 programmer, we can use compile-time checking \textit{between} CPU and GPU
@@ -437,9 +436,8 @@ tools which could be used to catch all errors of this nature at compile-time.
 We instead hope to show some ideas which could be used to catch various kinds
 of errors, by demonstrating implementations of two prototype systems which have
 been designed to capture a small subset of them. Although limited, both
-projects came to a total of over 13,000 lines of code, not including
-whitespace, comments, or any example programs that we use to test these two
-systems.
+projects came to a total of over 13,000 lines of code, excluding whitespace,
+comments, or any example programs that we use to test these two systems.
 
 \subsection{AnnoCheck}
 
@@ -554,11 +552,11 @@ by AnnoCheck. The full example can be found on the project GitHub repository
 
 The important key feature this example provides is the compile-time checking of
 the function name -- ensuring that \texttt{main} cannot be renamed in the host
-or shader without being consistently renamed in the other. If we were to ensure
-such an error was introduced in raw C and GLSL, the resulting behaviour would
-be a runtime crash. However, not all inconsistencies which can be checked like
-this result in runtime errors, others can simply result in incorrect or
-undefined runtime results (Appendix \ref{app:other_API_issues}).
+or shader without being consistently renamed in the other. If we deliberately
+introduced such an error was into raw C and GLSL, the resulting behaviour would
+be a runtime crash. However, not all such inconsistencies result in runtime
+errors, others can simply result in incorrect or undefined runtime results
+(Appendix \ref{app:other_API_issues}).
 
 Listing \ref{lst:annotation_example_input} demonstrates how annotations can
 prevent programmers from compiling code where the names of shaders differ
@@ -576,7 +574,7 @@ CUG consists of two \textit{separate} but \textit{semantically related}
 languages called \textit{CUG-C} and \textit{CUG-G}, each designed to target
 different architectures. However, due to them being semantically related, we
 refer to them as \textbf{dialects}. The first dialect, \textit{CUG-C}, is
-designed to be compiled for the CPU. The second language, \textit{CUG-G} is
+designed to be compiled for the CPU. The second dialect, \textit{CUG-G} is
 similarly designed to target GPUs.
 
 % Section \ref{sec:TODO} explains how historically compiling custom languages to
@@ -644,7 +642,7 @@ directive system similar to the annotation system we created for C and GLSL.
 This is used to tell the CUG compiler about the existence of a shader interface
 with the name ``main''. The compiler can then check for conformance of that
 interface when compiling CUG-G. We are not advocating for any particular
-features of these dialects, but demonstrate some of the benefits a
+features of these dialects, but rather demonstrate some of the benefits a
 multi-dialect system can provide. We also explore the opportunities such a
 system presents in Chapter \ref{chp:conclusion_and_further_work}.
 
@@ -664,7 +662,7 @@ themselves be improved. Our first attempt, AnnoCheck, is designed to allow
 programmers to annotate C and GLSL code in order to provide limited
 cross-language checking. However, due to limitations with this approach, we
 developed CUG, a multi-dialect programming language that solves some of the
-problems we had with AnnoCheck. However, both systems have merits, and we
+problems we experienced with AnnoCheck. However, both systems have merits, and we
 demonstrated some examples where they can help prevent common errors when using
 GPU APIs.
 
