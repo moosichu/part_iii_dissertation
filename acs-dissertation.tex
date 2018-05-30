@@ -818,8 +818,8 @@ intermediate representation for shader languages \cite{UnityShaderPipeline}.}
 \label{fig:unity_shader_sanity}
 \end{figure}
 
-The capabilities of GPUs and their related APIs have massively expanded since
-they were both introduced, allowing GPUs to be used in increasingly general
+Both the capabilities of GPUs and their related APIs have massively expanded
+since they were introduced, allowing GPUs to be used in increasingly general
 domains (Section \ref{sec:motivation}). Unfortunately, as a result of a complex
 history, there are many different APIs for different use-cases of the same
 hardware (eg. OpenGL vs OpenCL). Furthermore, many of these use-cases have
@@ -842,7 +842,7 @@ those APIs as light shims above the others \cite{VulkanPortabilityInitiative}
 \ref{fig:unity_shader_sanity} shows how the Unity game engine's toolchain could
 be simplified using SPIR-V as a backend \cite{UnityShaderPipeline}. This is
 much closer to the ``hourglass'' model that CPUs provide, and will hopefully
-spur the development of many new shading languages.
+spur on the development of many new shading languages.
 
 \section{The Challenges with the APIs}
 
@@ -876,11 +876,10 @@ can call in order to direct an abstracted model of the GPU to perform specific
 operations. Some of those API calls enable the user to load their shaders onto
 the GPU, transfer data to the GPU, and then execute the shaders on that data.
 
-For graphics operations, the full set of operations needed in order to render
-an image is called the \textit{graphics pipeline}
-\cite{TripThroughGraphicsPipeline1}. Although there were originally two stages,
-modern graphics APIs now expose up to seven shading stages
-\cite{TripThroughGraphicsPipeline3}:
+For graphics, the full set of operations needed in order to render an image is
+called the \textit{graphics pipeline} \cite{TripThroughGraphicsPipeline1}.
+Although there were originally two stages, modern graphics APIs now expose up
+to seven shading stages \cite{TripThroughGraphicsPipeline3}:
 
 \begin{itemize}
 
@@ -971,7 +970,7 @@ Drawbacks include:
     \item The \textit{driver} for a piece of hardware must include an entire
     compiler for a high-level language.
 
-    \item GPU drivers are proprietary, and can have bugs where semantically
+    \item GPU drivers are proprietary and can have bugs where semantically
     equivalent programs have different outputs (Figure \ref{fig:glfuzz})
     \cite{GLFuzz}.
 
@@ -994,7 +993,7 @@ Drawbacks include:
     placement of the \texttt{const} keyword varies in subtly different ways
     \cite{TODO}. Finally, shading languages natively support intrinsic types
     such as vectors, which many CPU languages do not \cite{TODO}. Therefore
-    code sharing does not provide guarantees, and can still be fiddly.
+    code sharing does not provide guarantees, and may still be cumbersome.
 
     \item GLSL does not support \texttt{\#include} directives, so code must be
     shared using a custom solution \cite{TODO}.
@@ -1121,20 +1120,20 @@ APIs which use SPIR-V, leaving many presented problems unsolved.
 \label{sec:issues_summary}
 
 We enumerate the two specific issues that AnnoCheck and CUG each solve.
-Although there is overlap in which problems each system solves, they differ in
+Although there is overlap in which problems each system tackles, they differ in
 their approaches. Concrete examples of these are evaluated in Chapter
 \ref{chp:evaluation}.
 
 \begin{itemize}
 
     \item \textbf{Referring to Identifiers with Strings}: The CPU refers to
-    many identifiers within shaders using strings. As the correctness of this
-    cannot be checked by a compiler, this makes refactoring code difficult.
-    Especially as mis-matches result in programs crashing at
+    many identifiers within shaders using strings. The correctness of this
+    cannot be checked by a compiler, which makes refactoring code difficult;
+    especially as mis-matches result in programs crashing at
     run-time\footnote{On an Ubuntu 16.04 machine with an NVIDIA GTX 970 GPU.}.
     AnnoCheck solves this problem through the use of programmer-provided
-    annotations. CUG does this through compiler directives and an enhanced type
-    system.
+    annotations. Whilst CUG does this through compiler directives and an
+    enhanced type system.
 
     \item \textbf{Sharing Code}: Despite being common when using compute
     shaders, sharing data structure definitions and other code can be difficult
@@ -1150,9 +1149,9 @@ their approaches. Concrete examples of these are evaluated in Chapter
 %TODO(Rewrite): Clunky
 
 We have presented the technical background to provide the context and knowledge
-needed in order to understand the problems AnnoCheck and CUG tackle. This
+required in order to understand the problems AnnoCheck and CUG tackle. This
 includes a history of GPU APIs, an overview of the GPU pipeline, and challenges
-when using shaders. We rounded off the chapter with the two specific issues our
+when using shaders. We concluded the chapter with the two specific issues our
 systems solve.
 
 % \subsubsection{Issue 1: Redefining Datastructures}
