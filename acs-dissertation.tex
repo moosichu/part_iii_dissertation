@@ -995,11 +995,19 @@ Drawbacks include:
     run-time.
 
     \item The C type system is limited compared with more modern programming
-    languages. Furthermore, C and shading languages do have subtle differences.
-    For example the \textbf{\texttt{int}} keyword in GLSL specifically defines
-    a 32-bit two's complement integer, compared with C, where an \texttt{int}
-    must have at least 16 bits and can use various encodings \cite{TODO}.
-    Therefore code sharing does not provide guarantees.
+    languages.
+
+    \item C and shading languages do have subtle differences. For example the
+    \textbf{\texttt{int}} keyword in GLSL specifically defines a 32-bit two's
+    complement integer, compared with C, where an \texttt{int} must have at
+    least 16 bits and can use various encodings \cite{TODO}. Additionally, the
+    placement of the \texttt{const} keyword varies in subtly different ways
+    \cite{TODO}. Finally, shading languages natively support intrinsic types
+    such vectors, which many CPU languages do not \cite{TODO}. Therefore code
+    sharing does not provide guarantees, and can still be fiddly.
+
+    \item GLSL does not support \texttt{\#include} directives, so code must be
+    shared using custom solution \cite{TODO}.
 
     \item The CPU still has to refer to many identifiers within a shader using
     strings at runtime. Therefore renaming identifiers in shaders requires
@@ -1125,86 +1133,109 @@ tackle.
 
 \label{sec:issues_summary}
 
-This section enumerates the specific issues the project aims to solve. This
-project consists of two systems, an annotation system for C and GLSL and a
-custom pair of programming languages. Although there is overlap in which
-problems they aim to solve, they differ in their approaches. The approaches
-they each take will be briefly described. Furthermore, some of the issues are
-only tackled by one of the systems, in this case that will be mentioned.
+We enumerate the two specific issues that AnnoCheck and CUG each solve.
+Although there is overlap in which problems they aim to solve, they differ in
+their approaches. Concrete examples of these are evaluated in Chapter
+\ref{chp:evaluation}.
 
-The examples listed here are taken from various sources. Due to the limited
-space available, only the relevant fragments of these sources are displayed.
-TODO(Content): List those sources, and provide a reference to a complete summary of
-them (maybe put into appendix).
+\begin{itemize}
 
-\subsubsection{Issue 1: Redefining Datastructures}
+    \item \textbf{Referring to Identifiers with Strings}: The CPU refers to
+    many identifiers within shaders using strings. As the correctness of this
+    cannot be checked by a compiler, this makes refactoring code difficult.
+    Especially as mis-matches result in programs crashing at
+    run-time\footnote{On an Ubuntu 16.04 machine with an NVIDIA GTX 970 GPU.}.
+    AnnoCheck solves this problem through the use of programmer-provided
+    annotations. CUG does this through compiler directives and an enhanced type
+    system.
 
-This issue is demonstrated in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
-and is extremely common when writing host code in a language that differs
-significantly from C.
+    \item \textbf{Sharing Code}: Despite being common when using compute
+    shaders, sharing data structure definitions and other code can be difficult
+    at best, and impossible at worst depending on which host-shader language
+    combination is being used (Section \ref{sec:shading_langauge_challenges}).
+    By allowing code to be shared semantically, CUG can provide guarantees and
+    a formalised way of doing this. AnnoCheck does provide basic syntactic
+    code-sharing through the use of an \texttt{@include} annotation.
 
-A common example is wanting to run a shader which takes a buffer of structs as
-input or output. When using C/C++ as the host language, you do not really have
-any problems, because most common shader languages are based on C. Therefore,
-you can define a struct in a \texttt{.h} header file and include it in both
-your shader and host code.
+\end{itemize}
 
-An issue arises when host code is written in another language that is distinct
-from C. In this case, when using shaders, you have to define the datastructure
-in both the host and the shader language separately. This is what Listing
-\ref{lst:c_sharp_hlsl_struct_comparison} demonstrates.
 
-Errors can easily occur when these representations of the same datastructure
-differ. For example, given different definitions, if the CPU fills a buffer
-with a given datastructure and then transfers it to the GPU for it to operate
-on, the resulting behaviour will simply be incorrect. Debugging these kind of
-errors is hard, as there are no runtime or compile time checks, so a programmer
-has to locate it by manual inspection.
+%TODO(Rewrite): Clunky
 
-Futhermore, this is not a niche error. For example, the Unity game engine uses
-C$^\sharp$ as a scripting language, whilst using HLSL for shaders \cite{TODO}.
-Between April and July 2015, Unity applications from over 170,000 developers
-were installed on mobile hardware alone \cite{UnityByTheNumbers}.
+We have presented the technical background needed in order to provide the
+context and knowledge needed in order to understand the problems AnnoCheck and
+CUG tackle. This includes a history of GPU APIs, an overview of the GPU
+pipeline, and the challenges when using shaders. We rounded off with the two
+specific issues we solve.
 
-We hope to demonstrate how this issue could be tackled through the development
-of a pair of custom languages. We aim to demonstrate how a language that differs
-from C can have a shader language derived from it, so that these errors can
-be avoided. For example, going forward, it could be possible to write shaders
-in Unity using a shader language based on C$^\sharp$ instead of one based on C.
+% \subsubsection{Issue 1: Redefining Datastructures}
 
-The reason this has not been previously possible, is because of TODO(Content): find
-other sections explaining why and reference them.
+% This issue is demonstrated in Listing \ref{lst:c_sharp_hlsl_struct_comparison}
+% and is extremely common when writing host code in a language that differs
+% significantly from C.
 
-\subsubsection{Issue 2: Refering to shader/shader names using strings}
+% A common example is wanting to run a shader which takes a buffer of structs as
+% input or output. When using C/C++ as the host language, you do not really have
+% any problems, because most common shader languages are based on C. Therefore,
+% you can define a struct in a \texttt{.h} header file and include it in both
+% your shader and host code.
 
-This issue is demonstrated in Listing \ref{lst:annotation_example_output}.
+% An issue arises when host code is written in another language that is distinct
+% from C. In this case, when using shaders, you have to define the datastructure
+% in both the host and the shader language separately. This is what Listing
+% \ref{lst:c_sharp_hlsl_struct_comparison} demonstrates.
 
-Running a shader consists of multiple steps, the following are important and
-relevant to this problem. Firstly, a shader needs to be written and saved in a
-file. Then, depending on the API, the shader may need to be compiled into an
-intermediary format in order to run on the GPU. Then, when the application is
-running, it performs three important steps. First, it passes a pointer to the
-the shader data to the API, so that it can handle loading the code onto the
-GPU. Second, it identifies which shader (essentially a function) within that
-code should be run. Third, it then makes an API call to run that shader.
+% Errors can easily occur when these representations of the same datastructure
+% differ. For example, given different definitions, if the CPU fills a buffer
+% with a given datastructure and then transfers it to the GPU for it to operate
+% on, the resulting behaviour will simply be incorrect. Debugging these kind of
+% errors is hard, as there are no runtime or compile time checks, so a programmer
+% has to locate it by manual inspection.
 
-However, this has an issue, and that is that the shader is identified by a
-string, as shown in Listing \ref{lst:annotation_example_output}, and there are
-no compile-time checks between the shader and the host code in order to make
-sure that the host code identifies a shader that actually exists. As there is
-no direct link between the string that the host code uses to identify the
-shader and the name of the shader itself, refactoring and renaming kernels can
-be tricky.
+% Futhermore, this is not a niche error. For example, the Unity game engine uses
+% C$^\sharp$ as a scripting language, whilst using HLSL for shaders \cite{TODO}.
+% Between April and July 2015, Unity applications from over 170,000 developers
+% were installed on mobile hardware alone \cite{UnityByTheNumbers}.
 
-For example, misnaming the shader in Vulkan, causes a
-\texttt{VK\_ERROR\_INVALID\_SHADER\_NV} error at runtime.
+% We hope to demonstrate how this issue could be tackled through the development
+% of a pair of custom languages. We aim to demonstrate how a language that differs
+% from C can have a shader language derived from it, so that these errors can
+% be avoided. For example, going forward, it could be possible to write shaders
+% in Unity using a shader language based on C$^\sharp$ instead of one based on C.
 
-% https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html
+% The reason this has not been previously possible, is because of TODO(Content): find
+% other sections explaining why and reference them.
 
-% https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResult.html
+% \subsubsection{Issue 2: Refering to shader/shader names using strings}
 
-The annotation system and the new languages both aim to catch these errors at
-compile-time using different mechanisms.
+% This issue is demonstrated in Listing \ref{lst:annotation_example_output}.
+
+% Running a shader consists of multiple steps, the following are important and
+% relevant to this problem. Firstly, a shader needs to be written and saved in a
+% file. Then, depending on the API, the shader may need to be compiled into an
+% intermediary format in order to run on the GPU. Then, when the application is
+% running, it performs three important steps. First, it passes a pointer to the
+% the shader data to the API, so that it can handle loading the code onto the
+% GPU. Second, it identifies which shader (essentially a function) within that
+% code should be run. Third, it then makes an API call to run that shader.
+
+% However, this has an issue, and that is that the shader is identified by a
+% string, as shown in Listing \ref{lst:annotation_example_output}, and there are
+% no compile-time checks between the shader and the host code in order to make
+% sure that the host code identifies a shader that actually exists. As there is
+% no direct link between the string that the host code uses to identify the
+% shader and the name of the shader itself, refactoring and renaming kernels can
+% be tricky.
+
+% For example, misnaming the shader in Vulkan, causes a
+% \texttt{VK\_ERROR\_INVALID\_SHADER\_NV} error at runtime.
+
+% % https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html
+
+% % https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/VkResult.html
+
+% The annotation system and the new languages both aim to catch these errors at
+% compile-time using different mechanisms.
 
 \chapter{Design}
 
