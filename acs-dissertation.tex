@@ -2387,13 +2387,13 @@ This section describes related work in the field of modifying or improving GPU
 toolchains beyond traditional low-level libraries. It aims to show the diverse
 set of approaches that have been taken to doing this and the progress that has
 been made, in addition to demonstrating that the specific problems targeted by
-this paper have yet to be addressed.
+AnnoCheck and CUG have yet to be addressed.
 
 Since the creation of the SPIR-V intermediate language for heterogeneous
 programming (as discussed in Chapter \ref{chp:technical_background}), some
 progress has been made in simplifying and unifying how GPUs are interacted with
 for compute purposes. For example the Khronos Group have recently standardised
-a modified version of C++, \textit{OpenCL C++} for developing compute kernels
+a modified version of C++, \textit{OpenCL C++} for developing compute shaders
 \cite{OpenCL22Release} \cite{OpenCLCPPWhitePaper} \cite{OpenCL}. This has only
 been possible because it can be compiled to SPIR-V, whereas previously graphics
 drivers had to implement OpenCL C directly, limiting how complex OpenCL's
@@ -2410,10 +2410,11 @@ implementations \cite{ComputeCPP} \cite{triSYCL}, and has been adopted as a
 backend for various machine learning frameworks such as TensorFlow and Eigen
 \cite{SYCLTensorFlow} \cite{SYCLEigen}. However, this approach does have its
 limitations in removing the ability for developers to control how those API
-calls are made. Both OpenCL and SYCL are also limited in only being suitable
-for \textit{compute} applications, and do not allow for the graphics operations
-that GPUs are capable of. However, Vulkan and OpenCL could merge in the future,
-which may open the door to this happening \cite{VulkanOpenCLMerge}.
+calls are made, which AnnoCheck and CUG do not remove. Both OpenCL and SYCL are
+also limited in only being suitable for \textit{compute} applications, and do
+not allow for the graphics operations that GPUs are capable of. However, Vulkan
+and OpenCL could merge in the future, which may open the door to this happening
+\cite{VulkanOpenCLMerge}.
 
 Research has been done to make GPU and heterogeneous computing available in
 high-level dynamic languages. Theano and TensorFlow do this by abstracting a
@@ -2467,21 +2468,23 @@ shared-memory multiprocessing \cite{OpenMP}. HCC is a project aims to take C++
 code that conforms to any of these standards and compile it to AMD's GCN
 instruction set \cite{HCC}.
 
+\section{Discussion}
+
 As can be seen, there has been progress in making programming for heterogeneous
 architectures easier. However, the focus has been primarily on GPGPU computing.
 Futhermore, although the creation of SPIR-V and Vulkan are slowly changing
 this, all of these systems have had to target fairly-high level backend APIs
-such as OpenCL or CUDA, in addition to languages interpreted by device drivers
+such as OpenCL or CUDA, in addition to languages compiled by device drivers
 such as \textit{OpenCL C} or \textit{CUDA C/C++}, which has limited the
 performance and stability of the higher-level systems \cite{GLFuzz}.
 Additionally, apart from \textit{Open CL C++}, these all either present
 alternate high-level interfaces or abstract them away in order to ensure
-simplified and less error-prone programs. This differs from the approach taken
-here, which is to mark-up low-level API calls directly, so that they are
+simplified and less error-prone programs. This differs from the approach we
+take, which is to mark-up low-level API calls directly, so that they are
 checked at compile-time for consistency without sacrificing the control that
-would otherwise be lost by abstractions. Furthermore, we targeted both
-\textit{compute} and \textit{graphics} back-ends, as opposed to focusing only
-on compute.
+would otherwise be lost by abstractions. Furthermore, although we could only
+test a compute shader, the design of AnnoCheck and CUG is amenable to being
+used for graphics programming.
 
 % TODO(Helpful): Future roadmap confusion
 
@@ -2498,28 +2501,51 @@ on compute.
 % You will generally want to draw some conclusions, and point
 % to potential future work. \cite{DirectXWorkings}
 
-We have shown two novel systems which can make programming for GPUs using
-conventional low-level APIs less error-prone. The first, an annotation
-processor for C and GLSL, aims to demonstrate how existing workflows which use
-these languages can be improved in this way, without sacrificing performance.
-We also demonstrate a novel pair of languages, demonstrating how modern type
-systems can bring these kind of checks to GPU programming, whilst still
-allowing programmers to use the low-level C APIs and writing their shaders
-explicitly.
+We have shown two novel systems, AnnoCheck and CUG, which can make programming
+for GPUs using conventional low-level APIs less error-prone. AnnoCheck, an
+annotation processor for C and GLSL, aims to demonstrate how existing workflows
+which use these languages can be improved in this way, without sacrificing
+performance. Leading on from this, CUG, demonstrates how a compiler can
+integrate these checks, whilst still allowing programmers to use the low-level
+C APIs and writing their shaders explicitly. Furthermore, CUG enables the
+\textit{semantic} sharing of code between CPUs and GPUs, as opposed to the
+syntactic sharing that occurs between C and GLSL. Although CUG is more powerful
+than AnnoCheck, AnnoCheck is a much simpler program and the techniques it
+employs could be used with existing C and GLSL code bases.
 
-Although these techniques do work for some simple cases, there is still much
+Although our implementations do work in some simple cases, there is still much
 more work that could be done and places where they could be taken. Furthermore,
-as covered in Section \ref{sec:api_challanges}, there are still many difficult
-problems with using graphics APIs. Although these techniques only solved a
-subset of them, this model could hopefully be expanded to more.
+as covered in Section \ref{sec:api_challanges}, there are still many unsolved
+problems with using graphics APIs. Semantic code-sharing in particular presents
+the following opportunities:
 
-TODO(Content):
+\begin{itemize}
+
+    \item A concretely designed ``single-source'' programming model, without
+    the ``integration discontinuity'' that current models such as SYCL
+    have\footnote{That is, the ability to iteratively migrate from a
+    ``single-source'' system to a ``multi-source'' one, when the costs of
+    single-source programming outweight the benefits over the course of a
+    project's lifecycle.} \cite{DesignAndEvaluateReusableComponents}.
+
+    \item Software-side debugging. That is, the ability to inform the compiler
+    to compile specific shaders for the CPU. This would be desirable to
+    simplify the debugging them during development. However, it would require a
+    software implementation of the Vulkan API, which has yet to exist
+    \cite{VulkanCPU} \cite{Kazan}, \cite{SwiftShaderVulkan}.
+
+    \item The ability to support other dialects beyond one for the CPU and one
+    for the GPU. For example, different dialects could exist for different
+    target architectures, in addition to different dialects existing which
+    provide different language features. However, the tradeoff here is that
+    increasing the number of dialects would increase the complexity of the
+    compiler.
+
+\end{itemize}
+
+% TODO(Content):
 
 % SUPPORT DIFFERENT STATES OF GPU LANGUAGES BASED ON TARGET PART OF PIPELINE.
-
-% NOTE: CURRENTLY ONLY CONTAINS SPECULATION ON THE FUTURE OF HETEROGENEOUS
-% PROGRAMMING. IT IS CURRENTLY SLIGHTLY UNSTRUCTURED BUT PRESENTS THE IDEAS
-% I THINK THE FINAL CONCLUSION WILL.
 
 Something which the creation of SPIR-V enables, and that this paper
 demonstrates is possible, is the ability to \textit{extend} languages with
@@ -2527,7 +2553,7 @@ custom shading languages whilst still preserving existing API interfaces. This
 is different from that currently done both in industry and reasearch. For
 example, whilst programs for the Unity game engine are written in C$^\sharp$,
 shaders for it have to be written in HLSL \cite{TODO}. Projects such as SYCL
-and LIME did extend C++ and Java respectively to allow shaders to be programmed
+and Lime did extend C++ and Java respectively to allow shaders to be programmed
 in their host languages, however they used optimising compilers with the goal
 of abstracting away the underlying OpenCL API and outputting OpenCL C code for
 shaders. However, OpenCL C++ has demonstrated that API interfaces can be
