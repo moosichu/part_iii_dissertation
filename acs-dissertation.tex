@@ -812,7 +812,7 @@ background needed to understand AnnoCheck and CUG.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.8\linewidth]{unity_shader_madness}
+\includegraphics[width=0.6\linewidth]{unity_shader_madness}
 \caption{The current state of the Unity game engine shader pipeline
 \cite{UnityShaderPipeline}. The complexity comes from the fragmented nature
 of GPU APIs.}
@@ -873,8 +873,8 @@ being designed from the ground-up. However, this situation has recently
 improved with the creation of the Vulkan API. This is a very low-level API that
 has been designed from the bottom-up to reflect the way modern GPUs operate
 \cite{Vulkan}. This contrasts with graphics APIs like OpenGL, which reflect how
-GPUs \textit{historically} operated \cite{TODO}. Therefore, this section does
-not enumerate all of the issues graphics APIs have, but instead will briefly
+GPUs \textit{historically} operated \cite{TODO}. This section does not
+enumerate all of the issues graphics APIs have, but instead will briefly
 describe the workflow and toolchains of using a GPU API, and then enumerate the
 challenges our systems aim to ease.
 
@@ -885,40 +885,72 @@ Appendix \ref{app:other_API_issues}.
 
 \label{sec:graphics_api_overview}
 
-%TODO: Rewrite and massively shorten!
+A GPU API typically consists of two components: the API itself and a ``shader''
+language that is used to write programs that run on the GPU itself. The API
+will typically come in the form of a C library, with functions that the user
+can call in order to direct an abstracted model of the GPU to perform specific
+operations. Some of those API calls enable the user to load their shaders onto
+the GPU, transfer data to the GPU, and then execute the shaders on that data.
 
-% A graphics API is what programmers use in order to make a GPU render the
-% graphics they desire, usually outputting the results to a display. Popular
-% graphics APIs include OpenGL, OpenGL ES and DirectX. Due to how the nature of
-% the hardware that makes GPUs suitable for rendering operations, they are also
-% incredibly adept at performing certain kinds of general purpose computations.
-% Using GPUs for these kind of computations is called GPGPU computing. Graphics
-% APIs now expose some of these compute capabilities, as they can be useful for
-% rendering and even performing other operations (such as physics, or procedural
-% generation \cite{TODO}) as a part of the rendering pipeline. However, as the
-% traditional graphics pipeline is quite heavyweight, alternative APIs for
-% interacting with GPUs have been developed which are targeted towards
-% programmers who only which to perform GPGPU computations. These are called
-% compute APIs. Popular compute APIs include OpenCL and CUDA. All of these APIs
-% are normally implemented at the driver-level of graphics hardware.
+For graphics operations, the full set of operations needed in order to render
+an image is called the \textit{graphics pipeline}
+\cite{TripThroughGraphicsPipeline1}. Although originally there were two stages,
+modern graphics APIs now expose up to seven shading stages
+\cite{TripThroughGraphicsPipeline3}:
 
-% Naturally, having two distinct sets of APIs for interacting with the same
-% hardware is not ideal. As it would be akin to having to use two different ISAs
-% depending on the domain a particular applications was being designed for.
-% Therefore there has been movement towards developing low-level APIs which will
-% eventually be capable of filling both roles. Vulkan is one such API.
+\begin{itemize}
 
+    \item \textbf{VS (Vertex Shader)}: Transform vertices.
 
-A GPU API typically consists of two components: the API itself and a
-``shader''/``shader'' language that is used to write programs that run on the
-GPU itself. The API will typically come in the form of a C library, with
-functions that the user can call in order to direct an abstracted model of the
-GPU to perform specific operations. Some of those API calls enable the user to
-load their shaders onto the GPU, transfer data to the GPU, and then execute the
-shaders on that data. Historically, most, if not all, shaders and shader
-language have been heavily based on the C-programming language. Furthermore,
-these languages have historically been compiled by the \textit{drivers} for
-GPUs \cite{TODO}. This has had a few benefits and drawbacks:
+    \item \textbf{HS (Hull Shader)}: Accept patch primitives and modify patch
+    control points.
+
+    \item \textbf{DS (Domain Shader)}: Take control points from HS and convert
+    them into vertices.
+
+    \item \textbf{GS (Geometry Shader)}: Take primitives as input and generate
+    new primitives from them.
+
+    \item \textbf{PS (Pixel Shader)}: Get interpolated primitive data for each
+    pixel, and output pixel color.
+
+    \item \textbf{CS (Compute Shader)}: Its own, separate pipeline. Takes
+    buffers as input and write to buffers as output. This is what is used for
+    general purpose computionans (GPGPU). OpenCL and CUDA only provide APIs for
+    controlling this part of the pipeline.
+
+\end{itemize}
+
+The different stages are compared in Figure \ref{fig:graphics_pipeline_stages}.
+
+\begin{figure}[h]
+\centering
+\def\svgwidth{\linewidth}
+\scriptsize{\input{images/cug_compiler_pipeline.pdf_tex}}
+\caption{TODO(Content!).}
+\label{fig:graphics_pipeline_stages}
+\end{figure}
+
+Although conceptually simple, controlling the graphics pipeline is complex. As
+we discuss in Chapter \ref{chp:implementation}, we focus on targeting the
+compute shading stage of the pipeline through the use of the Vulkan API. As
+Vulkan operates at a lower level than OpenGL and OpenCL, the API is incredibly
+verbose. As we cover in Chapter \ref{chp:evaluation}, the API calls
+necessary to run a simple compute shader is over 700 lines long
+\cite{ProjectSource}!
+
+However, this verbosity is a feature and not a bug\footnote{We discuss the
+tradeoffs this decision makes in Chapter
+\ref{chp:conclusion_and_further_work}\cite{TODO}.}.
+
+\subsection{The challenges with shading languages}
+
+\label{sec:shading_langauge_challenges}
+
+Historically, most, if not all, shader languages have been heavily based on the
+C-programming language (Appendix \ref{sec:api_options}). Furthermore, these
+languages have historically been compiled by the \textit{drivers} for GPUs
+\cite{TODO}. This has had a few benefits and drawbacks:
 
 Benefits include:
 
@@ -1646,6 +1678,8 @@ CUG-C code. DETERMINE WORD COUNT.
 
 \chapter{Implementation}
 
+\label{chp:implementation}
+
 % This chapter may be called something else\ldots but in general
 % the idea is that you have one (or a few) ``meat'' chapters which
 % describe the work you did in technical detail.
@@ -1905,6 +1939,8 @@ which we ran automatically on every commit to the main repository
 
 
 \chapter{Evaluation}
+
+\label{chp:evaluation}
 
 % For any practical projects, you should almost certainly have
 % some kind of evaluation, and it's often useful to separate
