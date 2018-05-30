@@ -695,16 +695,16 @@ accelerators for 3D rendering aimed at hobbyist gamers who wanted to play games
 with complex graphics \cite{GLQuake}. Due to rapid developments and
 competition, the scope and capabilities of graphics cards has expanded such
 that they are the highly-parallel general computation machines we find them to
-be today. However, the developments GPUs experienced were not pre-planned, and
-despite their current general-purpose nature, the terminology surrounding
-graphics cards has its foundation in graphics, and is disconnected from
+be today. However, the developments GPUs experienced were not pre-planned.
+Despite their current general-purpose nature, the terminology surrounding
+graphics cards has its foundation in graphics and is disconnected from
 programming language norms. Furthermore, standards around using GPUs and
 heterogeneous hardware are still solidifying, with many fragmented communities
 and confusion around the future roadmap of GPU APIs \cite{TODO}.
 
 This section summarises relevant milestones related to the history of
 heterogeneous computing in order to help the reader understand why the field is
-is in a fragmented state that has hindered the development of new shading
+in a fragmented state that has hindered the development of new shading
 languages. Furthermore, by giving context to development of the terms and
 technologies used by both of the systems we describe, it provides the relevant
 background needed to understand AnnoCheck and CUG.
@@ -728,7 +728,7 @@ background needed to understand AnnoCheck and CUG.
     % first graphics card, it dominated the consumer market and brought 3D
     % graphics rendering to the mainstream \cite{Voodoo1}.
 
-    \item 1999 \textbf{NVIDIA GeForce 256} released; the first video card to be
+    \item 1999 \textbf{NVIDIA GeForce 256} released. The first video card to be
     marketed as a \textbf{GPU}. It was the first consumer-PC graphics hardware
     to accelerate ``transform and lighting'' operations, allowing them to be
     offloaded from the CPU. The ``transform and lighting'' component of GPUs
@@ -745,7 +745,7 @@ background needed to understand AnnoCheck and CUG.
     multiplications by encoding matrices as the inputs and outputs of the
     graphics pipeline to offload calculations to the GPU \cite{MatrixGPU}.
     Subsequent papers then show how GPUs can outperform CPUs for many
-    operations that are desirable in scientific computing \cite{CUDAtoOpenCL}
+    operations desirable in scientific computing \cite{CUDAtoOpenCL}
     \cite{Kruger03linearalgebra} \cite{LUGPU} \cite{SparsematrixGPU}.
 
     \item 2003 \textbf{OpenGL ES}, released by the Khronos Group for embedded
