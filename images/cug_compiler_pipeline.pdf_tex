@@ -70,7 +70,7 @@
     \put(0,0){\includegraphics[width=\unitlength,page=8]{cug_compiler_pipeline.pdf}}%
     \put(0.38032914,0.15286403){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Generate IR\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=9]{cug_compiler_pipeline.pdf}}%
-    \put(0.15099855,0.16451422){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Generate C\\Output\end{tabular}}}}%
+    \put(0.15099855,0.16451422){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Generate GLSL\\Output\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=10]{cug_compiler_pipeline.pdf}}%
     \put(0.37793473,0.05548256){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Generate C\\Output\end{tabular}}}}%
     \put(0,0){\includegraphics[width=\unitlength,page=11]{cug_compiler_pipeline.pdf}}%
