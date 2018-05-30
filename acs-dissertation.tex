@@ -1297,13 +1297,13 @@ possible errors when analysing shaders.
 
 AnnoCheck is designed to demonstrate how existing graphics workflows using C
 and GLSL (or any other C-like shader) can be improved in order to be less
-error-prone, without compromising on the control they provide. Furthermore, the
+error-prone, without compromising the control they provide. Furthermore, the
 lessons learned from designing and implementing it influenced the design of the
 CUG, which provided these benefits natively as described in Section
 \ref{sec:design_languages}.
 
 AnnoCheck is specifically designed to make the errors described in Section
-\ref{sec:issues_summary} as hard as possible, that is, making it impossible
+\ref{sec:issues_summary} as hard to enact as possible, by making it impossible
 for there to be a mis-match in the identifiers that are referred to using
 strings in C, and the actual identifiers themselves in GLSL (Section
 \ref{sec:resolving_identifiers}).
@@ -1312,8 +1312,9 @@ AnnoCheck achieves this by allowing programmers to annotate C and GLSL to mark
 their \textit{intent}. Although this system is very flexible, it does have a
 few issues. We evaluate all the tradeoffs this choice makes in Chapter
 \ref{chp:evaluation}, and how its limitations led to the design of CUG.
-However, although only coming in at 1000 lines of code, and being much simpler
-than CUG, AnnoCheck does have a few benefits.
+However, although only employing 1000 lines of code, and being much simpler
+than CUG, AnnoCheck does have a several benefits. Notably, the ability to
+operate on existing C and GLSL codebases.
 
 \section{CUG Language Design}
 
@@ -1321,8 +1322,8 @@ than CUG, AnnoCheck does have a few benefits.
 
 We have previously argued the benefits of syntactic and semantic commonality
 between host and GPU code; CUG exemplifies this, and we highlight CUG-C's
-features next: Firstly, AnnoCheck's features are directly integrated into the
-language design. Secondly to show how by being able to \textit{semantically}
+features next: Firstly, those of AnnoCheck are directly integrated into the
+language design. Secondly to show how, by being able to \textit{semantically}
 share code with a related shading \textit{dialect} (CUG-G), code sharing can be
 made much more robust than with C and GLSL. However, our approach differs from
 many other custom languages which have aimed to do this. Similar to AnnoCheck,
@@ -1336,20 +1337,20 @@ particular language feature that CUG implements beyond the novel ideas that ew
 presents. CUG is a proof-of-concept that provides bare-minimum feature-set
 needed in order to demonstrate the ideas of this paper and it is very much a
 toy language. However, this was still a significant undertaking, with the CUG
-compiler taking consisting of over \compilerloccount lines of code without
-comments or whitespace.
+compiler consisting of over \compilerloccount lines of code without comments or
+whitespace.
 
 \subsection{Overall Design}
 
-CUG (CPU-Union-GPU) is a novel proof-of-concept programming language which
-consists of two different language \textit{dialects}. CUG-C (CUG-CPU), is a
-dialect that is designed to target the CPU. Similarly, CUG-G (CUG-GPU), is a
-dialect that is designed to target the GPU. Having two distinct dialects means
-that the different languages can each have distinct features which make them
-more suited for their target hardware, matching the workflow of programming for
-GPUs using C and GLSL. For example, CUG-C is capable of using raw pointers,
-whereas CUG-G has access to some of GLSL's built-in functions\footnote{such as
-normalize,reflect,sin etc.} \cite{GLSLBuiltIn}.
+CUG (CPU-Union-GPU) is a novel proof-of-concept programming language of two
+different \textit{dialects}. CUG-C (CUG-CPU), is a dialect that is designed to
+target the CPU. Similarly, CUG-G (CUG-GPU), is a dialect that is designed to
+target the GPU. Having two distinct dialects means that the different languages
+can each have distinct features which make them more suited for their target
+hardware, matching the workflow of programming for GPUs using C and GLSL. For
+example, CUG-C is capable of using raw pointers, whereas CUG-G has access to
+some of GLSL's built-in functions\footnote{such as normalize,reflect,sin etc.}
+\cite{GLSLBuiltIn}.
 
 However, unlike C and GLSL, where code (such as struct definitions) can be
 shared \textit{syntactically}, CUG supports the \textit{semantic} sharing of
