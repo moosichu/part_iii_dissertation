@@ -919,20 +919,18 @@ possible configuration of the graphics pipeline
 
 Figure \ref{fig:graphics_pipeline_stages} shows how these stages fit into the
 overall graphics pipeline, in addition to showing different configurations of
-the pipeline itself. Pipeline 1 shows how the graphics pipeline used to
-operate, with only the vertex and pixel shading stages. Pipeline 2 shows how
-the geometry shader was added, and pipeline 3 shows the addition of the hull
-and domain shaders. Pipeline 4 represents the (relatively simple) compute
-shading pipeline.
+the pipeline itself. Pipeline 1 shows how the graphics pipeline previously
+operated, with only vertex and pixel shading stages. Pipeline 2 shows how the
+geometry shader was added, and pipeline 3 shows the addition of the hull and
+domain shaders. Pipeline 4 represents the (relatively simple) compute shading
+pipeline.
 
 Although conceptually simple, controlling the graphics pipeline is complex. As
 we discuss in Chapter \ref{chp:implementation}, we focus on targeting the
 compute shading stage of the pipeline through the use of the Vulkan API. As
 Vulkan operates at a lower level than OpenGL and OpenCL, the API is incredibly
-verbose. As we cover in Chapter \ref{chp:evaluation}, the API calls
-necessary to run a simple compute shader is over 700 lines long
-\cite{ProjectSource}!
-
+verbose. As we cover in Chapter \ref{chp:evaluation}, the API calls necessary
+to run a simple compute shader is over 700 lines long \cite{ProjectSource}!
 However, this verbosity is a feature and not a bug\footnote{We discuss the
 tradeoffs this decision makes in Chapter
 \ref{chp:conclusion_and_further_work}\cite{TODO}.}.
@@ -997,15 +995,15 @@ Drawbacks include:
     least 16 bits and can use various encodings \cite{TODO}. Additionally, the
     placement of the \texttt{const} keyword varies in subtly different ways
     \cite{TODO}. Finally, shading languages natively support intrinsic types
-    such vectors, which many CPU languages do not \cite{TODO}. Therefore code
-    sharing does not provide guarantees, and can still be fiddly.
+    such as vectors, which many CPU languages do not \cite{TODO}. Therefore
+    code sharing does not provide guarantees, and can still be fiddly.
 
     \item GLSL does not support \texttt{\#include} directives, so code must be
-    shared using custom solution \cite{TODO}.
+    shared using a custom solution \cite{TODO}.
 
     \item The CPU still has to refer to many identifiers within a shader using
     strings at runtime. Therefore renaming identifiers in shaders requires
-    programmers to manually identify strings which refer to them within their
+    programmers to manually identify any relevant strings within their
     application.
 
     % \item As the drivers have their own optimisation systems, code does need to
@@ -1059,12 +1057,11 @@ injecting dead flow-control \cite{GLFuzz}.}
 % be shared between the host and shader, in addition to the advanced type
 % checking features C++ provides over C.
 
-As we discuss in Section (\ref{sec:sec:history_gpu}), high-level shading
+As we discussed in Section (\ref{sec:history_gpu}), high-level shading
 languages such as GLSL are being phased-out in favour of lower-level
-\textit{intermediate languages} such as SPIR-V, which is based on LLVM IR
-\cite{TODO}. Therefore, modern toolchains allow the programmer to pre-compile
-GLSL to SPIR-V. We discuss the developments this has enabled in Chapter
-\ref{chp:related_work}.
+\textit{intermediate languages} such as SPIR-V \cite{SPIRV}. Therefore, modern
+toolchains allow the programmer to pre-compile GLSL to SPIR-V. We discuss the
+developments this has enabled in Chapter \ref{chp:related_work}.
 
 % Additionally, the same compiler can be shared by the \textit{shader language},
 % OpenCL C++, and the ``single-source'' heterogeneous computing system known as
@@ -1091,9 +1088,7 @@ GLSL to SPIR-V. We discuss the developments this has enabled in Chapter
 % easier than doing the same for high-level languages \cite{TODO}.
 
 Even with this development, GLSL is still the language of choice for graphics
-APIs which use SPIR-V, leaving many presented problems unsolved. Section
-\ref{sec:issues_summary} enumerates the issues which AnnoCheck and CUG each
-tackle.
+APIs which use SPIR-V, leaving many presented problems unsolved.
 
 % \begin{itemize}
 
@@ -1128,7 +1123,7 @@ tackle.
 \label{sec:issues_summary}
 
 We enumerate the two specific issues that AnnoCheck and CUG each solve.
-Although there is overlap in which problems they aim to solve, they differ in
+Although there is overlap in which problems each system solves, they differ in
 their approaches. Concrete examples of these are evaluated in Chapter
 \ref{chp:evaluation}.
 
@@ -1145,7 +1140,7 @@ their approaches. Concrete examples of these are evaluated in Chapter
 
     \item \textbf{Sharing Code}: Despite being common when using compute
     shaders, sharing data structure definitions and other code can be difficult
-    at best, and impossible at worst depending on which host-shader language
+    at best and impossible at worst depending on which host-shader language
     combination is being used (Section \ref{sec:shading_langauge_challenges}).
     By allowing code to be shared semantically, CUG can provide guarantees and
     a formalised way of doing this. AnnoCheck does provide basic syntactic
@@ -1156,11 +1151,11 @@ their approaches. Concrete examples of these are evaluated in Chapter
 
 %TODO(Rewrite): Clunky
 
-We have presented the technical background needed in order to provide the
-context and knowledge needed in order to understand the problems AnnoCheck and
-CUG tackle. This includes a history of GPU APIs, an overview of the GPU
-pipeline, and the challenges when using shaders. We rounded off with the two
-specific issues we solve.
+We have presented the technical background to provide the context and knowledge
+needed in order to understand the problems AnnoCheck and CUG tackle. This
+includes a history of GPU APIs, an overview of the GPU pipeline, and challenges
+when using shaders. We rounded off the chapter with the two specific issues our
+systems solve.
 
 % \subsubsection{Issue 1: Redefining Datastructures}
 
