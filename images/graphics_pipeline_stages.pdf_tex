@@ -1,0 +1,83 @@
+%% Creator: Inkscape inkscape 0.92.3, www.inkscape.org
+%% PDF/EPS/PS + LaTeX output extension by Johan Engelen, 2010
+%% Accompanies image file 'graphics_pipeline_stages.pdf' (pdf, eps, ps)
+%%
+%% To include the image in your LaTeX document, write
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics{<filename>.pdf}
+%% To scale the image, write
+%%   \def\svgwidth{<desired width>}
+%%   \input{<filename>.pdf_tex}
+%%  instead of
+%%   \includegraphics[width=<desired width>]{<filename>.pdf}
+%%
+%% Images with a different path to the parent latex file can
+%% be accessed with the `import' package (which may need to be
+%% installed) using
+%%   \usepackage{import}
+%% in the preamble, and then including the image with
+%%   \import{<path to file>}{<filename>.pdf_tex}
+%% Alternatively, one can specify
+%%   \graphicspath{{<path to file>/}}
+%% 
+%% For more information, please see info/svg-inkscape on CTAN:
+%%   http://tug.ctan.org/tex-archive/info/svg-inkscape
+%%
+\begingroup%
+  \makeatletter%
+  \providecommand\color[2][]{%
+    \errmessage{(Inkscape) Color is used for the text in Inkscape, but the package 'color.sty' is not loaded}%
+    \renewcommand\color[2][]{}%
+  }%
+  \providecommand\transparent[1]{%
+    \errmessage{(Inkscape) Transparency is used (non-zero) for the text in Inkscape, but the package 'transparent.sty' is not loaded}%
+    \renewcommand\transparent[1]{}%
+  }%
+  \providecommand\rotatebox[2]{#2}%
+  \newcommand*\fsize{\dimexpr\f@size pt\relax}%
+  \newcommand*\lineheight[1]{\fontsize{\fsize}{#1\fsize}\selectfont}%
+  \ifx\svgwidth\undefined%
+    \setlength{\unitlength}{867.21394216bp}%
+    \ifx\svgscale\undefined%
+      \relax%
+    \else%
+      \setlength{\unitlength}{\unitlength * \real{\svgscale}}%
+    \fi%
+  \else%
+    \setlength{\unitlength}{\svgwidth}%
+  \fi%
+  \global\let\svgwidth\undefined%
+  \global\let\svgscale\undefined%
+  \makeatother%
+  \begin{picture}(1,0.52553837)%
+    \lineheight{1}%
+    \setlength\tabcolsep{0pt}%
+    \put(0,0){\includegraphics[width=\unitlength,page=1]{graphics_pipeline_stages.pdf}}%
+    \put(0.12612719,0.46753005){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}VS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=2]{graphics_pipeline_stages.pdf}}%
+    \put(0.32685303,0.46768951){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}PS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=3]{graphics_pipeline_stages.pdf}}%
+    \put(0.12689756,0.3278308){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}VS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=4]{graphics_pipeline_stages.pdf}}%
+    \put(0.32762337,0.32799026){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}GS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=5]{graphics_pipeline_stages.pdf}}%
+    \put(0.52526777,0.32608354){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}PS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=6]{graphics_pipeline_stages.pdf}}%
+    \put(0.1286448,0.1836837){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}VS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=7]{graphics_pipeline_stages.pdf}}%
+    \put(0.3293706,0.18384315){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}HS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=8]{graphics_pipeline_stages.pdf}}%
+    \put(0.52701498,0.18193639){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}DS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=9]{graphics_pipeline_stages.pdf}}%
+    \put(0.72774084,0.18209589){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}GS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=10]{graphics_pipeline_stages.pdf}}%
+    \put(0.92485438,0.18110735){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}PS\end{tabular}}}}%
+    \put(0,0){\includegraphics[width=\unitlength,page=11]{graphics_pipeline_stages.pdf}}%
+    \put(0.12813161,0.03437462){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}CS\end{tabular}}}}%
+    \put(0.01271921,0.46665293){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}1.\end{tabular}}}}%
+    \put(0.01622347,0.32466023){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}2.\end{tabular}}}}%
+    \put(0.0162537,0.18071118){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}3.\end{tabular}}}}%
+    \put(0.01975796,0.03698877){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25}\smash{\begin{tabular}[t]{c}4.\end{tabular}}}}%
+  \end{picture}%
+\endgroup%

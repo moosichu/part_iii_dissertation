@@ -677,18 +677,15 @@ over time to become useful in many fields beyond real-time rendering in video
 games. Following that, the evolution of graphics APIs is provided, to give both
 the context for the problem this paper aims to tackle and the underlying
 technology the solutions depend upon. We explain how the complexities of
-competing programming models for GPU programming, and therefore the lack of an
-``hourglass'' ecosystem, has limited the development of GPU-targeted languages.
-Finally, the difficulties and issues with programming for GPUs are summarised
-from the contents of this chapter.
+competing programming models for GPU programming, and therefore how the lack of
+an ``hourglass'' ecosystem has limited the development of GPU-targeted
+languages. Finally, the difficulties and issues with programming for GPUs are
+summarised from the contents of this chapter.
 
 % TODO(Citation): Why low level details are important (eg unified memory versus seperate
 % memory)
 % https://www.slideshare.net/zlatan4177/gpgpu-algorithms-in-games
 % https://en.wikipedia.org/wiki/Heterogeneous_System_Architecture
-
-% TODO(Citation): Can be worth being wary of GPU vs CPU performance based on performance alone.
-% http://people.eecs.berkeley.edu/~sangjin/2013/02/12/CPU-GPU-comparison.html
 
 
 \section{A (brief) History of GPU computing}
@@ -696,14 +693,14 @@ from the contents of this chapter.
 \label{sec:history_gpu}
 
 Graphics Processing Units (GPUs) were originally fixed-function hardware
-accelerators for 3D rendering aimed at hobbyist gamers who desired hardware to
-play games with the most complex graphics possible \cite{GLQuake}. Due to rapid
-developments and competition, the scope and capabilities of graphics cards has
-expanded such that they are the highly-parallel general computation machines we
-find them to be today. However, the developments GPUs experienced were not
-pre-planned, and despite their current general-purpose nature, the terminology
-surrounding graphics cards has its foundation in graphics, and is disconnected
-from programming language norms. Furthermore, standards around using GPUs and
+accelerators for 3D rendering aimed at hobbyist gamers who wanted to play games
+with complex graphics \cite{GLQuake}. Due to rapid developments and
+competition, the scope and capabilities of graphics cards has expanded such
+that they are the highly-parallel general computation machines we find them to
+be today. However, the developments GPUs experienced were not pre-planned, and
+despite their current general-purpose nature, the terminology surrounding
+graphics cards has its foundation in graphics, and is disconnected from
+programming language norms. Furthermore, standards around using GPUs and
 heterogeneous hardware are still solidifying, with many fragmented communities
 and confusion around the future roadmap of GPU APIs \cite{TODO}.
 
@@ -716,15 +713,13 @@ background needed to understand AnnoCheck and CUG.
 
 \begin{itemize}
 
-    \item 1992 \textbf{OpenGL 1.0} released by Silicon Graphics (SGI) as an API
-    for interacting with graphics hardware on 3D graphics workstations. The
-    open standard, OpenGL, was created from their proprietary ``IrisGL'' API in
-    order to discourage competitors creating their own proprietary graphics
-    APIs and fragmenting the market. The API allowed users to issue basic
-    commands in order to set-up 3D scenes, apply basic fixed-function lighting,
-    and then render the scenes \cite{OpenGL_1_0}. The OpenGL specification is
-    now controlled by the \textbf{Khronos Group} \cite{OpenGL}
-    \cite{OpenGLToKhronos}.
+    \item 1992 \textbf{OpenGL 1.0} released by Silicon Graphics and derived
+    from the proprietary ``IrisGL''. Created as an open-standard API for
+    interacting with graphics hardware on 3D graphics workstations. The API
+    allowed users to issue basic commands in order to set-up 3D scenes, apply
+    basic fixed-function lighting, and then render the scenes
+    \cite{OpenGL_1_0}. The OpenGL specification is now controlled by the
+    \textbf{Khronos Group} \cite{OpenGL} \cite{OpenGLToKhronos}.
 
     \item 1996 \textbf{Direct3D 2.0} released by Microsoft, so named, even
     though was the \textit{first} version of Direct3D. Although at this point
@@ -923,15 +918,25 @@ modern graphics APIs now expose up to seven shading stages
 
 \end{itemize}
 
-The different stages are compared in Figure \ref{fig:graphics_pipeline_stages}.
-
 \begin{figure}[h]
 \centering
 \def\svgwidth{\linewidth}
-\scriptsize{\input{images/cug_compiler_pipeline.pdf_tex}}
-\caption{TODO(Content!).}
+\input{images/graphics_pipeline_stages.pdf_tex}
+
+\caption{Different graphics pipeline configurations. Each row represents a
+possible configuration of the graphics pipeline
+\cite{TripThroughGraphicsPipeline3}.}
+
 \label{fig:graphics_pipeline_stages}
 \end{figure}
+
+Figure \ref{fig:graphics_pipeline_stages} shows how these stages fit into the
+overall graphics pipeline, in addition to showing different configurations of
+the pipeline itself. Pipeline 1 shows how the graphics pipeline used to
+operate, with only the vertex and pixel shading stages. Pipeline 2 shows how
+the geometry shader was added, and pipeline 3 shows the addition of the hull
+and domain shaders. Pipeline 4 represents the (relatively simple) compute
+shading pipeline.
 
 Although conceptually simple, controlling the graphics pipeline is complex. As
 we discuss in Chapter \ref{chp:implementation}, we focus on targeting the
@@ -1895,7 +1900,7 @@ a state machine for the following three reasons:
 
     \item Although the CUG-G dialect can only be compiled to compute shaders,
     an industrial compiler like this would need to be extended to supported
-    other shader types such as fragment, pixel and geometric shaders. These all
+    other shader types such as vertex, pixel and geometric shaders. These all
     have subtle differences in permitted operations and behaviour -- extending
     the state machine so that these could be handled would be trivial.
 
