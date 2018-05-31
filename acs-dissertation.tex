@@ -87,8 +87,6 @@
 \pagenumbering{arabic}
 \setcounter{page}{1}
 
-\label{sec:TODO}
-
 We provide the motivation for \textit{AnnoCheck} and \textit{CUG}: outlining
 the problem they solve, why this is important and why solutions have not yet
 been found. \textbf{AnnoCheck} is a cross-module annotation checker for the C
@@ -140,14 +138,14 @@ elaborated on in Chapter \ref{chp:technical_background}.
     \item \textbf{GLSL/HLSL:} GLSL is the shading language OpenGL uses whilst
     HLSL is the equivalent found in Direct3D. GPU vendors are often responsible
     for writing drivers which compile source-code down to GPU machine-code at
-    run-time. % \footnote{TODO(Content): Exceptions!}.
+    run-time.
 
     \item \textbf{SPIR-V}: An intermediate language supported by OpenGL and
     Vulkan. Graphics drivers only have to support interpreting this language
     instead of parsing a high-level language such as GLSL. The Khronos Group
     hopes that this will spur the development of many varieties of GPU-targeted
     languages, similar to how there are many languages which compile to CPU
-    machine-code \cite{SPIRV}. %TODO(Rewrite)
+    machine-code \cite{SPIRV}.
 
 \end{itemize}
 
@@ -167,8 +165,6 @@ in a broadening domain of applications, including machine learning, scientific
 computing, and bitcoin mining \cite{GPUCrypto} \cite{GPUScientificComputing}
 \cite{GPUAI}. Section \ref{sec:history_gpu} provides more details on this.
 
-%TODO(Image!): Add an image of how a GPU works/how it compares with a CPU.
-
 Despite this growth, the traditional toolchains used to program GPUs still
 suffer from many of the problems they did when originally used by graphics
 programmers in the early-to-mid 2000s:
@@ -182,9 +178,6 @@ programmers in the early-to-mid 2000s:
     \item Functions in GPU programs are identified by the CPU using strings,
     with no compile-time mechanisms available to ensure that they are correct
     (Section \ref{sec:issues_summary}).
-
-    % \item TODO(Content) find more errors which are not addressed by this paper
-    % (such as texture mis-match).
 
 \end{itemize}
 
@@ -344,8 +337,6 @@ Secondly, C's type system has limitations compared with many modern languages.
 As we discuss in Chapter \ref{chp:conclusion_and_further_work}, there are many
 opportunities presented by sharing code \textit{semantically} instead of just
 \textit{syntactically}.
-
-% TODO(Image!): include diagram of all the wokflows?
 
 This led us to develop the \textit{CUG} compiler, which can compile two
 language \textit{dialects} called CUG-C and CUG-G. The first goal was to
@@ -508,8 +499,6 @@ the syntactic sharing of code that typically happens between C and GLSL.
 Similar to how different natural-language dialects have mutually-intelligible
 subsets, CUG-C and CUG-G have a mutually intelligible subset called CUG-min
 that allows them to share code \textit{modules} (files).
-
-% TODO(Task): Read https://www.khronos.org/registry/spir-v/specs/1.0/SPIRV.pdf
 
 \begin{lstfloat}
 \begin{center} CUG-C \end{center}
@@ -752,12 +741,6 @@ spur on the development of many new shading languages.
 \section{The Challenges with the APIs}
 
 \label{sec:api_challanges}
-
-% TODO(Content) mention how Vulkan is merging the OpenGL, OpenCL and OpenGL ES.
-
-% TODO(Helpful): Good comparison of mess vs potential future (Unity Pipeline).
-% http://www.g-truc.net/doc/2015%20-%20EuroLLVM%20-%20SPIR-V.pdf
-% can also be shown in conclusion.
 
 Due to the complex development history of GPU APIs such as OpenGL (Section
 \ref{sec:history_gpu}), they have naturally evolved various issues, mainly as
@@ -1311,8 +1294,6 @@ CUG's syntax does differ from those C and GLSL in the following ways.
 There are naturally many syntax and design choices in CUG that we have not
 enumerated here due to space limitations.
 
-%TODO(Content): Formal Grammar
-
 \subsection{Semantics}
 
 The semantics of CUG is heavily inspired by C and GLSL, and this is done for
@@ -1429,18 +1410,12 @@ to interact with C from CUG-G.
 
 \label{chp:implementation}
 
-% This chapter may be called something else\ldots but in general
-% the idea is that you have one (or a few) ``meat'' chapters which
-% describe the work you did in technical detail.
-
 The source code for AnnoCheck and CUG is publicly available and open-source
 \cite{ProjectSource}. Although both are written in C++, Python is also used as
 a build-system to enable simple cross-platform builds. These systems were
 developed and tested on both the Ubuntu 16.04 and Windows 10 operating systems.
 The combined source-code for both projects comes to around \totalloccount lines
 of code. \compilerloccount of which are for the CUG compiler alone.
-
-%TODO: Furthermore, the design of CUG necessitated comprehensive semantic analysis,
 
 \section{Choice of Backend}
 
@@ -1537,8 +1512,6 @@ example of this is given in Section \ref{sec:toolchain_comparison}.
 input to output. Boxes represent compiler stages.}
 \label{fig:cug_compiler_pipeline}
 \end{figure}
-%TODO: nive tge furst arriw up top to possibly allow larger text.
-%TODO(Error!): Fix the typo in 'Generate output' (C in both!)
 
 Figure \ref{fig:cug_compiler_pipeline} shows the CUG compiler, with the
 stages handled in the following ways:
@@ -1658,9 +1631,6 @@ imports) is affected by the state machine:
     \item CUG-min files can only include other CUG-min files.
 
 \end{itemize}
-
-%TODO: mention benefit somewhere about CUG-C being able to use GLSL shaders and
-% CUG-G being callable from C.
 
 These relationships determine which state transitions are valid, and also are
 the mechanism through-which code is shared between CUG-C and CUG-G.
@@ -1908,7 +1878,8 @@ contrast to the simple syntactic sharing of the \texttt{Fish} definition in
 both the raw and AnnoCheck toolchains, the module containing \texttt{Fish} is
 shared semantically between CUG-C and CUG-G. However, the toolchain complexity
 is increased by the need to compile the resulting C and GLSL that is generated
-by the CUG compiler.
+by the CUG compiler. An interesting result of this toolchain is that it is
+possible for CUG-C to use GLSL shaders, and for CUG-G to be invoked by C.
 
 \begin{figure}[h]
 \centering
@@ -2112,11 +2083,6 @@ more simple than the toolchain needed for raw C and GLSL.
 
 \chapter{Related Work and Discussion}
 
-%TODO(Rewrite) Rewrite this so that comments on the related work is made
-
-%TODO: interesting point, how our annotation system differs from the one where
-% you can annotate portable C++ (find out which it is)
-
 \label{chp:related_work}
 
 We detail related work in the field of modifying or improving GPU toolchains
@@ -2185,9 +2151,10 @@ appropriate sections of normal C++, C or Fortran code as possible candidates
 for accelerated parallel computation \cite{OpenACC}. The specific goal being to
 allow users to write code as they normally would for the CPU, and then add
 directives to code fragments as hints to the compiler that such fragments could
-perform optimally if run on a GPU.
-
-%TODO: Above, compare OpenACC with AnnoCheck.
+perform optimally if run on a GPU. This directive system has parallels with
+AnnoCheck, as it aims to enhance existing languages with features for GPU
+programming. However, the OpenACC compiler abstracts the low-level details of
+GPU programming, whilst AnnoCheck highlights them.
 
 Another approach that has been taken is to abstract away underlying APIs such
 as CUDA and OpenCL with platforms that can target both as backends. HIP is a
@@ -2223,10 +2190,6 @@ API calls directly, so that they are checked at compile-time for consistency
 without sacrificing the control that would otherwise be lost by abstractions.
 Furthermore, although we could only test a compute shader, the design of
 AnnoCheck and CUG is amenable to being used for graphics programming.
-
-% TODO(Helpful): Future roadmap confusion
-
-% TODO(Helpful): Vulkan Validation Layers
 
 \chapter{Conclusion and Further Work}
 
@@ -2281,10 +2244,6 @@ the following opportunities:
 
 \end{itemize}
 
-% TODO(Content):
-
-% SUPPORT DIFFERENT STATES OF GPU LANGUAGES BASED ON TARGET PART OF PIPELINE.
-
 Something which the creation of SPIR-V enables, and that this paper
 demonstrates is possible, is the ability to \textit{extend} languages with
 custom shading languages whilst still preserving existing API interfaces. This
@@ -2328,8 +2287,6 @@ fragmented ecosystems it currently suffers. Eventually, the higher-level OpenCL
 and OpenGL could be APIs which are implemented in terms of the lower-level
 Vulkan, bringing this ``dream'' another step closer to reality
 \cite{OpenGLonVulkan} \cite{VulkanOpenCLMerge} \cite{OpenGLOverload}.
-
-% TODO(Helpful): Software renderer + Vulkan CPU for CPU side debugging
 
 
 \bibliographystyle{unsrt}
