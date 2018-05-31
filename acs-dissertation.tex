@@ -2186,50 +2186,52 @@ parts of their programs to heterogeneous architectures. Lime and JCUDA take the
 approach of compiling Java or Java-like code in such a manner \cite{Lime2010}
 \cite{Lime2012} \cite{JCUDA2009}. However, they differ in their approaches.
 Lime aims to abstract low-level details of heterogeneous computing such that
-arbitrary backends can be targeted, including GPUs (using OpenCL as a back-end)
+arbitrary backends may be targeted, including GPUs (using OpenCL as a back-end)
 and FPGA synthesisation. JCUDA targets CUDA, allowing CUDA programs to be
 created using Java, with an interface that aims to closely match CUDA's native
-C API. OpenACC is a system specifically targeted at scientists that lets
-programmers mark appropriate sections of normal C++, C or Fortran code as
-possible candidates for accelerated parallel computation \cite{OpenACC}. The
-goal is specifically to allow users to write code as they normally would for
-the CPU, and then add directives to code fragments as hints to the compiler
-that those fragments could perform optimally if run on a GPU.
+C API. OpenACC is a system for scientists that allows programmers to mark
+appropriate sections of normal C++, C or Fortran code as possible candidates
+for accelerated parallel computation \cite{OpenACC}. The specific goal being to
+allow users to write code as they normally would for the CPU, and then add
+directives to code fragments as hints to the compiler that such fragments could
+perform optimally if run on a GPU.
 
-Another approach has that has been taken is to abstract away underlying APIs
-such as CUDA and OpenCL with platforms that can target both as backends. HIP is
-a project that does this by allowing CUDA code to be compiled to C++ that uses
-an abstracted API so that developers can convert their CUDA projects to
-something that can target arbitrary backends \cite{HIP}.
+%TODO: Above, compare OpenACC with AnnoCheck.
+
+Another approach that has been taken is to abstract away underlying APIs such
+as CUDA and OpenCL with platforms that can target both as backends. HIP is a
+project that does this by allowing CUDA code to be compiled to C++. It uses an
+abstracted API in order that developers may convert their CUDA projects to
+something that can target non-NVIDIA backends \cite{HIP}.
 
 In addition to SYCL and OpenCL C++, there have been other attempts at bringing
 heterogeneous programming models natively to C++ through parallel programming
 standards. C++ AMP is a C++ library, programming model, and compiler developed
-by Microsoft that targets Direct3D 11 \cite{CAMP}. However, it seems to have
-died \cite{CAMPFail1} \cite{CAMPFail2}. \textit{C++ extensions for parallelism}
-has brought such standards to the C++ standard template library
+by Microsoft that targets Direct3D 11 \cite{CAMP}. However, it appears to have
+been abandoned \cite{CAMPFail1} \cite{CAMPFail2}. \textit{C++ extensions for
+parallelism} has brought such standards to the C++ standard template library
 \cite{CPPParallelism}. Finally, OpenMP is an API standard dedicated to
-shared-memory multiprocessing \cite{OpenMP}. HCC is a project aims to take C++
-code that conforms to any of these standards and compile it to AMD's GCN
+shared-memory multiprocessing \cite{OpenMP}. HCC is a project that aims to take
+C++ code conforming to any of these standards and compile it to AMD's GCN
 instruction set \cite{HCC}.
 
 \section{Discussion}
 
-As can be seen, there has been progress in making programming for heterogeneous
-architectures easier. However, the focus has been primarily on GPGPU computing.
-Futhermore, although the creation of SPIR-V and Vulkan are slowly changing
-this, all of these systems have had to target fairly-high level backend APIs
-such as OpenCL or CUDA, in addition to languages compiled by device drivers
-such as \textit{OpenCL C} or \textit{CUDA C/C++}, which has limited the
-performance and stability of the higher-level systems \cite{GLFuzz}.
-Additionally, apart from \textit{Open CL C++}, these all either present
-alternate high-level interfaces or abstract them away in order to ensure
-simplified and less error-prone programs. This differs from the approach we
-take, which is to mark-up low-level API calls directly, so that they are
-checked at compile-time for consistency without sacrificing the control that
-would otherwise be lost by abstractions. Furthermore, although we could only
-test a compute shader, the design of AnnoCheck and CUG is amenable to being
-used for graphics programming.
+As can be seen, there has been some progress in making programming for
+heterogeneous architectures and GPUs easier. However, the focus has been on
+GPGPU computing, with limited research on graphics programming. Futhermore,
+although the creation of SPIR-V and Vulkan are slowly changing this, all of
+these systems have had to target fairly-high level backend APIs such as OpenCL
+or CUDA, in addition to languages compiled by device drivers such as
+\textit{OpenCL C} or \textit{CUDA C/C++}, which has limited the performance and
+stability of the higher-level systems \cite{GLFuzz}. Additionally, apart from
+\textit{Open CL C++}, these all either present alternate high-level interfaces
+or abstract them away in order to ensure simplified and less error-prone
+programs. This differs from the approach we take, which is to mark-up low-level
+API calls directly, so that they are checked at compile-time for consistency
+without sacrificing the control that would otherwise be lost by abstractions.
+Furthermore, although we could only test a compute shader, the design of
+AnnoCheck and CUG is amenable to being used for graphics programming.
 
 % TODO(Helpful): Future roadmap confusion
 
