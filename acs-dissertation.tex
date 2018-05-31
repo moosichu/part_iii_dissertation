@@ -1707,14 +1707,13 @@ which we ran automatically on every commit to the main repository
 This chapter evaluates how AnnoCheck and CUG compare with the traditional
 unchecked C and GLSL toolchain. We do this by employing a sample program called
 \textit{FishCopy}, comparing aspects such as toolchain complexity, code
-samples, errors which AnnoCheck and CUG prevent, in addition to analysing how
-the resulting code performs. Due to the complexity of using the Vulkan API, we
-will present small samples of this program. The full version of
-\textit{FishCopy} can be found on the project GitHub repository
-\cite{ProjectSource}. For example, the C code which makes the appropriate API
-calls to run a simple compute shader that copies items from one file to another
-is over 750 lines long. The example is adapted from an open-source sample
-program \cite{VulkanComputeExampleSource}.
+samples, errors which AnnoCheck and CUG prevent, and runtime performance. Due
+to the complexity of using the Vulkan API, we will present small samples of
+this program. The full version of \textit{FishCopy} can be found on the project
+GitHub repository \cite{ProjectSource}. For example, the C code which makes the
+appropriate API calls to run a simple compute shader that copies items from one
+file to another is over 750 lines long. The example is adapted from an
+open-source sample program \cite{VulkanComputeExampleSource}.
 
 \section{Fishcopy}
 
@@ -1856,8 +1855,9 @@ can provide guarantees that CUG-G and CUG-C will use this module in compatible
 ways.
 
 AnnoCheck and the CUG-G shader both use different mechanisms for verification:
-with AnnoCheck, annotations applied to regular GLSL code, whilst CUG-G handles
-verification through the CUG type system.
+with AnnoCheck, annotations are applied to regular GLSL code, whilst CUG-G
+handles verification through the CUG type system (Section
+\ref{sec:resolving_identifiers}).
 
 \section{Toolchain Comparison}
 
@@ -1877,7 +1877,6 @@ an \texttt{\#include} directive, meaning that programmers need to manually
 ensure that shared code is compiled into the shader.}
 \label{fig:pipeline_basic}
 \end{figure}
-%TODO(Error!): Replace 'insert with custom program' with 'manually insert.
 
 Figure \ref{fig:pipeline_basic} shows how the raw C and GLSL versions of
 Fishcopy are compiled and executed. In this instance, the \texttt{Fish} struct
@@ -2101,15 +2100,15 @@ the resulting program is identical to what would be written in C or GLSL.
 For this reason, a performance evaluation of an AnnoCheck program and comparing
 it with any C or GLSL counterpart is meaningless. % TODO(Rewrite)
 
-\section{CUG versus raw C/GLSL}
+\section{CUG versus raw C and GLSL}
 
 CUG shares many of its semantics with C and GLSL, which in theory should mean
-that any CUG program should have identical performance to an equivalent C/GLSL
-program. However, as a novel language, we parse, analyse and convert CUG to an
-intermediate representation before outputting the results to a C back-end. This
-is a destructive operation in contrast to AnnoCheck's solution. For this
-reason, we compared the performance of CUG implementation of FishCopy with the
-one written in C/GLSL. As expected, the C/GLSL implementation slightly
+that any CUG program should have identical performance to an equivalent C GLSL
+program by design. However, as a novel language, we parse, analyse and convert
+CUG to an intermediate representation before outputting the results to a C
+back-end. This is a destructive operation in contrast to AnnoCheck's solution.
+For this reason, we compared the performance of CUG implementation of FishCopy
+with the one written in C/GLSL. As expected, the C/GLSL implementation slightly
 outperformed the CUG implentation. Although this may initially appear a trivial
 point, it has importance, as the maturity of optimisation tools for existing
 languages give them a significant incumbent advantage \cite{RustSlow}.

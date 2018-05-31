@@ -20,7 +20,7 @@
 %%   \import{<path to file>}{<filename>.pdf_tex}
 %% Alternatively, one can specify
 %%   \graphicspath{{<path to file>/}}
-%% 
+%%
 %% For more information, please see info/svg-inkscape on CTAN:
 %%   http://tug.ctan.org/tex-archive/info/svg-inkscape
 %%
@@ -72,7 +72,7 @@
     \put(0,0){\includegraphics[width=\unitlength,page=8]{pipeline_basic.pdf}}%
     \put(0.75628868,0.85865878){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}\texttt{\#include}\end{tabular}}}}%
     \put(0.694733,0.54714595){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Compile\\using Clang\end{tabular}}}}%
-    \put(0.2793245,0.74402277){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Insert using\\custom program\end{tabular}}}}%
+    \put(0.2793245,0.74402277){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Manually insert\\shared code\end{tabular}}}}%
     \put(0.35154331,0.30890483){\color[rgb]{0,0,0}\makebox(0,0)[t]{\lineheight{1.25000012}\smash{\begin{tabular}[t]{c}Compile using Glslang\\\end{tabular}}}}%
   \end{picture}%
 \endgroup%
