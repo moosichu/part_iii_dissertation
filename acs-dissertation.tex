@@ -319,6 +319,8 @@ annotations to check the validity of raw API calls.
 
 \subsection{What was done}
 
+\label{sec:what_was_done}
+
 We created two prototype systems for checking programs across language
 boundaries in CPU-GPU systems. Both demonstrate a different approach in
 implementing compile-time cross-language checks and checking the validity of
@@ -2013,10 +2015,8 @@ Listing \ref{lst:invoke_main_c} demonstrates the C implementation of creating a
 \texttt{VkPipelineShaderStageCreateInfo} data structure instance. This
 structure is employed by the Vulkan API to identify \texttt{main}, using a
 string. This is similar to the example shown in Listing
-\ref{lst:annotation_example_output}.
-
-TODO(Content!) On Ubuntu desktop renaming "main" causes a runtime crash, with
-no helpful error info. COMPLETE OTHER SECTIONS. DETERMINE WORD COUNT.
+\ref{lst:annotation_example_output}. On our machines, modifying this string led
+to a runtime crash of the FishCopy program.
 
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
@@ -2041,6 +2041,12 @@ AnnoChecked shader is processed.}
 \label{lst:invoke_main_anno}
 \end{lstfloat}
 
+Listing \ref{lst:invoke_main_anno} demonstrates how the C sample can be
+annotated. Deliberately misnaming \texttt{"main"} and processing this with
+AnnoCheck will generate a metadata file, that will result in AnnoCheck telling
+the programmer that the GLSL programmer is missing the identifier that the C
+program refers to.
+
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
 let shader_name : ShaderName = @verified_shader_function(main);
@@ -2062,6 +2068,12 @@ type \texttt{ShaderName}. This strongly encourages the programmer to use the
 directives which generate the code necessary for verifying CUG-G.}
 \label{lst:invoke_main_cugc}
 \end{lstfloat}
+
+Listing \ref{lst:invoke_main_cugc} similarly shows the CUG-C sample. Here, the
+\texttt{pName} member in the initialisation struct is declared as having the
+type \texttt{ShaderName} instead of a character pointer. This enforces a system
+where the programmer must use a compiler directive which performs the same
+functionality as AnnoCheck.
 
 \section{Performance}
 
@@ -2102,23 +2114,12 @@ outperformed the CUG implentation. Although this may initially appear a trivial
 point, it has importance, as the maturity of optimisation tools for existing
 languages give them a significant incumbent advantage \cite{RustSlow}.
 
-% \begin{figure}[h]
-% \centering
-% \includegraphics[width=0.8\linewidth]{TODO}
-% \caption{The results are... (TODO(Content!)) (expecting our version to be a tad slower).}
-% \label{fig:performance_evaluation}
-% \end{figure}
 
-% Figure \ref{fig:performance_evaluation} demonstrates how the CUG and C/GLSL
-% implementations of FishCopy compare.
+% TODO(Content!). READ AND ENSURE WE HAVE WHAT MYCROFT EXPECTS
 
+% \section{Conclusion}
 
-% TODO(Content!). DETERMINE EXPECTED WORD COUNT
-
-
-\section{Conclusion}
-
-TODO(Content!): DETERMINE EXPECTED WORD COUNT
+% TODO(Content!): WRITE EVALUATION CONCLUSION
 
 \chapter{Related Work and Discussion}
 
