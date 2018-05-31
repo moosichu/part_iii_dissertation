@@ -177,11 +177,11 @@ programmers in the early-to-mid 2000s:
 
     \item Unless using a language with C-like syntax, the layout of data
     structures must be defined separately in GPU and CPU programs, with
-    erroneous behaviour if they differ (Section \ref{sec:TODO}).
+    erroneous behaviour if they differ (Section \ref{sec:issues_summary}).
 
     \item Functions in GPU programs are identified by the CPU using strings,
     with no compile-time mechanisms available to ensure that they are correct
-    (Section \ref{sec:TODO}).
+    (Section \ref{sec:issues_summary}).
 
     % \item TODO(Content) find more errors which are not addressed by this paper
     % (such as texture mis-match).
@@ -191,10 +191,10 @@ programmers in the early-to-mid 2000s:
 A large root-cause of these problems is the fact that regardless of the API
 used, the programs written for GPUs (known as \textit{shaders}) have to be
 developed in a separate environment using high-level languages based on C
-(Section \ref{sec:TODO}) \cite{TripThroughGraphicsPipeline1}. Although data is
-shared between the CPU and GPU via a bus, the programmer has to manually ensure
-that the data structures used to encode that data is consistent between the
-programs written for the GPU and CPU.
+(Section \ref{sec:history_gpu}) \cite{TripThroughGraphicsPipeline1}. Although
+data is shared between the CPU and GPU via a bus, the programmer has to
+manually ensure that the data structures used to encode that data is consistent
+between the programs written for the GPU and CPU.
 
 \begin{lstfloat}
 \begin{center} C$^\sharp$ \end{center}
@@ -1814,7 +1814,7 @@ void main() {
 \end{lstlisting}
 \caption{AnnoChecked version of the GLSL FishCopy shader. AnnoCheck provides
 the \texttt{@include} annotation for including C structs. However, this does
-have its dangers (Section \ref{sec:TODO}). The \texttt{@verify} directive
+have its dangers (Section \ref{sec:shading_langauge_challenges}). The \texttt{@verify} directive
 verifies that the main function conforms to expectations.}
 \label{lst:anno_check_shader}
 \end{lstfloat}
