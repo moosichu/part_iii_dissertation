@@ -1366,7 +1366,7 @@ following ways:
     incorrect, it can cause weird behaviour.
 
     \item CUG does not support type-casting, however, we can define external C
-    functions which convert from one type to another and can call those. % TODO(Rewrite)
+    functions which convert from one type to another and can call those.
 
     \item CUG-G does not support the programming of graphics shaders, only
     simple compute shaders. This is reflected in the chosen benchmark.
@@ -1522,9 +1522,6 @@ AnnoCheck outputs the C and GLSL files with all the annotations removed, so
 that they can be compiled handled as regular C and GLSL by the rest of the
 programmer's build system.
 
-% TODO(Content): flesh this out more WORK OUT HOW MANY WORDS IT WILL TAKE
-% TODO: check the above for spelling errors, recently written
-
 \section{CUG Compiler Implementation}
 
 The CUG compiler is a much more complex endeavor than AnnoCheck, compromising
@@ -1576,7 +1573,8 @@ stages handled in the following ways:
     by CUG-G code.
 
     \item \textbf{Semantically Analyse Imported Modules and Metadata:} Perform
-    semantic analysis of imported modules and metadata.
+    semantic analysis of imported modules and metadata. This is done using a
+    custom symbol table which employs the FNV hashing algorithm \cite{FNVHash}.
 
     \item \textbf{Semantic Analyse}: Resolve types and identifiers on the
     program. This step is where most dialect-state specific work is done. Other
@@ -1695,11 +1693,6 @@ This process formed the foundation for an automatic regression-testing system,
 which we ran automatically on every commit to the main repository
 \cite{ProjectSource} \cite{AutomatedTestCode} \cite{AutomatedTestOutput}.
 
-% \subsection{Interfacing with existing languages}
-
-% TODO(Helpful): reference usage of FNV hash for symbol table. \cite{FNVHash}.
-
-
 \chapter{Evaluation}
 
 \label{chp:evaluation}
@@ -1734,21 +1727,12 @@ struct Fish{
 \label{lst:struct_fish}
 \end{lstfloat}
 
-% \begin{figure}[h]
-% \centering
-% \def\svgwidth{0.8\linewidth}
-% \input{images/copy_fish.pdf_tex}
-% \caption{FishCopy TODO(Content).}
-% \label{fig:copy_fish}
-% \end{figure}
-% TODO(Image!) Workout why this won't compile.
-
 All the values in the array are then assigned a random integer value using the
 C library's \texttt{rand()} function \cite{RandRef}. After the array has been
-initialised in this way, its contents are transferred to a buffer on the GPU.
-The CPU then invokes a simple compute shader which copies all of its data
-across to another buffer. Both buffers are loaded into arrays on the CPU, which
-subsequently confirms that they have matching contents.
+initialised, its contents are transferred to a buffer on the GPU. The CPU then
+invokes a simple compute shader which copies the data across to another buffer
+(Section \ref{sec:shader_comparison}). The CPU then confirms that this output
+matches the original input.
 
 Although Fishcopy is simple, it serves two purposes: Firstly, to demonstrate
 how both CUG and AnnoCheck catch errors which may easily be made in even a
@@ -1760,8 +1744,8 @@ AnnoCheck.
 \label{sec:shader_comparison}
 
 Listings \ref{lst:glsl_shader}, \ref{lst:anno_check_shader} and
-\ref{lst:cug_g_shader} display shaders written in GLSL, annotated GLSL and
-CUG-G respectively.
+\ref{lst:cug_g_shader} display the FishCopy shader written in GLSL, annotated
+GLSL and CUG-G respectively.
 
 \begin{lstfloat}
 \begin{center}
@@ -1845,10 +1829,10 @@ be included. }
 One aspect worth noting, is that the \texttt{Fish} struct must be manually
 defined in the raw GLSL shader, as \texttt{\#include} directives are not
 supported within the language \cite{NoIncludeGLSL}. For our own convenience,
-AnnoCheck includes an \texttt{@include} annotation, which does this for us,
+AnnoCheck provides an \texttt{@include} annotation, which does this for us,
 allowing code to be shared. However, as we discussed in Section
 \ref{sec:shading_langauge_challenges}, this sharing is purely syntactic, and C
-and GLSL do have some differences which can complicate things. This is
+and GLSL do have some differences which can complicate code sharing. This is
 primarily why we developed CUG, as the CUG-G shader includes the same module as
 the CUG-C program which invokes it. As this sharing is \textit{semantic}, we
 can provide guarantees that CUG-G and CUG-C will use this module in compatible
@@ -1881,15 +1865,13 @@ ensure that shared code is compiled into the shader.}
 Figure \ref{fig:pipeline_basic} shows how the raw C and GLSL versions of
 Fishcopy are compiled and executed. In this instance, the \texttt{Fish} struct
 is defined in a file called struct.h, which is included in the main program
-using C's \texttt{\#include} directive. Although the struct definition is
-syntactically valid GLSL as-is, it needs to be manually inserted into the
-shader as GLSL does not have a method for including code from other files
-\cite{NoIncludeGLSL}. This naturally increases the complexity of the
-"traditional" toolchain. We compile main.c to an executable using clang, and we
-compile the shader to SPIR-V using the Khronos Group's GLSL compiler, glslang
-\cite{glslang}.
+using C's \texttt{\#include} directive. However, as previously discussed, it
+needs to be manually inserted into the shader \cite{NoIncludeGLSL}. This
+naturally increases the complexity of this toolchain. We compile main.c to an
+executable using clang, and we compile the shader to SPIR-V using the Khronos
+Group's GLSL to SPIR-V compiler,\textit{glslang} \cite{Clang} \cite{glslang}.
 
-When the executable runs, it performs all the AI calls necessary to load the
+When the executable runs, it performs all the API calls necessary to load the
 compiled SPIR-V shader and execute it on the GPU.
 
 \begin{figure}[h]
@@ -1904,15 +1886,14 @@ comes with no guarantees about the correctness of doing so.}
 
 Figure \ref{fig:pipeline_anno_check} demonstrates the AnnoCheck version of this
 toolchain. As can be seen, there is an extra level of complexity here compared
-with the C and GLSL version. The process derived from that for raw C and GLSL,
-but with a couple of minor differences. Firstly, AnnoCheck processes the
+with the C and GLSL version. The process is derived from that for raw C and
+GLSL, but with a couple of minor differences. Firstly, AnnoCheck processes the
 annotations in main.c in order to generate a metadata file,
 \textit{annotations.meta}, that is used to verify the code in the shader. The
 second difference is that AnnoCheck is able to perform the same file-inclusion
-capabilities for the shader that previously had to be executed manually, and
-whilst doing so it verifies the shader and, only if the annotations within it
-are consistent with main.c, generates the GLSL shader file
-\cite{NoIncludeGLSL}.
+capabilities for the shader that previously had to be executed manually. The
+shader is successfully verified if, only if the annotations within it are
+consistent with those main.c.
 
 From this point on, the build process is identical to raw C and GLSL, with the
 generated C and GLSL files matching the raw C and GLSL files identically -- the
@@ -1932,9 +1913,9 @@ complicates the build process.}
 Figure \ref{fig:pipeline_cug} demonstrates the CUG toolchain we implemented. In
 contrast to the simple syntactic sharing of the \texttt{Fish} definition in
 both the raw and AnnoCheck toolchains, the module containing \texttt{Fish} is
-shared semantically between CUG-C and CUG-G. However, as we describe in Section
-Section \ref{sec:backends}, the toolchain complexity is increased by the need
-to compile the resulting C and GLSL that is generated by the CUG compiler.
+shared semantically between CUG-C and CUG-G. However, the toolchain complexity
+is increased by the need to compile the resulting C and GLSL that is generated
+by the CUG compiler.
 
 \begin{figure}[h]
 \centering
@@ -1958,13 +1939,11 @@ when making API calls. AnnoCheck increases the toolchain complexity, in
 exchange for allowing the programmer to annotate their code such that AnnoCheck
 can prevent some errors from happening. Futhermore, AnnoCheck can also handle
 code-inclusion in GLSL, removing the need for that to be done by a custom
-solution. The CUG compiler is part of the most complex toolchain, however, this
-was purely a result of how we implemented the compiler due to the constraints
-we faced. Figure \ref{fig:pipeline_cug_future} demonstrates that if properly
-implemented a custom language could actually reduce the overall toolchain
-complexity, even when compared with raw C and GLSL, by providing standardised
-methods for semantically sharing code between host and shader code (in this
-case, CUG-C and CUG-G).
+solution. The CUG compiler is part of the most complex toolchain. However,
+Figure \ref{fig:pipeline_cug_future} demonstrates that if properly implemented
+CUG could reduce the overall toolchain complexity. Especially as it provides
+standardised methods for semantically sharing code between host and shader code
+(in this case, CUG-C and CUG-G).
 
 \section{Error-Prevention}
 
@@ -2074,51 +2053,69 @@ type \texttt{ShaderName} instead of a character pointer. This enforces a system
 where the programmer must use a compiler directive which performs the same
 functionality as AnnoCheck.
 
-\section{Performance}
+\section{Performance and Discussion}
 
 One of the key goals of both AnnoCheck and CUG is to not compromise the
-low-level control raw graphics APIs provide. However, this does not guarantee
-that a program written using this APIs directly is going to out-perform one
-which is built on an abstraction layer (Chapter \ref{chp:related_work}).
+low-level control raw graphics APIs provide. This section discusses how the
+performance of AnnoCheck and CUG compare versus raw C and GLSL, followed by the
+tradeoffs that a low-level abstraction layer makes.
 
-However, the performance of any AnnoCheck or CUG program, should match the
-equivalent C and GLSL versions. In this section, we analyse the performance of
-FishCopy across all three of its implementations.
+\subsection{AnnoCheck versus raw C and GLSL}
 
-\section{AnnoCheck versus raw C and GLSL}
+AnnoCheck is an annotation system that \textit{enhances} C and GLSL. We
+designed it so that simply removing the annotations from any program which uses
+AnnoCheck results in plain and valid C and GLSL. This means that the set of
+AnnoCheck-enabled programs is a superset of valid C and GLSL programs. Although
+this makes a few tradeoffs \ref{sec:performance_tradeoffs}, a benefit is that
+after AnnoCheck processes a program, the output is identical to what would be
+written in C or GLSL.
 
-%TODO(Rewrite):
 
-One of the tradeoffs that AnnoCheck makes is that it is an annotation system
-that \textit{enhances} C and GLSL. We designed it so that simply removing the
-annotations from any program which uses AnnoCheck results in plain and valid C
-and GLSL. This means, that the set of AnnoCheck-enabled programs is a superset
-of valid C and GLSL programs. Although this comes with a few tradeoffs (Chapter
-\ref{chp:related_work}), a benefit is that after AnnoCheck processes a program,
-the resulting program is identical to what would be written in C or GLSL.
-
-For this reason, a performance evaluation of an AnnoCheck program and comparing
-it with any C or GLSL counterpart is meaningless. % TODO(Rewrite)
-
-\section{CUG versus raw C and GLSL}
+\subsection{CUG versus raw C and GLSL}
 
 CUG shares many of its semantics with C and GLSL, which in theory should mean
 that any CUG program should have identical performance to an equivalent C GLSL
 program by design. However, as a novel language, we parse, analyse and convert
 CUG to an intermediate representation before outputting the results to a C
 back-end. This is a destructive operation in contrast to AnnoCheck's solution.
-For this reason, we compared the performance of CUG implementation of FishCopy
-with the one written in C/GLSL. As expected, the C/GLSL implementation slightly
-outperformed the CUG implentation. Although this may initially appear a trivial
-point, it has importance, as the maturity of optimisation tools for existing
-languages give them a significant incumbent advantage \cite{RustSlow}.
 
+Therefore, when compared the runtime performance of CUG implementation of
+FishCopy with the one written in C and GLSL. As expected, the C and GLSL
+implementation slightly outperformed the CUG implentation. Although this may
+initially appear a trivial point, it has importance, as the maturity of
+optimisation tools for existing languages give them a significant incumbent
+advantage \cite{RustSlow}. Therefore, although a language can be carefully
+designed with semantics which enable high-performance programs, the
+implementation which achieves that is an important barrier to overcome.
 
-% TODO(Content!). READ AND ENSURE WE HAVE WHAT MYCROFT EXPECTS
+\subsection{Tradeoffs}
 
-% \section{Conclusion}
+\label{sec:performance_tradeoffs}
 
-% TODO(Content!): WRITE EVALUATION CONCLUSION
+AnnoCheck and CUG both make similar tradeoffs when it comes to the overall
+performance: They give the programmer control over low level details. This
+differs substantially from the approach much research has taken, where these
+are abstracted in favour of allowing an optimising compiler to handle them.
+Whilst the low level details are still important in many domains such as games,
+which have hard real-time constraints, as we discuss in Chapter
+\ref{chp:related_work}, some optimising compilers have been able to outperform
+manually-written code.
+
+\section{Conclusion}
+
+We have evaluated four components of AnnoCheck and CUG: How code is written,
+the toolchain complexity, how errors are prevented, and the performance
+tradeoffs both systems make. By requiring annotations and a new tool, AnnoCheck
+does increase both the complexity of code and the complexity of the toolchain
+relative to raw C and GLSL. However, the benefit of this is that it can handle
+syntactic code sharing for the user and catch identifier mis-matches.
+Futhermore, it has identical performane to raw C and GLSL.
+
+CUG makes different tradeoffs, as code has to be written in an entirely new
+language, but CUG-C and CUG-G can semantically share code. Futhermore, the type
+system enforces the usage off AnnoCheck-like annotations. Although our CUG
+implementation had the most complex toolchain, a complete compiler would be
+more simple than the toolchain needed for raw C and GLSL.
 
 \chapter{Related Work and Discussion}
 
