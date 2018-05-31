@@ -20,7 +20,7 @@
 \def\authorcollege{Downing College\xspace}
 \def\authoremail{tr395@cam.ac.uk}
 \def\dissertationtitle{Heterogeneous type checking in multi-language CPU-GPU systems}
-\def\wordcount{11595}
+\def\wordcount{11448}
 \def\totalloccount{13000 }
 \def\compilerloccount{12000 }
 
@@ -2085,58 +2085,47 @@ more simple than the toolchain needed for raw C and GLSL.
 
 \label{chp:related_work}
 
-We detail related work in the field of modifying or improving GPU toolchains
-beyond traditional low-level libraries. We demonstrate the diverse set of
-approaches that have been employed in this area and the progress made, whilst
-demonstrating how the specific problems targeted by AnnoCheck and CUG have yet
-to be addressed.
+Since the creation of the SPIR-V intermediate language (Chapter
+\ref{chp:technical_background}), some progress has been made in simplifying and
+unifying how GPUs are interacted with. For example the Khronos Group have
+recently standardised a modified version of C++, \textit{OpenCL C++} for
+developing compute shaders \cite{OpenCL22Release} \cite{OpenCLCPPWhitePaper}
+\cite{OpenCL}. Possibly because a reference compiler can output SPIR-V,
+previously graphics drivers had to implement OpenCL C directly, limiting the
+complexity of the language. However, this system still uses the traditional
+workflow of programming compute shaders and host code separately, with no
+cross-module checking at the API boundaries \cite{OpenCL22Release}.
 
-Since the creation of the SPIR-V intermediate language for heterogeneous
-programming (as discussed in Chapter \ref{chp:technical_background}), some
-progress has been made in simplifying and unifying how GPUs are interacted with
-for compute purposes. For example the Khronos Group have recently standardised
-a modified version of C++, \textit{OpenCL C++} for developing compute shaders
-\cite{OpenCL22Release} \cite{OpenCLCPPWhitePaper} \cite{OpenCL}. This has only
-been possible because it can be compiled to SPIR-V, whereas previously graphics
-drivers had to implement OpenCL C directly, limiting how complex OpenCL's
-shader language could become. However, whilst unifying some aspects of host and
-shading languages, this uses the traditional workflow of programming compute
-kernels and host code separately, with no cross-module checking at the API
-boundaries \cite{OpenCL22Release}.
-
-SYCL is a framework by the Khronos Group built on top of OpenCL that abstracts
-away the API calls to enable ``single-source'' C++ development which
-automatically generates host and shader code from a single C++ source file
-\cite{OpenCL22Release} \cite{SYCL}. SYCL has seen uptake in multiple
-implementations, and has been adopted as a backend for various machine learning
-frameworks such as TensorFlow and Eigen \cite{ComputeCPP} \cite{triSYCL}
-\cite{SYCLTensorFlow} \cite{SYCLEigen}. However, this approach does have its
-limitations by removing the ability for developers to control how those API
-calls are made, which AnnoCheck and CUG preserve. Both OpenCL and SYCL are also
-limited in only being suitable for \textit{compute} applications, and do not
-allow for the graphics operations for which GPUs are capable. However, Vulkan
-and OpenCL may merge in the future, which could open the door to this happening
+SYCL is a framework by that abstracts away OpenCL API calls to enable
+``single-source'' C++ development, automatically generating host and shader
+code from a single C++ source file \cite{OpenCL22Release} \cite{SYCL}. SYCL has
+seen uptake in multiple implementations, and has been adopted as a backend for
+various machine learning frameworks such as TensorFlow and Eigen
+\cite{ComputeCPP} \cite{triSYCL} \cite{SYCLTensorFlow} \cite{SYCLEigen}.
+However, this approach removes the control which AnnoCheck and CUG preserve.
+Both OpenCL and SYCL are only suitable for \textit{compute} applications, not
+allowing for the graphics operations. However, Vulkan and OpenCL may merge in
+the future, which could open the door to this happening
 \cite{VulkanOpenCLMerge}.
 
-Research has been done to make GPU and heterogeneous computing available in
-high-level dynamic languages. Theano and TensorFlow do this by abstracting a
-compute platform such as OpenCL or CUDA using a framework or library
-\cite{Theano2016} \cite{TensorFlowWhitePaper}. This technique has primarily
-seen success in scientific computing and machine learning. Others have created
-custom high-level languages which target GPUs directly. Harlan, developed by
-Holk et al., is a GPU-targeted domain-specific language (DSL) based on Scheme,
-with support for higher order programming with Scheme-influenced syntax and
-semantics \cite{Harlan} \cite{HarlanAnnouncement}. GPipe extends the functional
-language Haskell such that shaders can be written functionally and OpenGL calls
-can be made in type-safe ways. However, the garbage-collection of Haskell makes
-it unsuitable for many of the domains in which GPUs are employed, such as games
-\cite{HaskellState} \cite{GPipe}. Halide is a DSL for image processing and
-computational photography \cite{Halide}. Fumero et al. have developed
-techniques to automatically offload computation from high-level interpreted
-dynamic languages using just-in-time compilation to achieve speedups by
-compiling R to an OpenCL C backend \cite{JITGPU}. Futhark is an attempt to
-design a functional data-parallel array language from the ground-up that can
-target GPUs through an OpenCL backend \cite{Futhark}.
+Research has made GPU and heterogeneous computing available in high-level
+dynamic languages. Theano and TensorFlow do this by abstracting a compute
+platform such as OpenCL or CUDA using a framework or library \cite{Theano2016}
+\cite{TensorFlowWhitePaper}. This technique has primarily seen success in
+scientific computing and machine learning. Others have created custom
+high-level languages which target GPUs directly. Harlan, developed by Holk et
+al., is a GPU-targeted domain-specific language (DSL) based on Scheme which
+higher order programming \cite{Harlan} \cite{HarlanAnnouncement}. GPipe extends
+the functional language Haskell such that shaders can be written functionally
+and OpenGL calls can be made in type-safe ways. However, the garbage-collection
+of Haskell makes it unsuitable for many of the domains in which GPUs are
+employed, such as games \cite{HaskellState} \cite{GPipe}. Halide is a DSL for
+image processing and computational photography \cite{Halide}. Fumero et al.
+have developed techniques to automatically offload computation from high-level
+interpreted dynamic languages using just-in-time compilation to achieve
+speedups by compiling R to an OpenCL C backend \cite{JITGPU}. Futhark is an
+attempt to design a functional data-parallel array language from the ground-up
+that can target GPUs through an OpenCL backend \cite{Futhark}.
 
 Existing languages have also been extended with the functionality to compile
 parts of their programs to heterogeneous architectures. Lime and JCUDA take the
@@ -2153,8 +2142,8 @@ allow users to write code as they normally would for the CPU, and then add
 directives to code fragments as hints to the compiler that such fragments could
 perform optimally if run on a GPU. This directive system has parallels with
 AnnoCheck, as it aims to enhance existing languages with features for GPU
-programming. However, the OpenACC compiler abstracts the low-level details of
-GPU programming, whilst AnnoCheck highlights them.
+programming. However, the OpenACC compiler abstracts-way the low-level details
+of GPU programming, whilst AnnoCheck enforces them.
 
 Another approach that has been taken is to abstract away underlying APIs such
 as CUDA and OpenCL with platforms that can target both as backends. HIP is a
@@ -2175,21 +2164,21 @@ instruction set \cite{HCC}.
 
 \section{Discussion}
 
-As can be seen, there has been limited progress in making programming for
-heterogeneous architectures and GPUs easier. However, the focus has been on
-GPGPU computing, with limited research in graphics programming. The creation of
-SPIR-V and Vulkan are slowly correcting this, as previously these systems have
-had to target fairly-high level backend APIs such as OpenCL or CUDA.
-Futhermore, these languages were compiled by device drivers such as
-\textit{OpenCL C} or \textit{CUDA C/C++}, which has limited the performance and
-stability of the higher-level systems \cite{GLFuzz}. Additionally, apart from
-\textit{Open CL C++}, these all either present alternate high-level interfaces
-or abstract them away in order to ensure simplified and less error-prone
-programs. This differs from the approach we take, in marking-up low-level API
-calls directly, so that they are checked at compile-time for consistency whilst
-preserving the control that would otherwise be lost by abstractions.
-Furthermore, although we merely tested a single compute shader, the design of
-AnnoCheck and CUG are amenable for employment graphics programming.
+Limited progress has been made in making programming for heterogeneous
+architectures and GPUs easier. However, the focus has been on GPGPU computing,
+with limited research in graphics programming. The creation of SPIR-V and
+Vulkan are slowly correcting this, as previously these systems have had to
+target fairly-high level backend APIs such as OpenCL or CUDA. Futhermore, these
+languages were compiled by device drivers such as \textit{OpenCL C} or
+\textit{CUDA C/C++}, which has limited the performance and stability of the
+higher-level systems \cite{GLFuzz}. Additionally, apart from \textit{Open CL
+C++}, these all either present alternate high-level interfaces or abstract them
+away in order to ensure simplified and less error-prone programs. This differs
+from the approach we take in marking-up low-level API calls directly, so that
+they are checked at compile-time for consistency. This preserves the control
+that would otherwise be lost by abstractions. Furthermore, although we merely
+tested a single compute shader, the design of AnnoCheck and CUG are amenable
+for employment graphics programming.
 
 \chapter{Conclusion and Further Work}
 
