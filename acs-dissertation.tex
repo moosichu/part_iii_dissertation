@@ -1132,7 +1132,7 @@ respectively.
 \begin{center} CUG-min Syntax \end{center}
 \begin{lstlisting}[language=C]
 // Import external module
-@add module
+@add "module.cug"
 // 3 being assigned to a newly-declared 32-bit signed integer
 var a_variable : s32 = 3;
 // 5 being assigned to the existing variable
@@ -1429,10 +1429,6 @@ represented within the language.}
 
 Listing \ref{lst:lang_c_interop} demonstrates an example of the features used
 to interact with C from CUG-G.
-
-% \subsection{Cross-Dialect Interactions}
-
-% TODO(Content!)
 
 \chapter{Implementation}
 
@@ -1762,10 +1758,9 @@ AnnoCheck.
 
 \label{sec:shader_comparison}
 
-TODO(Content!): COMPARE THE SHADER EXAMPLES IN DEPTH
-
 Listings \ref{lst:glsl_shader}, \ref{lst:anno_check_shader} and
-\ref{lst:cug_g_shader}.
+\ref{lst:cug_g_shader} display shaders written in GLSL, annotated GLSL and
+CUG-G respectively.
 
 \begin{lstfloat}
 \begin{center}
@@ -1845,6 +1840,22 @@ let main()
 be included. }
 \label{lst:cug_g_shader}
 \end{lstfloat}
+
+One aspect worth noting, is that the \texttt{Fish} struct must be manually
+defined in the raw GLSL shader, as \texttt{\#include} directives are not
+supported within the language \cite{NoIncludeGLSL}. For our own convenience,
+AnnoCheck includes an \texttt{@include} annotation, which does this for us,
+allowing code to be shared. However, as we discussed in Section
+\ref{sec:shading_langauge_challenges}, this sharing is purely syntactic, and C
+and GLSL do have some differences which can complicate things. This is
+primarily why we developed CUG, as the CUG-G shader includes the same module as
+the CUG-C program which invokes it. As this sharing is \textit{semantic}, we
+can provide guarantees that CUG-G and CUG-C will use this module in compatible
+ways.
+
+AnnoCheck and the CUG-G shader both use different mechanisms for verification:
+with AnnoCheck, annotations applied to regular GLSL code, whilst CUG-G handles
+verification through the CUG type system.
 
 
 
