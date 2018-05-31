@@ -479,8 +479,7 @@ the function name -- ensuring that \texttt{main} cannot be renamed in the host
 or shader without being consistently renamed in the other. If we deliberately
 introduced such an error was into raw C and GLSL, the resulting behaviour would
 be a runtime crash. However, not all such inconsistencies result in runtime
-errors, others can simply result in incorrect or undefined runtime results
-(Appendix \ref{app:other_API_issues}).
+errors, others can simply result in incorrect or undefined runtime results.
 
 Listing \ref{lst:annotation_example_input} demonstrates how annotations can
 prevent programmers from compiling code where the names of shaders differ
@@ -563,8 +562,7 @@ system presents in Chapter \ref{chp:conclusion_and_further_work}.
 
 The syntax, semantics and particular features of these languages are provided
 in-depth in Section \ref{sec:design_languages}. Due to the verbose nature of
-using GPU APIs, further CUG examples are given in Appendix
-\ref{app:other_cug_examples}.
+using GPU APIs.
 
 \section{Summary}
 
@@ -769,9 +767,6 @@ the creation of the Vulkan API. This section does not enumerate all of the
 issues graphics APIs have, but instead will briefly describe the workflow and
 toolchains of using a GPU API, and then enumerate the challenges our systems
 aim to ease.
-
-A comprehensive overview of the challenges GPU APIs present are given in
-Appendix \ref{app:other_API_issues}.
 
 \subsection{An overview of a typical GPU API}
 
@@ -1314,9 +1309,7 @@ CUG's syntax does differ from those C and GLSL in the following ways.
 \end{itemize}
 
 There are naturally many syntax and design choices in CUG that we have not
-enumerated here due to space limitations. The exhaustive list of design
-decisions made which are not directly related to the problems this paper
-tackles are given in Appendix \ref{app:cug_design_decisions}.
+enumerated here due to space limitations.
 
 %TODO(Content): Formal Grammar
 
@@ -2344,247 +2337,5 @@ Vulkan, bringing this ``dream'' another step closer to reality
 
 \appendix
 \singlespacing
-
-\chapter{A comprehensive overview of GPU API issues}
-
-\label{app:other_API_issues}
-
-Writing about some of the issues here.
-
-This section gives an overview of the general challenges programmers face when
-using graphics APIs. Firstly, the context and history of graphics APIs are
-described, with a focus on OpenGL and Vulkan. Subsequently, the general
-workflow of writing programs for GPUs is described, before finally the
-individual problems that type heterogeneous type safety seeks to address are
-identified.
-
-Programmers interact with GPUs using APIs, however, as the development of and
-growth of GPUs in computing has been relatively organic and ad-hoc, these APIs
-themselves have many legacy components and can be difficult to work with
-\cite{NVIDIAInternshipLessons}.
-
-% TODO(Citation): can reference this blog:
-% http://aras-p.info/blog/2015/03/13/thoughts-on-explicit-graphics-apis/
-% http://aras-p.info/blog/2014/05/31/rant-about-rants-about-opengl/
-
-To understand the challenges of working GPUs, one must first both understand
-the current workflow of GPUs and how that workflow has developed over time.
-
-The best point of comparison is the CPU, and programming for the CPU. When
-programming for the CPU, programmers often have access to a plethora of
-programming languages which are suited to different needs and are capable of
-targeting a wide range of backends. Furthermore, the instruction sets of CPUs
-are published and well-documented, allowing programmers to write applications
-for them directly -- even allowing them to write their own compiler for them
-if they so desire. Finally, in the world of desktop computing, x86 is the
-de-facto standard architecture, massively increasing the portability of
-programs which target desktop PCs without the need for hardware abstractions
-which could come with performance penalties.
-
-The workflow of the GPU is very different.
-
-\subsection{OpenGL}
-
-Although GPUs do not have a standard ISA, open standards for GPU computing have
-been developed and maintained by the Khronos Group, which was
-founded in 2000 by a group of companies for this purpose. OpenGL is the most
-widely used standard graphics API that they maintain, however, the API has a
-history dating back to the early 1990's, with control of the
-standard being passed from Silicon Graphics in 2006. For a long
-time the OpenGL family of graphics APIs were the only cross-platform family of
-graphics APIs, with OpenGL ES, a related API, being used for mobile and
-embedded systems
-
-Despite OpenGL being an open standard with a differently-flavoured API for
-non-desktop systems, portability and development using the API is difficult for
-several reasons. The focus of this is on the language-aspects of graphics
-programming.
-
-The largest competitor to OpenGL has been Direct3D by Microsoft, and is an
-alternative graphics API for Windows computers. Other platforms may have their
-own proprietary graphics APIs, such a Metal for Apple devices , and the various
-APIs that gaming consoles provide . Although each of these platforms have their
-differences, the problems being tackled can be generalised to all of them.
-Therefore, this paper will purely focus on the OpenGL family of graphics APIs.
-
-\subsection{Vulkan}
-
-TODO(Content?):
-
-\subsection{Graphics workflow and pipeline}
-
-GPUs are highly parallel compute machines capable of running programs called
-\textit{shaders}. However, unlike CPU programs, where a programmer will simply
-start writing code in a \texttt{main} function which can be straightforwardly
-compiled and executed, shaders require more setup and boilerplate. Typically,
-shaders complement programs designed for the CPU, with the traditional example
-being a video game. In this case, the core components of a game (such as logic,
-animation, scene-setup, input handling) will be handled by the CPU which can
-then offload certain computations to the GPU (such as graphics and physics).
-The programmer does this by using graphics APIs to initialise the graphics
-pipeline to the desired state for a particular computation (setting up buffers,
-loading data onto the GPU, initialising the pipeline, reserving resources,
-etc.). Following this, those APIs are used to direct the drivers to load
-\textit{shader code} onto the GPU. Finally, the shaders are executed for the
-desired results.
-
-Although laborious, this workflow allows programmers to use the resources of
-GPUs fairly efficiently. However, it is not without issues. The one which this
-paper seeks to tackle is down to the fact that \textit{shaders} and CPU code
-are written in completely different programming languages.
-
-\begin{itemize}
-
-    \item standard has a lot of legacy and issues:
-
-        \item different workflows and APIs for different applications
-
-        \item non-standard implementations of the standard, with
-        vendor-specific extensions and other proprietary technologies.
-
-    \item standard changes depending on whether targeting desktop, mobile
-    or embedded systems
-
-    \item must interact with Operating systems directly, such as using
-    their windowing system to create a \textit{context}. This reduces
-    portability.
-
-    \item Languages are compiled at run-time, with different shader-models
-
-    \item Companies Will partner with different vendors
-
-    \item Examples
-
-    \item Portability
-
-    \item Fuzzing \cite{GLFuzz}
-
-    \item Drive white-lists \cite{NVIDIAInternshipLessons}
-
-\end{itemize}
-
-\subsection{API options}
-
-\label{sec:api_options}
-
-\begin{table}
-\footnotesize
-\begin{tabu} to 1
-\textwidth {||X[c]||X[c]|X[c]|X[c]||}
-\hline
-Name &
-Created &
-Developer &
-Purpose \\
-\hline
-OpenGL &
-1992 &
-Khronos Group &
-Graphics \\
-\hline
-Direct3D &
-1996 &
-Microsoft &
-Graphics \\
-\hline
-OpenGL ES &
-2003 &
-Khronos Group &
-Graphics \\
-\hline
-CUDA &
-2007 &
-NVIDIA &
-Compute \\
-\hline
-OpenCL &
-2009 &
-Khronos Group &
-Compute \\
-\hline
-Metal &
-2014 &
-Apple &
-Compute and Graphics \\
-\hline
-Vulkan &
-2016 &
-Khronos Group &
-Compute and Graphics \\
-\hline
-
-\hline
-\hline
-
-\hline
-Name &
-Targets &
-language &
-License \\
-\hline
-OpenGL &
-Desktop and console GPUs &
-GLSL and SPIR-V &
-Open Specification \\
-\hline
-Direct3D &
-GPUs with Windows OS &
-HLSL &
-Proprietary \\
-\hline
-OpenGL ES &
-GPUs on mobile and embedded systems &
-GLSL &
-Open Specification \\
-\hline
-CUDA &
-NVIDIA GPUs &
-CUDA C/C++ &
-Proprietary \\
-\hline
-OpenCL &
-GPUs, DSPs and FPGAs &
-OpenCL C and SPIR-V &
-Open Specification \\
-\hline
-Metal &
-GPUs with macOS or iOS &
-Metal Shading Language (C++ based) &
-Proprietary \\
-\hline
-Vulkan &
-GPUs &
-SPIR-V &
-Open Specification \\
-\hline
-\end{tabu}
-
-\caption{ A comparison of different graphics and compute APIs, listed in
-chronological order. These represent lowest-level interfaces for interacting
-with heterogeneous hardware. The fragmentation seen here has resulted in an
-ecosystem very different from the ``hourglass model'' that CPUs enjoy. OpenCL,
-OpenGL, OpenGL ES and Vulkan are simply four standards from a \textit{single
-body} for interacting with the same underlying hardware. Furthermore, there are
-many proprietary alternatives hardware and operating system vendors like to
-push themselves.}
-
-%TODO(Citation): add references to this table.
-
-\label{tbl:api_comparison}
-
-\end{table}
-
-\chapter{Other CUG Examples}
-
-\label{app:other_cug_examples}
-
-TODO(ContentApp)
-
-\chapter{CUG design decisions}
-
-\label{app:cug_design_decisions}
-
-TODO(ContentApp)
-
 
 \end{document}
