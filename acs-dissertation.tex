@@ -1442,7 +1442,7 @@ For annotated C code, this AST is semantically analysed in order to produce
 metadata, which is saved in an output file. This metadata needs to be to fed to
 AnnoCheck when analysing annotated GLSL, so it can verify that the annotations
 within it are consistent with the annotated C. Although this build system may
-seem cumbersome, as we discuss in Section \ref{sec:sec:build_strategy}, by
+seem cumbersome, as we discuss in Section \ref{sec::build_strategy}, by
 generating metadata from annotated C once, GLSL can be re-compiled and
 ``hot-loaded'' at run-time. After analysing either annotated C or GLSL,
 AnnoCheck outputs the C and GLSL files with all the annotations removed, so
@@ -1528,7 +1528,7 @@ stages handled in the following ways:
 CUG-C and CUG-G share a compiler, ensuring that there are not any unexpected
 differences in how the programs are parsed, especially when sharing modules
 between the two dialects. This differs substantially from C and GLSL, which do
-have peculiar differences (Section \ref{sec:sec:shading_langauge_challenges}).
+have peculiar differences (Section \ref{sec::shading_langauge_challenges}).
 
 We achieve this through the use of a state machine within the compiler, where
 each module is associated with one of the following states:
