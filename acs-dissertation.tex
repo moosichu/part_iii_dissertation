@@ -1706,14 +1706,10 @@ which we ran automatically on every commit to the main repository
 
 \label{chp:evaluation}
 
-% For any practical projects, you should almost certainly have
-% some kind of evaluation, and it's often useful to separate
-% this out into its own chapter.
-
 This chapter evaluates how AnnoCheck and CUG compare with the traditional
-unchecked C and GLSL toolchain. We do this using a sample program called
+unchecked C and GLSL toolchain. We do this by employing a sample program called
 \textit{FishCopy}, comparing aspects such as toolchain complexity, code
-samples, which errors AnnoCheck and CUG prevent, in addition to analysing how
+samples, errors which AnnoCheck and CUG prevent, in addition to analysing how
 the resulting code performs. Due to the complexity of using the Vulkan API, we
 will present small samples of this program. The full version of
 \textit{FishCopy} can be found on the project GitHub repository
@@ -1752,14 +1748,14 @@ struct Fish{
 
 All the values in the array are then assigned a random integer value using the
 C library's \texttt{rand()} function \cite{RandRef}. After the array has been
-initialised in this way, its contents are then transferred to a buffer on the
-GPU. The CPU then invokes a simple compute shader which copies all of its data
+initialised in this way, its contents are transferred to a buffer on the GPU.
+The CPU then invokes a simple compute shader which copies all of its data
 across to another buffer. Both buffers are loaded into arrays on the CPU, which
 subsequently confirms that they have matching contents.
 
 Although Fishcopy is simple, it serves two purposes: Firstly, to demonstrate
-how both CUG and AnnoCheck can catch errors which could easily be made in even
-a simple program. Secondly, to show the benefits that CUG can provide over
+how both CUG and AnnoCheck catch errors which may easily be made in even a
+simple program. Secondly, to show the benefits that CUG provides over
 AnnoCheck.
 
 \section{Shader Comparison}
@@ -1903,9 +1899,10 @@ but with a couple of minor differences. Firstly, AnnoCheck processes the
 annotations in main.c in order to generate a metadata file,
 \textit{annotations.meta}, that is used to verify the code in the shader. The
 second difference is that AnnoCheck is able to perform the same file-inclusion
-capabilities for the shader that previously had to be done manually, and whilst
-doing so it verifies the shader and, only if the annotations within it are
-consistent with main.c, it generates the GLSL shader file.
+capabilities for the shader that previously had to be executed manually, and
+whilst doing so it verifies the shader and, only if the annotations within it
+are consistent with main.c, generates the GLSL shader file
+\cite{NoIncludeGLSL}.
 
 From this point on, the build process is identical to raw C and GLSL, with the
 generated C and GLSL files matching the raw C and GLSL files identically -- the
@@ -1922,8 +1919,8 @@ complicates the build process.}
 \label{fig:pipeline_cug}
 \end{figure}
 
-Figure \ref{fig:pipeline_cug} demonstrates the CUG toolchain we implemented.
-Compared with the simple syntactic sharing of the \texttt{Fish} definition in
+Figure \ref{fig:pipeline_cug} demonstrates the CUG toolchain we implemented. In
+contrast to the simple syntactic sharing of the \texttt{Fish} definition in
 both the raw and AnnoCheck toolchains, the module containing \texttt{Fish} is
 shared semantically between CUG-C and CUG-G. However, as we describe in Section
 Section \ref{sec:backends}, the toolchain complexity is increased by the need
@@ -1938,45 +1935,45 @@ process would be simpler.}
 \label{fig:pipeline_cug_future}
 \end{figure}
 
-Figure \ref{fig:pipeline_cug_future} shows what an idealised CUG toolchain
-would look like, that is, if CUG-G was compiled directly to SPIR-V and if CUG-C
-was compiled directly to x86.
+Figure \ref{fig:pipeline_cug_future} illustrates how an idealised CUG toolchain
+would appear if CUG-G was compiled directly to SPIR-V and if CUG-C was compiled
+directly to x86.
 
-All the toolchains make different tradeoffs. The raw C and GLSL is the
-simplest, but suffers from requiring programmers to use custom solutions for
-code-sharing between C and GLSL. Furthermore, interactions between C and GLSL
-are completely unchecked -- programmer discipline is what ensures bug or
-erroneous behaviour does not occur when making API calls. AnnoCheck increases
-the toolchain complexity, in exchange for allowing the programmer to annotate
-their code such that AnnoCheck can prevent some errors from happening.
-Futhermore, AnnoCheck can also handle code-inclusion in GLSL, removing the need
-for that to be done by a custom solution. The CUG compiler is part of the most
-complex toolchain, however, this was purely a result of how we implemented the
-compiler due to the constraints we faced. Figure \ref{fig:pipeline_cug_future}
-demonstrates that if implemented well, a custom language could actually reduce
-the overall toolchain complexity, even when compared with raw C and GLSL, by
-providing standardised methods for semantically sharing code between host and
-shader code (in this case, CUG-C and CUG-G).
+All the toolchains make different tradeoffs. The raw C and GLSL toolchain is
+the simplest, but suffers from requiring programmers to use custom solutions
+for code-sharing between C and GLSL \cite{NoIncludeGLSL}. Furthermore,
+interactions between C and GLSL are completely unchecked -- programmer
+discipline being required to ensure bug or erroneous behaviour does not occur
+when making API calls. AnnoCheck increases the toolchain complexity, in
+exchange for allowing the programmer to annotate their code such that AnnoCheck
+can prevent some errors from happening. Futhermore, AnnoCheck can also handle
+code-inclusion in GLSL, removing the need for that to be done by a custom
+solution. The CUG compiler is part of the most complex toolchain, however, this
+was purely a result of how we implemented the compiler due to the constraints
+we faced. Figure \ref{fig:pipeline_cug_future} demonstrates that if properly
+implemented a custom language could actually reduce the overall toolchain
+complexity, even when compared with raw C and GLSL, by providing standardised
+methods for semantically sharing code between host and shader code (in this
+case, CUG-C and CUG-G).
 
 \section{Error-Prevention}
 
 In this section we analyse each of the errors shown in Section
-\ref{sec:issues_summary}, demonstrating how both the annotation system and
-custom heterogeneous languages prevent the programmer from making them.
+\ref{sec:issues_summary}, demonstrating how both AnnoCheck and CUG prevent the
+programmer from committing them.
 
 \subsection{Resolving Identifiers}
 
 \label{sec:resolving_identifiers}
 
-This is an issue solved by both the annotation system and the new set of custom
-languages. As we discuss in Section \ref{sec:issues_summary}, host code often
-has to refer to identifiers which are mentioned in shaders through the use of
-strings. However, this is problematic, for two reasons: Firstly, the
-identifiers are not resolved until runtime, when API calls are made by the CPU
-that refer to identifiers within a shader that has been loaded onto the GPU.
-Secondly, it makes refactoring tools harder to implement, as there is no
-logical connection between strings in a host language and identifiers within a
-shader that can be statically determined.
+This is an issue solved by both AnnoCheck and CUG. As we discuss in Section
+\ref{sec:issues_summary}, host code often has to refer to identifiers which are
+mentioned in shaders through the use of strings. However, this is problematic,
+for two reasons: Firstly, the identifiers are not resolved until runtime, when
+API calls are made by the CPU that refer to identifiers within a shader that
+has been loaded onto the GPU. Secondly, it makes refactoring tools harder to
+implement, as there is no logical connection between strings in a host language
+and identifiers within a shader that can be statically determined.
 
 This is the primary issue that AnnoCheck aims to resolve, and one of the
 features that CUG handles within its cross-dialect type system. Section
@@ -2005,7 +2002,7 @@ in C\cite{DesignatedInitC}.}
 
 Listing \ref{lst:invoke_main_c} demonstrates the C implementation of creating a
 \texttt{VkPipelineShaderStageCreateInfo} data structure instance. This
-structure is what is used by the Vulkan API to identify \texttt{main}, using a
+structure is employed by the Vulkan API to identify \texttt{main}, using a
 string. This is similar to the example shown in Listing
 \ref{lst:annotation_example_output}.
 
@@ -2067,7 +2064,7 @@ directives which generate the code necessary for verifying CUG-G.}
 
 \section{Performance}
 
-One of the key goals of both AnnoCheck and CUG is to not compromise on the
+One of the key goals of both AnnoCheck and CUG is to not compromise the
 low-level control raw graphics APIs provide. However, this does not guarantee
 that a program written using this APIs directly is going to out-perform one
 which is built on an abstraction layer (Chapter \ref{chp:related_work}).
@@ -2076,7 +2073,9 @@ However, the performance of any AnnoCheck or CUG program, should match the
 equivalent C and GLSL versions. In this section, we analyse the performance of
 FishCopy across all three of its implementations.
 
-\section{AnnoCheck versus raw C/GLSL}
+\section{AnnoCheck versus raw C and GLSL}
+
+%TODO(Rewrite):
 
 One of the tradeoffs that AnnoCheck makes is that it is an annotation system
 that \textit{enhances} C and GLSL. We designed it so that simply removing the
@@ -2087,7 +2086,7 @@ of valid C and GLSL programs. Although this comes with a few tradeoffs (Chapter
 the resulting program is identical to what would be written in C or GLSL.
 
 For this reason, a performance evaluation of an AnnoCheck program and comparing
-it with any C or GLSL counterpart is meaningless.
+it with any C or GLSL counterpart is meaningless. % TODO(Rewrite)
 
 \section{CUG versus raw C/GLSL}
 
@@ -2095,12 +2094,12 @@ CUG shares many of its semantics with C and GLSL, which in theory should mean
 that any CUG program should have identical performance to an equivalent C/GLSL
 program. However, as a novel language, we parse, analyse and convert CUG to an
 intermediate representation before outputting the results to a C back-end. This
-is a destructive operation compared to what AnnoCheck does. For this reason, we
-compared the performance of CUG implementation of FishCopy with the one written
-in C/GLSL. As expected, the C/GLSL implementation slightly outperformed the CUG
-implentation. Although this does not say much of interest, it is still
-important, as the maturity of optimisation tools for existing languages give
-them a significant incumbent advantage \cite{RustSlow}.
+is a destructive operation in contrast to AnnoCheck's solution. For this
+reason, we compared the performance of CUG implementation of FishCopy with the
+one written in C/GLSL. As expected, the C/GLSL implementation slightly
+outperformed the CUG implentation. Although this may initially appear a trivial
+point, it has importance, as the maturity of optimisation tools for existing
+languages give them a significant incumbent advantage \cite{RustSlow}.
 
 % \begin{figure}[h]
 % \centering
@@ -2129,11 +2128,11 @@ TODO(Content!): DETERMINE EXPECTED WORD COUNT
 
 \label{chp:related_work}
 
-This section describes related work in the field of modifying or improving GPU
-toolchains beyond traditional low-level libraries. It aims to show the diverse
-set of approaches that have been taken to doing this and the progress that has
-been made, in addition to demonstrating that the specific problems targeted by
-AnnoCheck and CUG have yet to be addressed.
+We detail related work in the field of modifying or improving GPU toolchains
+beyond traditional low-level libraries. We demonstrate the diverse set of
+approaches that have been employed in this area and the progress made, whilst
+demonstrating how the specific problems targeted by AnnoCheck and CUG have yet
+to be addressed.
 
 Since the creation of the SPIR-V intermediate language for heterogeneous
 programming (as discussed in Chapter \ref{chp:technical_background}), some
@@ -2143,23 +2142,23 @@ a modified version of C++, \textit{OpenCL C++} for developing compute shaders
 \cite{OpenCL22Release} \cite{OpenCLCPPWhitePaper} \cite{OpenCL}. This has only
 been possible because it can be compiled to SPIR-V, whereas previously graphics
 drivers had to implement OpenCL C directly, limiting how complex OpenCL's
-shader language could become. However, despite unifying some aspects of host
-and accelerator languages, this uses the traditional workflow of programming
-compute kernels and host code separately, with no cross-module checking at the
-API boundaries \cite{OpenCL22Release}.
+shader language could become. However, whilst unifying some aspects of host and
+shading languages, this uses the traditional workflow of programming compute
+kernels and host code separately, with no cross-module checking at the API
+boundaries \cite{OpenCL22Release}.
 
 SYCL is a framework by the Khronos Group built on top of OpenCL that abstracts
 away the API calls to enable ``single-source'' C++ development which
 automatically generates host and shader code from a single C++ source file
-\cite{OpenCL22Release} \cite{SYCL}. SYCL has seen uptake in terms of multiple
-implementations \cite{ComputeCPP} \cite{triSYCL}, and has been adopted as a
-backend for various machine learning frameworks such as TensorFlow and Eigen
+\cite{OpenCL22Release} \cite{SYCL}. SYCL has seen uptake in multiple
+implementations, and has been adopted as a backend for various machine learning
+frameworks such as TensorFlow and Eigen \cite{ComputeCPP} \cite{triSYCL}
 \cite{SYCLTensorFlow} \cite{SYCLEigen}. However, this approach does have its
-limitations in removing the ability for developers to control how those API
-calls are made, which AnnoCheck and CUG do not remove. Both OpenCL and SYCL are
-also limited in only being suitable for \textit{compute} applications, and do
-not allow for the graphics operations that GPUs are capable of. However, Vulkan
-and OpenCL could merge in the future, which may open the door to this happening
+limitations by removing the ability for developers to control how those API
+calls are made, which AnnoCheck and CUG preserve. Both OpenCL and SYCL are also
+limited in only being suitable for \textit{compute} applications, and do not
+allow for the graphics operations for which GPUs are capable. However, Vulkan
+and OpenCL may merge in the future, which could open the door to this happening
 \cite{VulkanOpenCLMerge}.
 
 Research has been done to make GPU and heterogeneous computing available in
@@ -2168,19 +2167,19 @@ compute platform such as OpenCL or CUDA using a framework or library
 \cite{Theano2016} \cite{TensorFlowWhitePaper}. This technique has primarily
 seen success in scientific computing and machine learning. Others have created
 custom high-level languages which target GPUs directly. Harlan, developed by
-Holk et al., is a domain-specific language (DSL) based on Scheme for GPUS, with
-support for higher order programming with Scheme-influenced syntax and
+Holk et al., is a GPU-targeted domain-specific language (DSL) based on Scheme,
+with support for higher order programming with Scheme-influenced syntax and
 semantics \cite{Harlan} \cite{HarlanAnnouncement}. GPipe extends the functional
 language Haskell such that shaders can be written functionally and OpenGL calls
-can be made in type-safe ways, however, the garbage-collected nature of Haskell
-makes it unsuitable for many of the domains GPUs are used in such as games
+can be made in type-safe ways. However, the garbage-collection of Haskell makes
+it unsuitable for many of the domains in which GPUs are employed, such as games
 \cite{HaskellState} \cite{GPipe}. Halide is a DSL for image processing and
 computational photography \cite{Halide}. Fumero et al. have developed
 techniques to automatically offload computation from high-level interpreted
-dynamic languages using just-in-time compilation to achieving speedups by
+dynamic languages using just-in-time compilation to achieve speedups by
 compiling R to an OpenCL C backend \cite{JITGPU}. Futhark is an attempt to
 design a functional data-parallel array language from the ground-up that can
-target GPUs, targeting an OpenCL backend \cite{Futhark}.
+target GPUs through an OpenCL backend \cite{Futhark}.
 
 Existing languages have also been extended with the functionality to compile
 parts of their programs to heterogeneous architectures. Lime and JCUDA take the
