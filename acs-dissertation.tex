@@ -20,7 +20,7 @@
 \def\authorcollege{Downing College\xspace}
 \def\authoremail{tr395@cam.ac.uk}
 \def\dissertationtitle{Heterogeneous type checking in multi-language CPU-GPU systems}
-\def\wordcount{11448}
+\def\wordcount{11058}
 \def\totalloccount{13000 }
 \def\compilerloccount{12000 }
 
@@ -609,17 +609,6 @@ background needed to understand AnnoCheck and CUG.
     basic fixed-function lighting, and then render the scenes
     \cite{OpenGL_1_0}. The OpenGL specification is now controlled by the
     \textbf{Khronos Group} \cite{OpenGL} \cite{OpenGLToKhronos}.
-
-    \item 1996 \textbf{Direct3D 2.0} released by Microsoft. Although at this
-    point API was designed as an abstraction for a software renderer, it
-    eventually developed into an API for interfacing with graphics cards
-    \cite{JohnCarmackPlanDirect3DvsOpenGl}.
-
-    \item 1999 \textbf{NVIDIA GeForce 256} released. The first video card to be
-    marketed as a \textbf{GPU}. It was the first consumer-PC graphics hardware
-    to accelerate ``transform and lighting'' operations, allowing them to be
-    offloaded from the CPU. The ``transform and lighting'' component of GPUs
-    prefigured what would eventually run shaders \cite{GeForce256}.
 
     \item 2000 \textbf{The Khronos Group} was founded to provide a formal body
     for open standards in 3D graphics. Reflecting the increasing flexibility of
@@ -1536,16 +1525,13 @@ stages handled in the following ways:
 
 \label{sec:internal_state_machine}
 
-In order to ensure that CUG-C and CUG-G can share code semantically, code
-written in these dialects share the same compiler. This ensures that there are
-not any unexpected differences in how the programs are parsed, especially when
-sharing modules between the two dialects. This differs substantially from C and
-GLSL, which do have peculiar differences which means that sharing code can
-result in unexpected behaviour (Section
-\ref{sec:sec:shading_langauge_challenges}).
+CUG-C and CUG-G share a compiler, ensuring that there are not any unexpected
+differences in how the programs are parsed, especially when sharing modules
+between the two dialects. This differs substantially from C and GLSL, which do
+have peculiar differences (Section \ref{sec:sec:shading_langauge_challenges}).
 
-We achieve this through the use of an internal state machine within the
-compiler, where each module is associated with one of the following states:
+We achieve this through the use of a state machine within the compiler, where
+each module is associated with one of the following states:
 
 \begin{itemize}
 
@@ -1557,7 +1543,7 @@ compiler, where each module is associated with one of the following states:
     similarly, only CUG-G code can be compiled.
 
     \item \textbf{\texttt{SHARED}:} When in the \texttt{SHARED} state, only
-    CUG-min is parsed.
+    CUG-min is compiled.
 
 \end{itemize}
 
@@ -1580,7 +1566,7 @@ replaced by a state machine for the following three reasons:
     movement towards ensuring ``single-source'' (where shaders are embedded
     within a C++ program) programs and ``multi-source'' (what we are doing)
     programs use similar semantics, so that code from communites which use each
-    can be shared. Theoretically, we could extend the CUG compiler to allows
+    can be shared. Theoretically, we could extend the CUG compiler to allow
     programmers to embed CUG-G programs within CUG-C ones.
 
 \end{itemize}
@@ -2115,12 +2101,6 @@ AnnoCheck, as it aims to enhance existing languages with features for GPU
 programming. However, the OpenACC compiler abstracts-way the low-level details
 of GPU programming, whilst AnnoCheck enforces them.
 
-Another approach that has been taken is to abstract away underlying APIs such
-as CUDA and OpenCL with platforms that can target both as backends. HIP is a
-project that does this by allowing CUDA code to be compiled to C++. It uses an
-abstracted API in order that developers may convert their CUDA projects to
-something that can target non-NVIDIA backends \cite{HIP}.
-
 In addition to SYCL and OpenCL C++, there have been other attempts at bringing
 heterogeneous programming models natively to C++ through parallel programming
 standards. C++ AMP is a C++ library, programming model, and compiler developed
@@ -2244,8 +2224,5 @@ Vulkan, bringing this ``dream'' another step closer to reality
 
 \bibliographystyle{unsrt}
 \bibliography{references}
-
-\appendix
-\singlespacing
 
 \end{document}
