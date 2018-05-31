@@ -90,13 +90,11 @@
 We provide the motivation for \textit{AnnoCheck} and \textit{CUG}: outlining
 the problem they solve, why this is important and why solutions have not yet
 been found. \textbf{AnnoCheck} is a cross-module annotation checker for the C
-and GLSL programming languages that can be used to catch common errors when
-using them to control the GPU. \textbf{CUG}\footnote{This is short for
-\textit{CPU-Union-GPU}, similar logic applies to the naming of the dialects.}
-takes this approach to the next level, being a programming language with two
-\textit{dialects} which are each designed to target a different backend. The
-dialect which targets the CPU is called \textbf{CUG-C} and the language
-targeting the GPU is called \textbf{CUG-G}.
+and GLSL programming languages that can be used to catch common errors across
+their language boundaries. \textbf{CUG} takes this approach to the next level,
+being a programming language consisting of two \textit{dialects} which are each
+designed to target a different backend architecture. \textbf{CUG-C} targets the
+CPU whilst \textbf{CUG-G} targets the GPU.
 
 \section{Terminology}
 
@@ -107,16 +105,15 @@ elaborated on in Chapter \ref{chp:technical_background}.
 
     \item \textbf{GPU (Graphical Processing Unit)}: A piece of hardware that
     performs computations using a massively parallel SIMT and SIMD architecture
-    \cite{GPUSIMTSIMD}. The RAM directly accessed by a GPU is called \textit{VRAM}. In
-    most architectures data must be explicitly transferred from the CPU's RAM
-    to the GPU's VRAM through a bus\footnote{In some architectures, the GPU and
-    CPU share access to a single pool of memory\cite{PS4SpecAnalysis}}.
+    \cite{GPUSIMTSIMD}. The RAM directly accessed by a GPU is called
+    \textit{VRAM}. In most architectures data must be explicitly transferred
+    from the CPU's RAM to the GPU's VRAM through a bus\footnote{Some
+    shared-memory architectures do exist\cite{PS4SpecAnalysis}}.
 
-    \item \textbf{Shader:} A \textit{shader} is \textit{any} computer
-    program written for the GPU. They were originally used for shading computer
-    graphics images, but the term now applies to all GPU programs\footnote{The
-    original specification for the first OpenGL shading language discusses how
-    this decision was made \cite{GLSL_1_10}.}
+    \item \textbf{Shader:} A \textit{shader} is \textit{any} computer program
+    written for the GPU. They were originally used for shading computer
+    graphics images, but the term now applies to all GPU programs\footnote{A
+    decision made in the original GLSL specification \cite{GLSL_1_10}.}
 
     \item \textbf{Shading language:} These are programming languages that are
     used to write shaders. These are usually distinct languages from those used
@@ -229,14 +226,11 @@ which calculates how these particles are generated. This particle data is then
 transferred to the GPU which simulates their behaviour and uses them in
 rendering the surface of a liquid as shown in Figure
 \ref{fig:waveparticles_example}. In this system, C$^\sharp$ is the host (CPU)
-language, and HLSL is the shader language that targeted the GPU\footnote{This
-is a common language combination for scripting and writing shaders for the
-popular Unity game engine\cite{UnityScripting} \cite{UnityShaders}.}. Even
-though both languages share the same data structure, it has to separately be
-defined in both languages. If these definitions do not agree with each other,
-there are no in-built mechanisms to catch the errors this causes, resulting in
-incorrect run-time behaviour. Section \ref{sec:api_challanges} elaborates how
-further errors can occur.
+language, and HLSL is the shader language that targeted the GPU. Even though
+both languages share the same data structure, it has to defined separately in
+each language. There are no in-built mechanisms to catch the errors caused by
+inconsistent definitions, resulting in incorrect run-time behaviour. Section
+\ref{sec:api_challanges} elaborates how further errors can occur.
 
 \begin{figure}[h]
 \centering
@@ -419,9 +413,9 @@ As we will describe, Listing \ref{lst:annotation_example_input} shows an
 example of an API call that can result in an error that could be checked-for at
 compile-time. Here, the host code makes the \texttt{vkCreateComputePipelines}
 API call in order to create a compute pipeline\footnote{This is just an API
-call that needs to be made in order to run a non-graphics (compute) shader on
-the GPU \cite{vkCreateComputePipelines}.} \cite{vkCreateComputePipelines}. An
-instance of the \texttt{VkComputePipelineCreateInfo} struct containing a
+call required by Vulkan \cite{vkCreateComputePipelines}.}
+\cite{vkCreateComputePipelines}. An instance of the
+\texttt{VkComputePipelineCreateInfo} struct containing a
 \texttt{VkPipelineShaderStageCreateInfo} struct is passed to that API call,
 which ultimately specifies which function in the shader to use within the
 compute pipeline \cite{VkComputePipelineCreateInfo}
@@ -718,10 +712,10 @@ domains (Section \ref{sec:motivation}). Unfortunately, as a result of a complex
 history, there are many different APIs for different use-cases of the same
 hardware (eg. OpenGL vs OpenCL). Furthermore, many of these use-cases have
 widely-used proprietary alternatives such as CUDA, Direct3D,
-Metal\footnote{Apple's proprietary API.} and even proprietary game console APIs
-\cite{CUDA} \cite{Metal} \cite{Direct3D} \cite{PS4PortCrew} (full comparison in
-Appendix \ref{sec:api_options}). This makes programming for GPUs in a portable
-manner extremely complex. This is shown in Figure
+Metal\footnote{Apple's proprietary API \cite{Metal}.} and even proprietary game
+console APIs \cite{CUDA} \cite{Metal} \cite{Direct3D} \cite{PS4PortCrew} (full
+comparison in Appendix \ref{sec:api_options}). This makes programming for GPUs
+in a portable manner extremely complex. This is shown in Figure
 \ref{fig:unity_shader_madness}, which displays how the popular Unity game
 engine targets many platforms \cite{UnityShaderPipeline}.
 
@@ -814,9 +808,8 @@ compute shading stage of the pipeline through the use of the Vulkan API. As
 Vulkan operates at a lower level than OpenGL and OpenCL, the API is incredibly
 verbose. As we cover in Chapter \ref{chp:evaluation}, the API calls necessary
 to run a simple compute shader is over 700 lines long \cite{ProjectSource}!
-However, this verbosity is a feature and not a bug\footnote{We discuss the
-tradeoffs this decision makes in Chapter
-\ref{chp:conclusion_and_further_work}\cite{VulkanAnnouncement}.}.
+However, this verbosity is a feature and not a bug (Chapter
+\ref{chp:conclusion_and_further_work}) \cite{VulkanAnnouncement}.
 
 \subsection{The challenges with shading languages}
 
@@ -1064,18 +1057,16 @@ between host and GPU code; CUG exemplifies this, and we highlight CUG-C's
 features next: Firstly, those of AnnoCheck are directly integrated into the
 language design. Secondly to show how, by being able to \textit{semantically}
 share code with a related shading \textit{dialect} (CUG-G), code sharing can be
-made much more robust than with C and GLSL. However, our approach differs from
-many other custom languages which have aimed to do this. Similar to AnnoCheck,
-we are not abstracting-away any API calls. Therefore CUG is theoretically
-capable of the same peak-performance as C and GLSL.
+made much more robust than with C and GLSL. Similar to AnnoCheck, we do not
+abstract-away any API calls. Therefore CUG is theoretically capable of the same
+peak-performance as C and GLSL.
 
 Due to resource constraints, CUG does not aim to replicate \textit{all} of the
-features that one would expect from an industrial language such a Java, C, C++,
-C$^\sharp$, Swift, Rust, etc. Furthermore, we are not advocating for any
-particular language feature that CUG implements beyond the novel ideas that ew
-presents. CUG is a proof-of-concept that provides the bare-minimum feature-set
-needed in order to demonstrate the ideas of this paper. However, this was still
-a significant undertaking, with the CUG compiler consisting of over
+features that one would expect from an industrial language. Furthermore, we are
+not advocating for any particular language feature that CUG implements beyond
+the novel ideas we present. CUG provides the bare-minimum feature-set needed in
+order to demonstrate the ideas of this paper. However, this was still a
+significant undertaking, with the CUG compiler consisting of over
 \compilerloccount lines of code without comments or whitespace.
 
 \subsection{Overall Design}
@@ -1272,11 +1263,7 @@ CUG's syntax does differ from those C and GLSL in the following ways.
     declaring the existence of external symbols.
 
     \item All parameters in structs and function-calls must be explicitly
-    assigned\footnote{There is a tradeoff here. On one hand, code-readability
-    increases and breaking-changes to function interfaces are less likely to
-    result in 'silent' errors. On the other hand, friction is increased when
-    writing code. We do not advocate for either approach, but decided on this
-    to see how it felt.}.
+    assigned.
 
     \item C and GLSL code can be embedded within CUG-C and CUG-G respectively
     by wrapping them in \texttt{@c\_environment} or \texttt{@glsl\_environment}
@@ -1293,23 +1280,6 @@ CUG's syntax does differ from those C and GLSL in the following ways.
 
 There are naturally many syntax and design choices in CUG that we have not
 enumerated here due to space limitations.
-
-\subsection{Semantics}
-
-The semantics of CUG is heavily inspired by C and GLSL, and this is done for
-two reasons: Firstly, it simplifies compiling CUG-C and CUG-G to C and GLSL
-respectively. Secondly, our goal is to demonstrate how graphics programming may
-be made less error-prone without sacrificing any of the control existing
-low-level toolchains provide, and this was the simplest way to do that. Even
-compiling this bare-minimum was highly demanding. We had to support all of the
-language features necessary to interface with the Vulkan API. Due to this, we
-limited the scope of which language features would be provided and how much our
-semantics differed from C and GLSL. For example, we did not concern ourselves
-with proving our type-system was sound or that CUG provided any safety
-guarantees. CUG is an experimental language built from the ground-up and should
-be treated as such. The upshot of this is that, barring minor syntax changes,
-CUG code should be familiar to those who are familiar with C and GLSL. Section
-\ref{subsec:limitations} enumerates the limitations of CUG.
 
 \subsection{Limitations}
 
