@@ -249,7 +249,7 @@ There has been research into pushing forward the state-of-the-art in developing
 code for GPUs in more programmer-friendly ways. However, as covered in Chapter
 \ref{chp:related_work}, much of the research has either been domain-specific or
 provided abstractions which have an unacceptable performance overhead for many
-use-cases \cite{CAMPFail1}. For example, a common approach is to design a
+use-cases \cite{CAMPFail1}. For example, a recent approach is to design a
 unified language which can be compiled to a run-time that supports GPUs, as is
 the case with Lime and Halide \cite{Lime2010} \cite{Halide}. However, by hiding
 the details of the heterogeneous backends it targets, Lime has no facility for
@@ -469,14 +469,14 @@ The important key feature this example provides is the compile-time checking of
 the function name -- ensuring that \texttt{main} cannot be renamed in the host
 or shader without being consistently renamed in the other. If we deliberately
 introduced such an error was into raw C and GLSL, the resulting behaviour would
-be a runtime crash. However, not all such inconsistencies result in runtime
-errors, others can simply result in incorrect or undefined runtime results.
+be a run-time crash. However, not all such inconsistencies result in run-time
+errors, others can simply result in incorrect or undefined run-time results.
 
 Listing \ref{lst:annotation_example_input} demonstrates how annotations can
 prevent programmers from compiling code where the names of shaders differ
-between C and GLSL, informing them of the runtime error that this would cause.
+between C and GLSL, informing them of the run-time error that this would cause.
 The flexibility of AnnoCheck is that the programmer can remove the annotations
-if they desire, especially when using complex runtime features. However,
+if they desire, especially when using complex run-time features. However,
 AnnoCheck can still help ensure that an initial implementation is correct.
 Furthermore, Section \ref{sec:design_annotation_processor} covers design
 decisions that were made with typical shader workflows in mind such that
@@ -887,7 +887,7 @@ Drawbacks include:
     shared using a custom solution \cite{NoIncludeGLSL}.
 
     \item The CPU still has to refer to many identifiers within a shader using
-    strings at runtime. Therefore renaming identifiers in shaders requires
+    strings at run-time. Therefore renaming identifiers in shaders requires
     programmers to manually identify any relevant strings within their
     application.
 
@@ -951,7 +951,7 @@ when using shaders. We concluded the chapter with the two specific issues our
 systems solve.
 
 % For example, misnaming the shader in Vulkan, causes a
-% \texttt{VK\_ERROR\_INVALID\_SHADER\_NV} error at runtime.
+% \texttt{VK\_ERROR\_INVALID\_SHADER\_NV} error at run-time.
 
 % % https://www.khronos.org/registry/vulkan/specs/1.1-extensions/man/html/vkCreateComputePipelines.html
 
@@ -986,7 +986,7 @@ following concerns:
 
     \item Existing workflows need to be accounted for. For example, a commonly
     used feature is the ability to swap or reloading shaders with identical
-    interfaces in-and-out at runtime \cite{HotloadShader}.
+    interfaces in-and-out at run-time \cite{HotloadShader}.
 
 \end{itemize}
 
@@ -1426,7 +1426,7 @@ of our systems \cite{Vulkan}. For the following reasons:
 
 \begin{itemize}
 
-    \item Vulkan is a modern graphics API with runtime safety-features (such as
+    \item Vulkan is a modern graphics API with run-time safety-features (such as
     validation layers) lacked by other APIs such as OpenGL
     \cite{VulkanValidationLayers}. Our goal was to demonstrate how even a
     modern graphics API could suffer from the issues described in Section
@@ -1437,7 +1437,7 @@ of our systems \cite{Vulkan}. For the following reasons:
     described here are applicable to a wide audience.
 
     \item Vulkan is a low-level API. One of the goals of our systems was to
-    demonstrate how they have no runtime overhead, this is done by allowing
+    demonstrate how they have no run-time overhead, this is done by allowing
     users to make Vulkan API-calls directly.
 
 \end{itemize}
@@ -1485,7 +1485,7 @@ AnnoCheck when analysing annotated GLSL, so it can verify that the annotations
 within it are consistent with the annotated C. Although this build system may
 seem cumbersome, as we discuss in Section \ref{sec:sec:build_strategy}, by
 generating metadata from annotated C once, GLSL can be re-compiled and
-``hot-loaded'' at runtime. After analysing either annotated C or GLSL,
+``hot-loaded'' at run-time. After analysing either annotated C or GLSL,
 AnnoCheck outputs the C and GLSL files with all the annotations removed, so
 that they can be compiled handled as regular C and GLSL by the rest of the
 programmer's build system.
@@ -1663,7 +1663,7 @@ which we ran automatically on every commit to the main repository
 This chapter evaluates how AnnoCheck and CUG compare with the traditional
 unchecked C and GLSL toolchain. We do this by employing a sample program called
 \textit{FishCopy}, comparing aspects such as toolchain complexity, code
-samples, errors which AnnoCheck and CUG prevent, and runtime performance. Due
+samples, errors which AnnoCheck and CUG prevent, and run-time performance. Due
 to the complexity of using the Vulkan API, we will present small samples of
 this program. The full version of \textit{FishCopy} can be found on the project
 GitHub repository \cite{ProjectSource}. For example, the C code which makes the
@@ -1922,7 +1922,7 @@ programmer from committing them.
 This is an issue solved by both AnnoCheck and CUG. As we discuss in Section
 \ref{sec:issues_summary}, host code often has to refer to identifiers which are
 mentioned in shaders through the use of strings. However, this is problematic,
-for two reasons: Firstly, the identifiers are not resolved until runtime, when
+for two reasons: Firstly, the identifiers are not resolved until run-time, when
 API calls are made by the CPU that refer to identifiers within a shader that
 has been loaded onto the GPU. Secondly, it makes refactoring tools harder to
 implement, as there is no logical connection between strings in a host language
@@ -1958,7 +1958,7 @@ Listing \ref{lst:invoke_main_c} demonstrates the C implementation of creating a
 structure is employed by the Vulkan API to identify \texttt{main}, using a
 string. This is similar to the example shown in Listing
 \ref{lst:annotation_example_output}. On our machines, modifying this string led
-to a runtime crash of the FishCopy program.
+to a run-time crash of the FishCopy program.
 
 \begin{lstfloat}
 \begin{lstlisting}[language=C]
@@ -2043,7 +2043,7 @@ program by design. However, as a novel language, we parse, analyse and convert
 CUG to an intermediate representation before outputting the results to a C
 back-end. This is a destructive operation in contrast to AnnoCheck's solution.
 
-Therefore, when compared the runtime performance of CUG implementation of
+Therefore, when compared the run-time performance of CUG implementation of
 FishCopy with the one written in C and GLSL. As expected, the C and GLSL
 implementation slightly outperformed the CUG implentation. Although this may
 initially appear a trivial point, it has importance, as the maturity of
@@ -2175,21 +2175,21 @@ instruction set \cite{HCC}.
 
 \section{Discussion}
 
-As can be seen, there has been some progress in making programming for
+As can be seen, there has been limited progress in making programming for
 heterogeneous architectures and GPUs easier. However, the focus has been on
-GPGPU computing, with limited research on graphics programming. Futhermore,
-although the creation of SPIR-V and Vulkan are slowly changing this, all of
-these systems have had to target fairly-high level backend APIs such as OpenCL
-or CUDA, in addition to languages compiled by device drivers such as
+GPGPU computing, with limited research in graphics programming. The creation of
+SPIR-V and Vulkan are slowly correcting this, as previously these systems have
+had to target fairly-high level backend APIs such as OpenCL or CUDA.
+Futhermore, these languages were compiled by device drivers such as
 \textit{OpenCL C} or \textit{CUDA C/C++}, which has limited the performance and
 stability of the higher-level systems \cite{GLFuzz}. Additionally, apart from
 \textit{Open CL C++}, these all either present alternate high-level interfaces
 or abstract them away in order to ensure simplified and less error-prone
-programs. This differs from the approach we take, which is to mark-up low-level
-API calls directly, so that they are checked at compile-time for consistency
-without sacrificing the control that would otherwise be lost by abstractions.
-Furthermore, although we could only test a compute shader, the design of
-AnnoCheck and CUG is amenable to being used for graphics programming.
+programs. This differs from the approach we take, in marking-up low-level API
+calls directly, so that they are checked at compile-time for consistency whilst
+preserving the control that would otherwise be lost by abstractions.
+Furthermore, although we merely tested a single compute shader, the design of
+AnnoCheck and CUG are amenable for employment graphics programming.
 
 \chapter{Conclusion and Further Work}
 
@@ -2204,21 +2204,22 @@ AnnoCheck and CUG is amenable to being used for graphics programming.
 
 We have shown two novel systems, AnnoCheck and CUG, which can make programming
 for GPUs using conventional low-level APIs less error-prone. AnnoCheck, an
-annotation processor for C and GLSL, aims to demonstrate how existing workflows
-which use these languages can be improved in this way, without sacrificing
-performance. Leading on from this, CUG, demonstrates how a compiler can
-integrate these checks, whilst still allowing programmers to use the low-level
-C APIs and writing their shaders explicitly. Furthermore, CUG enables the
-\textit{semantic} sharing of code between CPUs and GPUs, as opposed to the
-syntactic sharing that occurs between C and GLSL. Although CUG is more powerful
-than AnnoCheck, AnnoCheck is a much simpler program and the techniques it
-employs could be used with existing C and GLSL code bases.
+annotation processor for C and GLSL, demonstrates how existing toolchains can
+be improved by providing compile-time identifier resolution without sacrificing
+run-time performance. Leading on from this, CUG, demonstrates how a compiler
+can integrate these checks, whilst still allowing programmers to use the
+low-level C APIs and writing their shaders explicitly. Furthermore, CUG enables
+the \textit{semantic} sharing of code between CPUs and GPUs, as opposed to the
+syntactic sharing that occurs between C and GLSL and is capable of introducing
+subtle errors. Although CUG is more powerful than AnnoCheck, AnnoCheck is a
+much simpler program and the techniques it employs could be used with existing
+C and GLSL code bases.
 
-Although our implementations do work in some simple cases, there is still much
-more work that could be done and places where they could be taken. Furthermore,
-as covered in Section \ref{sec:api_challanges}, there are still many unsolved
-problems with using graphics APIs. Semantic code-sharing in particular presents
-the following opportunities:
+Although our implementations demonstrated these fundamental ideas, they open up
+interesting avenues for future work. Furthermore, as covered in Section
+\ref{sec:api_challanges}, there are still many unsolved problems with using
+graphics APIs. Semantic code-sharing in particular presents the following
+opportunities:
 
 \begin{itemize}
 
@@ -2244,19 +2245,12 @@ the following opportunities:
 
 \end{itemize}
 
-Something which the creation of SPIR-V enables, and that this paper
-demonstrates is possible, is the ability to \textit{extend} languages with
-custom shading languages whilst still preserving existing API interfaces. This
-is different from that currently done both in industry and reasearch. For
-example, whilst programs for the Unity game engine are written in C$^\sharp$,
-shaders for it have to be written in HLSL \cite{UnityShaders}. Projects such as
-SYCL and Lime did extend C++ and Java respectively to allow shaders to be
-programmed in their host languages, however they used optimising compilers with
-the goal of abstracting away the underlying OpenCL API and outputting OpenCL C
-code for shaders. However, OpenCL C++ has demonstrated that API interfaces can
-be preserved whilst shaders are written in the host language
-\cite{OpenCLCPPWhitePaper}. This also means that SYCL can use this compiler in
-its backend \cite{SYCL}.
+We also hope that the creation the creation of SPIR-V will enable the creation
+of many shading dialects which are semantically compatible with a given host
+language. For example, whilst programs for the Unity game engine are written in
+C$^\sharp$, shaders for it have to be written in HLSL \cite{UnityShaders}.
+There are some promising signs of this kind of work, with a \textit{Rust}
+shading language that is currently in development \cite{RLSL}.
 
 This leads into the approach I expect other high-level languages to take in the
 future as, briefly summarised below:
